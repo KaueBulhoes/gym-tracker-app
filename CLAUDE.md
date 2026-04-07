@@ -105,6 +105,16 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Row Level Security (RLS) habilitado em todas as tabelas
 - Chaves do Supabase em variáveis de ambiente (.env), nunca hardcoded
 
+### Tratamento de Erros
+- Nunca `throw error` cru do Supabase — sempre usar `mapAuthError(error)` ou `mapDatabaseError(error)`
+- Classe `AppError` em `src/types/errors.ts` com `code` (programático) + `message` (PT-BR para o usuário) + `originalError` (debug)
+- Mappers em `src/utils/errorMapper.ts` traduzem erros do Supabase para mensagens amigáveis
+- Nos stores: capturar com `err instanceof AppError` e exibir `appError.message` na UI
+- Novos services devem seguir o padrão: `if (error) { throw mapXxxError(error); }`
+- Para erros de auth: usar `mapAuthError`
+- Para erros de banco (CRUD): usar `mapDatabaseError`
+- Ao adicionar novas operações: verificar se o código de erro já está mapeado, senão adicionar ao mapper
+
 ### Estilo e UI
 - Tema de cores definido em `src/constants/colors.ts`
 - Espaçamentos padronizados em `src/constants/spacing.ts`

@@ -1,6 +1,7 @@
 import type { Session, User } from '@supabase/supabase-js';
 import { create } from 'zustand';
 import { authService } from '../services/authService';
+import { AppError } from '../types/errors';
 
 interface AuthState {
   user: User | null;
@@ -26,9 +27,11 @@ export const useAuthStore = create<AuthState>((set) => ({
       const { session, user } = await authService.signIn(email, password);
       set({ session, user, isLoading: false });
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Erro ao fazer login';
-      set({ error: message, isLoading: false });
+      const appError =
+        err instanceof AppError
+          ? err
+          : new AppError('UNKNOWN', 'Erro ao fazer login', err);
+      set({ error: appError.message, isLoading: false });
     }
   },
 
@@ -38,9 +41,11 @@ export const useAuthStore = create<AuthState>((set) => ({
       const { session, user } = await authService.signUp(email, password, name);
       set({ session, user, isLoading: false });
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Erro ao criar conta';
-      set({ error: message, isLoading: false });
+      const appError =
+        err instanceof AppError
+          ? err
+          : new AppError('UNKNOWN', 'Erro ao criar conta', err);
+      set({ error: appError.message, isLoading: false });
     }
   },
 
@@ -50,9 +55,11 @@ export const useAuthStore = create<AuthState>((set) => ({
       await authService.signOut();
       set({ user: null, session: null, isLoading: false });
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Erro ao sair';
-      set({ error: message, isLoading: false });
+      const appError =
+        err instanceof AppError
+          ? err
+          : new AppError('UNKNOWN', 'Erro ao sair', err);
+      set({ error: appError.message, isLoading: false });
     }
   },
 

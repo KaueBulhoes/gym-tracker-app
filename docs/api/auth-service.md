@@ -26,6 +26,7 @@
 - **Usada em:** RootNavigator (verificação inicial)
 
 ## Regras de negócio
-- Erros do Supabase são propagados com `throw error`
+- Erros tratados com `mapAuthError()` — traduz para PT-BR via [AppError](../decisoes/adr-002-error-handling.md)
+- Se o erro não está mapeado, usa a mensagem original do Supabase como fallback
 - Nome é enviado como `user_metadata.name` no signUp
 - Sem confirmação de email (desabilitado no dashboard Supabase)
