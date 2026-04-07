@@ -4,11 +4,11 @@ Catálogo de features do app com suas composições (telas + services + tabelas)
 
 ## Implementadas
 
-(nenhuma ainda)
+- [Autenticação (Login + Cadastro)](autenticacao.md) — Login e cadastro com email/senha via Supabase Auth
 
 ## Em desenvolvimento
 
-- [Autenticação (Login + Cadastro)](autenticacao.md) — Fases 1 e 2 concluídas, restam Fases 3–6
+(nenhuma ainda)
 
 ## Planejadas
 

@@ -4,9 +4,10 @@ Registro de todos os services e integração com Supabase.
 
 ## Services
 
-| Service         | Arquivo                    | Usada por                        | Tabelas |
-| --------------- | -------------------------- | -------------------------------- | ------- |
-| Supabase Client | `src/services/supabase.ts` | RootNavigator, todos os services | Todas   |
+| Service | Arquivo | Usada por | Tabelas |
+|---------|---------|-----------|---------|
+| [Supabase Client](supabase-client.md) | `src/services/supabase.ts` | RootNavigator, todos os services | Todas |
+| [Auth Service](auth-service.md) | `src/services/authService.ts` | authStore, LoginScreen, RegisterScreen | auth.users |
 
 ## Tabelas Supabase
 
