@@ -8,7 +8,7 @@ Catálogo de features do app com suas composições (telas + services + tabelas)
 
 ## Em desenvolvimento
 
-(nenhuma ainda)
+- [Autenticação (Login + Cadastro)](autenticacao.md) — Fases 1 e 2 concluídas, restam Fases 3–6
 
 ## Planejadas
 

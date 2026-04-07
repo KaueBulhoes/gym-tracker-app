@@ -22,6 +22,7 @@ App
 
 ## Telas implementadas
 
-| Tela | Arquivo | Services | Tabelas |
-|------|---------|----------|---------|
-| (nenhuma ainda) | | | |
+| Tela     | Arquivo                               | Services              | Tabelas              |
+| -------- | ------------------------------------- | --------------------- | -------------------- |
+| Login    | `src/screens/Auth/LoginScreen.tsx`    | authService (a impl.) | auth.users           |
+| Cadastro | `src/screens/Auth/RegisterScreen.tsx` | authService (a impl.) | auth.users, profiles |
