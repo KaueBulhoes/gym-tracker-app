@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "decisoes/index.md",
+                "file": "telas/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "decisoes/index.md",
+                "file": "telas/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,7 +113,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "decisoes/index.md",
+                "file": "telas/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -156,7 +156,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "decisoes/index.md",
+                "file": "telas/index.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -185,18 +185,18 @@
   },
   "active": "62a6473fdea223a8",
   "lastOpenFiles": [
+    "README.md",
+    "backlog.md",
+    "funcionalidades/index.md",
+    "diario/2026-04-07.md",
+    "diario/index.md",
+    "decisoes/index.md",
+    "decisoes/adr-001-stack.md",
     "telas/index.md",
     "telas",
     "api/index.md",
     "api",
-    "funcionalidades/index.md",
     "funcionalidades",
-    "decisoes/adr-001-stack.md",
-    "diario/2026-04-07.md",
-    "diario/index.md",
-    "backlog.md",
-    "README.md",
-    "setup.md",
-    "decisoes/index.md"
+    "setup.md"
   ]
 }
