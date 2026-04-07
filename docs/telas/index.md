@@ -26,4 +26,4 @@ App
 |------|---------|-----------------|---------|
 | [Login](login.md) | `src/screens/Auth/LoginScreen.tsx` | authStore.signIn | auth.users |
 | [Cadastro](cadastro.md) | `src/screens/Auth/RegisterScreen.tsx` | authStore.signUp | auth.users |
-| [Home](home.md) | `src/screens/Home/HomeScreen.tsx` | authStore.signOut | — |
+| [Home](home.md) | `src/screens/Home/HomeScreen.tsx` | authStore.signOut, mocks (dados mockados) | — (mock por enquanto) |
