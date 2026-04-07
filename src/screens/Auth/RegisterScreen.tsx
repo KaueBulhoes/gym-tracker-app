@@ -44,11 +44,12 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
           <Text style={styles.title}>Criar conta</Text>
@@ -84,6 +85,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
             onChangeText={setPassword}
             placeholder="Mínimo 6 caracteres"
             secureTextEntry
+            autoCapitalize="none"
             containerStyle={styles.input}
           />
 
@@ -93,6 +95,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
             onChangeText={setConfirmPassword}
             placeholder="Repita a senha"
             secureTextEntry
+            autoCapitalize="none"
             error={passwordMismatch ? 'As senhas não coincidem' : undefined}
             containerStyle={styles.input}
           />

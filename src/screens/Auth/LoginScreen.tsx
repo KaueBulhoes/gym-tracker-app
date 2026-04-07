@@ -33,11 +33,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
           <Text style={styles.title}>Gym Tracker</Text>
@@ -64,6 +65,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             onChangeText={setPassword}
             placeholder="Sua senha"
             secureTextEntry
+            autoCapitalize="none"
             containerStyle={styles.input}
           />
 

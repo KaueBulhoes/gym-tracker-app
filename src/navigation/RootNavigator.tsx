@@ -2,13 +2,9 @@ import type { Session } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { colors } from '../constants';
+import HomeScreen from '../screens/Home/HomeScreen';
 import { supabase } from '../services/supabase';
 import AuthNavigator from './AuthNavigator';
-
-// MainNavigator será implementado nas próximas fases com as telas do app
-const AppPlaceholder = () => (
-    <View style={styles.placeholder} />
-);
 
 const RootNavigator = () => {
     const [session, setSession] = useState<Session | null>(null);
@@ -37,7 +33,7 @@ const RootNavigator = () => {
         );
     }
 
-    return session ? <AppPlaceholder /> : <AuthNavigator />;
+    return session ? <HomeScreen /> : <AuthNavigator />;
 };
 
 const styles = StyleSheet.create({
@@ -45,10 +41,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.background,
-    },
-    placeholder: {
-        flex: 1,
         backgroundColor: colors.background,
     },
 });
