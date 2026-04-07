@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  type TextInputProps,
-  type ViewStyle,
-} from 'react-native';
+import { type TextInputProps, type ViewStyle } from 'react-native';
+import styled from 'styled-components/native';
 import { colors, spacing, typography } from '../constants';
 
 interface InputProps extends Omit<TextInputProps, 'style'> {
@@ -27,17 +20,10 @@ const Input: React.FC<InputProps> = ({
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
-    <View style={containerStyle}>
-      <Text style={styles.label}>{label}</Text>
-      <View
-        style={[
-          styles.inputContainer,
-          isFocused && styles.focused,
-          error && styles.errorBorder,
-        ]}
-      >
-        <TextInput
-          style={styles.input}
+    <Wrapper style={containerStyle}>
+      <Label>{label}</Label>
+      <InputContainer $isFocused={isFocused} $hasError={!!error}>
+        <StyledInput
           placeholderTextColor={colors.neutral300}
           secureTextEntry={secureTextEntry && !isPasswordVisible}
           onFocus={() => setIsFocused(true)}
@@ -46,63 +32,69 @@ const Input: React.FC<InputProps> = ({
           {...rest}
         />
         {secureTextEntry && (
-          <Pressable
+          <ToggleButton
             onPress={() => setIsPasswordVisible(!isPasswordVisible)}
             accessibilityLabel={
               isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha'
             }
-            style={styles.toggle}
           >
-            <Text style={styles.toggleText}>
+            <ToggleText>
               {isPasswordVisible ? 'Ocultar' : 'Mostrar'}
-            </Text>
-          </Pressable>
+            </ToggleText>
+          </ToggleButton>
         )}
-      </View>
-      {error && <Text style={styles.error}>{error}</Text>}
-    </View>
+      </InputContainer>
+      {error && <ErrorText>{error}</ErrorText>}
+    </Wrapper>
   );
 };
 
-const styles = StyleSheet.create({
-  label: {
-    ...typography.caption,
-    color: colors.neutral200,
-    marginBottom: spacing.xs,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.backgroundInput,
-    borderRadius: spacing.inputRadius,
-    borderWidth: 1.5,
-    borderColor: 'transparent',
-  },
-  focused: {
-    borderColor: colors.primary,
-  },
-  errorBorder: {
-    borderColor: colors.error,
-  },
-  input: {
-    flex: 1,
-    height: 48,
-    paddingHorizontal: spacing.base,
-    ...typography.body,
-    color: colors.text,
-  },
-  toggle: {
-    paddingHorizontal: spacing.md,
-  },
-  toggleText: {
-    ...typography.caption,
-    color: colors.secondary,
-  },
-  error: {
-    ...typography.small,
-    color: colors.error,
-    marginTop: spacing.xs,
-  },
-});
+const Wrapper = styled.View``;
+
+const Label = styled.Text`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.caption.fontWeight};
+  color: ${colors.neutral200};
+  margin-bottom: ${spacing.xs}px;
+`;
+
+const InputContainer = styled.View<{
+  $isFocused: boolean;
+  $hasError: boolean;
+}>`
+  flex-direction: row;
+  align-items: center;
+  background-color: ${colors.backgroundInput};
+  border-radius: ${spacing.inputRadius}px;
+  border-width: 1.5px;
+  border-color: ${({ $isFocused, $hasError }) =>
+    $hasError ? colors.error : $isFocused ? colors.primary : 'transparent'};
+`;
+
+const StyledInput = styled.TextInput`
+  flex: 1;
+  height: 48px;
+  padding-horizontal: ${spacing.base}px;
+  font-size: ${typography.body.fontSize}px;
+  font-weight: ${typography.body.fontWeight};
+  color: ${colors.text};
+`;
+
+const ToggleButton = styled.Pressable`
+  padding-horizontal: ${spacing.md}px;
+`;
+
+const ToggleText = styled.Text`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.caption.fontWeight};
+  color: ${colors.secondary};
+`;
+
+const ErrorText = styled.Text`
+  font-size: ${typography.small.fontSize}px;
+  font-weight: ${typography.small.fontWeight};
+  color: ${colors.error};
+  margin-top: ${spacing.xs}px;
+`;
 
 export default Input;

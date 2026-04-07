@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import styled from 'styled-components/native';
 import Button from '../../components/Button';
 import { colors, spacing, typography } from '../../constants';
 import { useAuthStore } from '../../stores/authStore';
@@ -8,35 +8,32 @@ const HomeScreen: React.FC = () => {
   const { signOut, isLoading } = useAuthStore();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Hello GymTracker</Text>
+    <Container>
+      <Title>Hello GymTracker</Title>
       <Button
         title="Sair"
         onPress={signOut}
         isLoading={isLoading}
         variant="outline"
-        style={styles.button}
+        style={{ width: '100%' as unknown as number }}
       />
-    </View>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: spacing.screenHorizontal,
-  },
-  title: {
-    ...typography.h1,
-    color: colors.primary,
-    marginBottom: spacing.xxl,
-  },
-  button: {
-    width: '100%',
-  },
-});
+const Container = styled.View`
+  flex: 1;
+  background-color: ${colors.background};
+  align-items: center;
+  justify-content: center;
+  padding-horizontal: ${spacing.screenHorizontal}px;
+`;
+
+const Title = styled.Text`
+  font-size: ${typography.h1.fontSize}px;
+  font-weight: ${typography.h1.fontWeight};
+  color: ${colors.primary};
+  margin-bottom: ${spacing.xxl}px;
+`;
 
 export default HomeScreen;

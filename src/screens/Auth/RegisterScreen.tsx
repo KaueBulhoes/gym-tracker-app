@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
+import styled from 'styled-components/native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { colors, spacing, typography } from '../../constants';
@@ -42,30 +36,24 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView
-        contentContainerStyle={styles.content}
+    <Container behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <Content
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
-          <Text style={styles.title}>Criar conta</Text>
-          <Text style={styles.subtitle}>
-            Comece a registrar seus treinos
-          </Text>
-        </View>
+        <Header>
+          <Title>Criar conta</Title>
+          <Subtitle>Comece a registrar seus treinos</Subtitle>
+        </Header>
 
-        <View style={styles.form}>
+        <Form>
           <Input
             label="Nome"
             value={name}
             onChangeText={setName}
             placeholder="Seu nome"
             autoCapitalize="words"
-            containerStyle={styles.input}
           />
 
           <Input
@@ -76,7 +64,6 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
-            containerStyle={styles.input}
           />
 
           <Input
@@ -86,7 +73,6 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
             placeholder="Mínimo 6 caracteres"
             secureTextEntry
             autoCapitalize="none"
-            containerStyle={styles.input}
           />
 
           <Input
@@ -97,69 +83,65 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
             secureTextEntry
             autoCapitalize="none"
             error={passwordMismatch ? 'As senhas não coincidem' : undefined}
-            containerStyle={styles.input}
           />
 
-          {error && <Text style={styles.error}>{error}</Text>}
+          {error && <ErrorText>{error}</ErrorText>}
 
           <Button
             title="Cadastrar"
             onPress={handleRegister}
             isLoading={isLoading}
             disabled={!isFormValid}
-            style={styles.button}
           />
 
           <Button
             title="Já tenho conta"
             onPress={() => navigation.goBack()}
             variant="outline"
-            style={styles.button}
           />
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </Form>
+      </Content>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    paddingHorizontal: spacing.screenHorizontal,
-    paddingVertical: spacing.xxxl,
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: spacing.xxxl,
-  },
-  title: {
-    ...typography.h1,
-    color: colors.primary,
-    marginBottom: spacing.sm,
-  },
-  subtitle: {
-    ...typography.body,
-    color: colors.textSecondary,
-  },
-  form: {
-    gap: spacing.base,
-  },
-  input: {
-    marginBottom: spacing.xs,
-  },
-  error: {
-    ...typography.caption,
-    color: colors.error,
-    textAlign: 'center',
-  },
-  button: {
-    marginTop: spacing.xs,
-  },
-});
+const Container = styled(KeyboardAvoidingView)`
+  flex: 1;
+  background-color: ${colors.background};
+`;
+
+const Content = styled.ScrollView`
+  padding-horizontal: ${spacing.screenHorizontal}px;
+  padding-vertical: ${spacing.xxxl}px;
+`;
+
+const Header = styled.View`
+  align-items: center;
+  margin-bottom: ${spacing.xxxl}px;
+`;
+
+const Title = styled.Text`
+  font-size: ${typography.h1.fontSize}px;
+  font-weight: ${typography.h1.fontWeight};
+  color: ${colors.primary};
+  margin-bottom: ${spacing.sm}px;
+`;
+
+const Subtitle = styled.Text`
+  font-size: ${typography.body.fontSize}px;
+  font-weight: ${typography.body.fontWeight};
+  color: ${colors.textSecondary};
+`;
+
+const Form = styled.View`
+  gap: ${spacing.base}px;
+`;
+
+const ErrorText = styled.Text`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.caption.fontWeight};
+  color: ${colors.error};
+  text-align: center;
+`;
 
 export default RegisterScreen;

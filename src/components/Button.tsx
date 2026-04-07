@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  type ViewStyle,
-} from 'react-native';
+import { ActivityIndicator, type ViewStyle } from 'react-native';
+import styled from 'styled-components/native';
 import { colors, spacing, typography } from '../constants';
 
 interface ButtonProps {
@@ -28,18 +23,14 @@ const Button: React.FC<ButtonProps> = ({
   const isDisabled = disabled || isLoading;
 
   return (
-    <Pressable
+    <Container
       onPress={onPress}
       disabled={isDisabled}
       accessibilityLabel={title}
       accessibilityRole="button"
-      style={({ pressed }) => [
-        styles.base,
-        variant === 'primary' ? styles.primary : styles.outline,
-        pressed && !isDisabled && styles.pressed,
-        isDisabled && styles.disabled,
-        style,
-      ]}
+      $variant={variant}
+      $isDisabled={isDisabled}
+      style={style}
     >
       {isLoading ? (
         <ActivityIndicator
@@ -47,52 +38,40 @@ const Button: React.FC<ButtonProps> = ({
           size="small"
         />
       ) : (
-        <Text
-          style={[
-            styles.text,
-            variant === 'outline' && styles.outlineText,
-            isDisabled && styles.disabledText,
-          ]}
-        >
+        <Title $variant={variant} $isDisabled={isDisabled}>
           {title}
-        </Text>
+        </Title>
       )}
-    </Pressable>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  base: {
-    height: 52,
-    borderRadius: spacing.buttonRadius,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: spacing.xl,
-  },
-  primary: {
-    backgroundColor: colors.primary,
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1.5,
-    borderColor: colors.primary,
-  },
-  pressed: {
-    opacity: 0.8,
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-  text: {
-    ...typography.button,
-    color: colors.textInverse,
-  },
-  outlineText: {
-    color: colors.primary,
-  },
-  disabledText: {
-    opacity: 0.7,
-  },
-});
+const Container = styled.Pressable<{
+  $variant: 'primary' | 'outline';
+  $isDisabled: boolean;
+}>`
+  height: 52px;
+  border-radius: ${spacing.buttonRadius}px;
+  align-items: center;
+  justify-content: center;
+  padding-horizontal: ${spacing.xl}px;
+  opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+  background-color: ${({ $variant }) =>
+    $variant === 'primary' ? colors.primary : 'transparent'};
+  ${({ $variant }) =>
+    $variant === 'outline' &&
+    `border-width: 1.5px; border-color: ${colors.primary};`}
+`;
+
+const Title = styled.Text<{
+  $variant: 'primary' | 'outline';
+  $isDisabled: boolean;
+}>`
+  font-size: ${typography.button.fontSize}px;
+  font-weight: ${typography.button.fontWeight};
+  color: ${({ $variant }) =>
+    $variant === 'outline' ? colors.primary : colors.textInverse};
+  opacity: ${({ $isDisabled }) => ($isDisabled ? 0.7 : 1)};
+`;
 
 export default Button;

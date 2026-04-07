@@ -1,6 +1,7 @@
 import type { Session } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
+import styled from 'styled-components/native';
 import { colors } from '../constants';
 import HomeScreen from '../screens/Home/HomeScreen';
 import { supabase } from '../services/supabase';
@@ -27,22 +28,20 @@ const RootNavigator = () => {
 
     if (isLoading) {
         return (
-            <View style={styles.loading}>
+            <LoadingContainer>
                 <ActivityIndicator size="large" color={colors.primary} />
-            </View>
+            </LoadingContainer>
         );
     }
 
     return session ? <HomeScreen /> : <AuthNavigator />;
 };
 
-const styles = StyleSheet.create({
-    loading: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: colors.background,
-    },
-});
+const LoadingContainer = styled.View`
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: ${colors.background};
+`;
 
 export default RootNavigator;
