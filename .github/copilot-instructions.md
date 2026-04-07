@@ -13,6 +13,7 @@ App mobile de acompanhamento de academia. Permite registrar treinos, séries, re
 - **Backend:** Supabase (Auth, Database PostgreSQL, Realtime)
 - **Gráficos:** react-native-chart-kit ou victory-native
 - **Testes:** Jest + React Native Testing Library
+- **Estilização:** styled-components/native
 - **Lint/Format:** ESLint + Prettier
 
 ## Estrutura de Pastas
@@ -89,7 +90,7 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Sempre funcionais com arrow functions
 - Um componente por arquivo
 - Props tipadas com interface dedicada
-- Estilização com `StyleSheet.create()` no final do arquivo (nunca inline)
+- Estilização com `styled-components/native` (não usar StyleSheet.create nem styles inline)
 - Nomes em PascalCase para componentes, camelCase para hooks e utils
 
 ### Hooks
@@ -110,6 +111,17 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Row Level Security (RLS) habilitado em todas as tabelas
 - Chaves do Supabase em variáveis de ambiente (.env), nunca hardcoded
 
+### Tratamento de Erros
+
+- Nunca `throw error` cru do Supabase — sempre usar `mapAuthError(error)` ou `mapDatabaseError(error)`
+- Classe `AppError` em `src/types/errors.ts` com `code` (programático) + `message` (PT-BR para o usuário) + `originalError` (debug)
+- Mappers em `src/utils/errorMapper.ts` traduzem erros do Supabase para mensagens amigáveis
+- Nos stores: capturar com `err instanceof AppError` e exibir `appError.message` na UI
+- Novos services devem seguir o padrão: `if (error) { throw mapXxxError(error); }`
+- Para erros de auth: usar `mapAuthError`
+- Para erros de banco (CRUD): usar `mapDatabaseError`
+- Ao adicionar novas operações: verificar se o código de erro já está mapeado, senão adicionar ao mapper
+
 ### Estilo e UI
 
 - Tema de cores definido em `src/constants/colors.ts`
@@ -121,7 +133,7 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 1. **Sempre TypeScript** — nunca gerar código .js ou .jsx
 2. **Não usar Expo** — este projeto usa React Native CLI puro
 3. **Não usar class components** — apenas componentes funcionais
-4. **Não usar styles inline** — sempre StyleSheet.create()
+4. **Usar styled-components** — não usar StyleSheet.create() nem styles inline
 5. **Não instalar libs sem avisar** — perguntar antes de adicionar dependências
 6. **Manter arquivos pequenos** — se um arquivo passar de 200 linhas, sugerir split
 7. **Segurança** — nunca expor chaves ou secrets no código; usar .env
