@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { colors } from '../constants';
+import { colors } from '../../constants';
 
 export const Track = styled.View`
   height: 8px;

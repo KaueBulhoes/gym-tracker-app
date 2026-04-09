@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextInput as RNTextInput, type TextInputProps } from 'react-native';
 import styled from 'styled-components/native';
-import { colors, spacing, typography } from '../../../constants';
+import { colors, spacing, typography } from '../../../../constants';
 
 export const Wrapper = styled.View`
   margin-top: ${spacing.md}px;

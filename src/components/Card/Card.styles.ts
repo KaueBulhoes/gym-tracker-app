@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { colors, spacing } from '../constants';
+import { colors, spacing } from '../../constants';
 
 export const getBackgroundColor = (variant: string) => {
   switch (variant) {

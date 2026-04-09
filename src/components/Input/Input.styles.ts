@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { colors, spacing, typography } from '../constants';
+import { colors, spacing, typography } from '../../constants';
 
 export const Wrapper = styled.View``;
 

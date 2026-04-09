@@ -1,6 +1,6 @@
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors, spacing } from '../constants';
+import { colors, spacing } from '../../constants';
 import { Container, IconContainer, Info, Title, Subtitle } from './WorkoutListItem.styles';
 
 interface WorkoutListItemProps {

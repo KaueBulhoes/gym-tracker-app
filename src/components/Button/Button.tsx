@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, type ViewStyle } from 'react-native';
-import { colors } from '../constants';
+import { colors } from '../../constants';
 import { Container, Title } from './Button.styles';
 
 interface ButtonProps {
