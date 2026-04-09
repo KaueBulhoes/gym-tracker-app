@@ -5,6 +5,11 @@ export type AuthStackParamList = {
   Register: undefined;
 };
 
+export type AppStackParamList = {
+  Home: undefined;
+  AddWorkoutPlan: undefined;
+};
+
 export type LoginScreenProps = NativeStackScreenProps<
   AuthStackParamList,
   'Login'
@@ -12,4 +17,9 @@ export type LoginScreenProps = NativeStackScreenProps<
 export type RegisterScreenProps = NativeStackScreenProps<
   AuthStackParamList,
   'Register'
+>;
+export type HomeScreenProps = NativeStackScreenProps<AppStackParamList, 'Home'>;
+export type AddWorkoutPlanScreenProps = NativeStackScreenProps<
+  AppStackParamList,
+  'AddWorkoutPlan'
 >;

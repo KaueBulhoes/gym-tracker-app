@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { LayoutAnimation, Platform, StatusBar, UIManager } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,6 +17,7 @@ import {
   mockWorkoutPlan,
 } from '../../mocks/homeData';
 import { useAuthStore } from '../../stores/authStore';
+import type { AppStackParamList } from '../../navigation/types';
 
 if (
   Platform.OS === 'android' &&
@@ -34,6 +37,7 @@ const formatDate = (isoDate: string): string => {
 
 const HomeScreen: React.FC = () => {
   const { signOut } = useAuthStore();
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const remaining = mockWeeklyGoal.target - mockWeeklyGoal.completed;
   const [isWorkoutSectionOpen, setIsWorkoutSectionOpen] = useState(false);
   const [expandedWorkout, setExpandedWorkout] = useState<string | null>(null);
@@ -204,6 +208,13 @@ const HomeScreen: React.FC = () => {
           </WorkoutList>}
         </ContentArea>
       </ScrollContent>
+
+      <AddPlanFAB
+        onPress={() => navigation.navigate('AddWorkoutPlan')}
+        accessibilityLabel="Novo plano de treino"
+      >
+        <MaterialCommunityIcons name="plus" size={28} color={colors.textInverse} />
+      </AddPlanFAB>
     </Container>
   );
 };
@@ -360,6 +371,23 @@ const SectionTitle = styled.Text`
   font-size: ${typography.h3.fontSize}px;
   font-weight: ${typography.h3.fontWeight};
   color: ${colors.text};
+`;
+
+const AddPlanFAB = styled.Pressable`
+  position: absolute;
+  bottom: ${spacing.xl}px;
+  align-self: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background-color: ${colors.primary};
+  align-items: center;
+  justify-content: center;
+  elevation: 6;
+  shadow-color: ${colors.primary};
+  shadow-offset: 0px 4px;
+  shadow-opacity: 0.35;
+  shadow-radius: 8px;
 `;
 
 const WorkoutList = styled.View`

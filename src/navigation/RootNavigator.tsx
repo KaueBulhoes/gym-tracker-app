@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import styled from 'styled-components/native';
 import { colors } from '../constants';
-import HomeScreen from '../screens/Home/HomeScreen';
 import { supabase } from '../services/supabase';
 import AuthNavigator from './AuthNavigator';
+import AppNavigator from './AppNavigator';
 
 const RootNavigator = () => {
     const [session, setSession] = useState<Session | null>(null);
@@ -34,7 +34,7 @@ const RootNavigator = () => {
         );
     }
 
-    return session ? <HomeScreen /> : <AuthNavigator />;
+    return session ? <AppNavigator /> : <AuthNavigator />;
 };
 
 const LoadingContainer = styled.View`
