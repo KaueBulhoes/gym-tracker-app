@@ -60,11 +60,11 @@ export const Content = styled.View`
   gap: ${spacing.sm}px;
 `;
 
-export const DayCard = styled.Pressable<{ $expanded: boolean }>`
+export const DayCard = styled.Pressable`
   background-color: ${colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   border-width: 1px;
-  border-color: ${({ $expanded }) => ($expanded ? colors.secondary : colors.neutral600)};
+  border-color: ${colors.neutral600};
   overflow: hidden;
 `;
 
@@ -82,14 +82,13 @@ export const DayHeaderLeft = styled.View`
   flex: 1;
 `;
 
-export const DayIconContainer = styled.View<{ $expanded: boolean }>`
+export const DayIconContainer = styled.View`
   width: 40px;
   height: 40px;
   border-radius: 20px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ $expanded }) =>
-    $expanded ? 'rgba(139, 92, 246, 0.2)' : colors.backgroundHighlight};
+  background-color: ${colors.backgroundHighlight};
 `;
 
 export const DayInfo = styled.View`
@@ -109,66 +108,3 @@ export const DayCount = styled.Text`
   margin-top: ${spacing.xxs}px;
 `;
 
-export const DayBody = styled.View`
-  padding-horizontal: ${spacing.cardPadding}px;
-  padding-bottom: ${spacing.cardPadding}px;
-  border-top-width: 1px;
-  border-top-color: ${colors.neutral600};
-  gap: ${spacing.sm}px;
-`;
-
-export const ExerciseRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: ${spacing.sm}px;
-  padding: ${spacing.sm}px ${spacing.md}px;
-  background-color: ${colors.backgroundHighlight};
-  border-radius: ${spacing.cardRadius}px;
-  margin-top: ${spacing.sm}px;
-`;
-
-export const ExerciseName = styled.Text`
-  flex: 1;
-  font-size: ${typography.body.fontSize}px;
-  font-weight: ${typography.body.fontWeight};
-  color: ${colors.text};
-`;
-
-export const DeleteButton = styled.Pressable`
-  width: 32px;
-  height: 32px;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const InputRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: ${spacing.sm}px;
-  margin-top: ${spacing.sm}px;
-`;
-
-export const ExerciseInput = styled.TextInput`
-  flex: 1;
-  height: 44px;
-  background-color: ${colors.backgroundInput};
-  border-radius: ${spacing.inputRadius}px;
-  border-width: 1.5px;
-  border-color: ${colors.border};
-  padding-horizontal: ${spacing.md}px;
-  font-size: ${typography.body.fontSize}px;
-  color: ${colors.text};
-`;
-
-export const AddButton = styled.Pressable<{ $disabled: boolean }>`
-  width: 44px;
-  height: 44px;
-  border-radius: ${spacing.buttonRadius}px;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ $disabled }) =>
-    $disabled ? colors.backgroundElevated : colors.secondary};
-  border-width: 1.5px;
-  border-color: ${({ $disabled }) =>
-    $disabled ? colors.neutral600 : colors.secondary};
-`;

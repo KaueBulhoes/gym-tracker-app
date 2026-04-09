@@ -3,6 +3,7 @@ import React from 'react';
 import HomeScreen from '../screens/Home/HomeScreen';
 import AddWorkoutExercisesScreen from '../screens/Workout/AddWorkoutExercisesScreen';
 import AddWorkoutPlanScreen from '../screens/Workout/AddWorkoutPlanScreen';
+import WorkoutDayScreen from '../screens/Workout/WorkoutDayScreen';
 import type { AppStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -12,6 +13,7 @@ const AppNavigator: React.FC = () => (
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="AddWorkoutPlan" component={AddWorkoutPlanScreen} />
         <Stack.Screen name="AddWorkoutExercises" component={AddWorkoutExercisesScreen} />
+        <Stack.Screen name="WorkoutDay" component={WorkoutDayScreen} />
     </Stack.Navigator>
 );
 
