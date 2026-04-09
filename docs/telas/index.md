@@ -9,15 +9,10 @@ App
 ├── Auth (Stack)
 │   ├── Login
 │   └── Cadastro
-├── Main (Bottom Tabs)
-│   ├── Home
-│   ├── Treinar
-│   ├── Histórico
-│   └── Perfil
-└── Modais
-    ├── Novo Treino
-    ├── Timer de Descanso
-    └── Detalhes do Exercício
+└── App (Stack)
+    ├── Home
+    │   └── FAB (+) → AddWorkoutPlan
+    └── AddWorkoutPlan
 ```
 
 ## Telas implementadas
@@ -26,4 +21,5 @@ App
 |------|---------|-----------------|---------|
 | [Login](login.md) | `src/screens/Auth/LoginScreen.tsx` | authStore.signIn | auth.users |
 | [Cadastro](cadastro.md) | `src/screens/Auth/RegisterScreen.tsx` | authStore.signUp | auth.users |
-| [Home](home.md) | `src/screens/Home/HomeScreen.tsx` | authStore.signOut, mocks (dados mockados) | — (mock por enquanto) |
+| [Home](home.md) | `src/screens/Home/HomeScreen.tsx` | authStore.signOut, mocks | — (mock por enquanto) |
+| [Adicionar Plano de Treino](add-workout-plan.md) | `src/screens/Workout/AddWorkoutPlanScreen.tsx` | — (a integrar) | workout_plans (a integrar) |
