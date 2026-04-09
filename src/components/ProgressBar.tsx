@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from 'styled-components/native';
 import { colors } from '../constants';
+import { Track, Fill } from './ProgressBar.styles';
 
 interface ProgressBarProps {
   current: number;
@@ -21,19 +21,5 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     </Track>
   );
 };
-
-const Track = styled.View`
-  height: 8px;
-  border-radius: 4px;
-  background-color: ${colors.neutral600};
-  overflow: hidden;
-`;
-
-const Fill = styled.View<{ $progress: number; $color: string }>`
-  height: 100%;
-  border-radius: 4px;
-  width: ${({ $progress }) => $progress * 100}%;
-  background-color: ${({ $color }) => $color};
-`;
 
 export default ProgressBar;

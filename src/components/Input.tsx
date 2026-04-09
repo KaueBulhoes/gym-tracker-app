@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { type TextInputProps, type ViewStyle } from 'react-native';
-import styled from 'styled-components/native';
-import { colors, spacing, typography } from '../constants';
+import { Wrapper, Label, InputContainer, StyledInput, ToggleButton, ToggleText, ErrorText } from './Input.styles';
 
 interface InputProps extends Omit<TextInputProps, 'style'> {
   label: string;
@@ -48,53 +47,5 @@ const Input: React.FC<InputProps> = ({
     </Wrapper>
   );
 };
-
-const Wrapper = styled.View``;
-
-const Label = styled.Text`
-  font-size: ${typography.caption.fontSize}px;
-  font-weight: ${typography.caption.fontWeight};
-  color: ${colors.neutral200};
-  margin-bottom: ${spacing.xs}px;
-`;
-
-const InputContainer = styled.View<{
-  $isFocused: boolean;
-  $hasError: boolean;
-}>`
-  flex-direction: row;
-  align-items: center;
-  background-color: ${colors.backgroundInput};
-  border-radius: ${spacing.inputRadius}px;
-  border-width: 1.5px;
-  border-color: ${({ $isFocused, $hasError }) =>
-    $hasError ? colors.error : $isFocused ? colors.primary : 'transparent'};
-`;
-
-const StyledInput = styled.TextInput`
-  flex: 1;
-  height: 48px;
-  padding-horizontal: ${spacing.base}px;
-  font-size: ${typography.body.fontSize}px;
-  font-weight: ${typography.body.fontWeight};
-  color: ${colors.text};
-`;
-
-const ToggleButton = styled.Pressable`
-  padding-horizontal: ${spacing.md}px;
-`;
-
-const ToggleText = styled.Text`
-  font-size: ${typography.caption.fontSize}px;
-  font-weight: ${typography.caption.fontWeight};
-  color: ${colors.secondary};
-`;
-
-const ErrorText = styled.Text`
-  font-size: ${typography.small.fontSize}px;
-  font-weight: ${typography.small.fontWeight};
-  color: ${colors.error};
-  margin-top: ${spacing.xs}px;
-`;
 
 export default Input;

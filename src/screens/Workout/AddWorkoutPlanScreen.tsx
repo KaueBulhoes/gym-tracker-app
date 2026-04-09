@@ -1,9 +1,27 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import styled from 'styled-components/native';
 import Button from '../../components/Button';
-import { colors, spacing, typography } from '../../constants';
+import { colors, spacing } from '../../constants';
+import {
+    BackButton,
+    Container,
+    Content,
+    Header,
+    HeaderTitle,
+    Panel,
+    PanelLabel,
+    RadioCircle,
+    RadioDescription,
+    RadioDot,
+    RadioGroup,
+    RadioLabel,
+    RadioLeft,
+    RadioOption,
+    RadioTextGroup,
+    ScrollContent,
+    SectionLabel,
+} from './AddWorkoutPlanScreen.styles';
 import type { AddWorkoutPlanScreenProps } from '../../navigation/types';
 import CustomDayForm from './components/CustomDayForm';
 import DayChipSelector from './components/DayChipSelector';
@@ -187,118 +205,5 @@ const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation 
         </Container>
     );
 };
-
-const Container = styled.View`
-  flex: 1;
-  background-color: ${colors.background};
-`;
-
-const Header = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: ${spacing.md}px;
-  padding-horizontal: ${spacing.screenHorizontal}px;
-  padding-top: ${spacing.huge}px;
-  padding-bottom: ${spacing.xl}px;
-  background-color: ${colors.secondaryDark};
-`;
-
-const BackButton = styled.Pressable`
-  width: 40px;
-  height: 40px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
-`;
-
-const HeaderTitle = styled.Text`
-  font-size: ${typography.h3.fontSize}px;
-  font-weight: ${typography.h3.fontWeight};
-  color: ${colors.neutral50};
-`;
-
-const ScrollContent = styled.ScrollView``;
-
-const Content = styled.View`
-  padding-horizontal: ${spacing.screenHorizontal}px;
-  padding-top: ${spacing.xl}px;
-  padding-bottom: 55px;
-  gap: ${spacing.base}px;
-`;
-
-const SectionLabel = styled.Text`
-  font-size: ${typography.bodyBold.fontSize}px;
-  font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.text};
-`;
-
-const RadioGroup = styled.View`
-  gap: ${spacing.sm}px;
-`;
-
-const RadioOption = styled.Pressable<{ $selected: boolean }>`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${spacing.md}px;
-  border-radius: ${spacing.cardRadius}px;
-  background-color: ${colors.backgroundElevated};
-  border-width: 1.5px;
-  border-color: ${({ $selected }) => ($selected ? colors.primary : colors.border)};
-`;
-
-const RadioLeft = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: ${spacing.md}px;
-`;
-
-const RadioCircle = styled.View<{ $selected: boolean }>`
-  width: 22px;
-  height: 22px;
-  border-radius: 11px;
-  border-width: 2px;
-  border-color: ${({ $selected }) => ($selected ? colors.primary : colors.border)};
-  align-items: center;
-  justify-content: center;
-`;
-
-const RadioDot = styled.View`
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: ${colors.primary};
-`;
-
-const RadioTextGroup = styled.View`
-  gap: ${spacing.xxs}px;
-`;
-
-const RadioLabel = styled.Text<{ $selected: boolean }>`
-  font-size: ${typography.bodyBold.fontSize}px;
-  font-weight: ${typography.bodyBold.fontWeight};
-  color: ${({ $selected }) => ($selected ? colors.primary : colors.text)};
-`;
-
-const RadioDescription = styled.Text`
-  font-size: ${typography.small.fontSize}px;
-  font-weight: ${typography.small.fontWeight};
-  color: ${colors.textSecondary};
-`;
-
-const Panel = styled.View`
-  background-color: ${colors.backgroundElevated};
-  border-radius: ${spacing.cardRadius}px;
-  padding: ${spacing.md}px;
-  border-width: 1px;
-  border-color: ${colors.neutral600};
-`;
-
-const PanelLabel = styled.Text`
-  font-size: ${typography.caption.fontSize}px;
-  font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
-`;
 
 export default AddWorkoutPlanScreen;

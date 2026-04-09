@@ -3,11 +3,51 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { LayoutAnimation, Platform, StatusBar, UIManager } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import styled from 'styled-components/native';
 import Button from '../../components/Button';
 import Card from '../../components/Card';
 import ProgressBar from '../../components/ProgressBar';
-import { colors, spacing, typography } from '../../constants';
+import { colors, spacing } from '../../constants';
+import {
+  AddPlanFAB,
+  Container,
+  ContentArea,
+  GoalCount,
+  GoalHeader,
+  GoalMotivation,
+  GoalTitle,
+  GoalTitleRow,
+  Header,
+  HeaderContent,
+  MetricCard,
+  MetricLabel,
+  MetricSub,
+  MetricValue,
+  MetricValueLarge,
+  MetricsRow,
+  NextBadge,
+  NextBadgeText,
+  NextWorkoutHeader,
+  NextWorkoutTitle,
+  ProfileButton,
+  ProgressBarWrapper,
+  ScrollContent,
+  SectionHeader,
+  SectionTitle,
+  UserName,
+  WelcomeText,
+  WorkoutAccordion,
+  WorkoutAccordionBody,
+  WorkoutAccordionHeader,
+  WorkoutAccordionInfo,
+  WorkoutAccordionLeft,
+  WorkoutAccordionRight,
+  WorkoutAccordionSubtitle,
+  WorkoutAccordionTitle,
+  WorkoutDetail,
+  WorkoutDetailText,
+  WorkoutIconContainer,
+  WorkoutList,
+} from './HomeScreen.styles';
 import {
   mockLastWorkout,
   mockMonthlyTotal,
@@ -218,269 +258,5 @@ const HomeScreen: React.FC = () => {
     </Container>
   );
 };
-
-const Container = styled.View`
-  flex: 1;
-  background-color: ${colors.background};
-`;
-
-const ScrollContent = styled.ScrollView``;
-
-const Header = styled.View`
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding-horizontal: ${spacing.screenHorizontal}px;
-  padding-top: ${spacing.huge}px;
-  padding-bottom: ${spacing.xl}px;
-  background-color: ${colors.secondaryDark};
-`;
-
-const HeaderContent = styled.View`
-  flex: 1;
-`;
-
-const WelcomeText = styled.Text`
-  font-size: ${typography.caption.fontSize}px;
-  font-weight: ${typography.caption.fontWeight};
-  color: ${colors.neutral200};
-`;
-
-const UserName = styled.Text`
-  font-size: ${typography.h2.fontSize}px;
-  font-weight: ${typography.h2.fontWeight};
-  color: ${colors.neutral50};
-  margin-top: ${spacing.xxs}px;
-`;
-
-const ProfileButton = styled.Pressable`
-  width: 44px;
-  height: 44px;
-  border-radius: 22px;
-  background-color: rgba(255, 255, 255, 0.15);
-  align-items: center;
-  justify-content: center;
-`;
-
-const ContentArea = styled.View`
-  padding-horizontal: ${spacing.screenHorizontal}px;
-  padding-top: ${spacing.lg}px;
-  padding-bottom: 55px;
-  gap: ${spacing.base}px;
-`;
-
-const GoalHeader = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const GoalTitleRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: ${spacing.sm}px;
-`;
-
-const GoalTitle = styled.Text`
-  font-size: ${typography.bodyBold.fontSize}px;
-  font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.neutral50};
-`;
-
-const GoalCount = styled.Text`
-  font-size: ${typography.h3.fontSize}px;
-  font-weight: ${typography.h3.fontWeight};
-  color: ${colors.neutral50};
-`;
-
-const ProgressBarWrapper = styled.View`
-  margin-top: ${spacing.md}px;
-  margin-bottom: ${spacing.sm}px;
-`;
-
-const GoalMotivation = styled.Text`
-  font-size: ${typography.small.fontSize}px;
-  font-weight: ${typography.small.fontWeight};
-  color: ${colors.neutral200};
-`;
-
-const MetricsRow = styled.View`
-  flex-direction: row;
-  gap: ${spacing.md}px;
-`;
-
-const MetricCard = styled.View`
-  flex: 1;
-  background-color: ${colors.backgroundElevated};
-  border-radius: ${spacing.cardRadius}px;
-  border-width: 1px;
-  border-color: ${colors.neutral600};
-  padding: ${spacing.md}px;
-  align-items: center;
-  gap: ${spacing.xxs}px;
-`;
-
-const MetricValue = styled.Text`
-  font-size: ${typography.numberSmall.fontSize}px;
-  font-weight: ${typography.numberSmall.fontWeight};
-  color: ${colors.text};
-`;
-
-const MetricValueLarge = styled.Text`
-  font-size: ${typography.number.fontSize}px;
-  font-weight: ${typography.number.fontWeight};
-  color: ${colors.text};
-  flex: 1;
-  text-align-vertical: center;
-`;
-
-const MetricLabel = styled.Text`
-  font-size: ${typography.small.fontSize}px;
-  font-weight: ${typography.small.fontWeight};
-  color: ${colors.textSecondary};
-`;
-
-const MetricSub = styled.Text`
-  font-size: ${typography.small.fontSize}px;
-  font-weight: ${typography.small.fontWeight};
-  color: ${colors.neutral400};
-`;
-
-
-const NextWorkoutHeader = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: ${spacing.base}px;
-`;
-
-const NextWorkoutTitle = styled.Text`
-  font-size: ${typography.h3.fontSize}px;
-  font-weight: ${typography.h3.fontWeight};
-  color: ${colors.text};
-`;
-
-const SectionHeader = styled.Pressable`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: ${spacing.sm}px;
-`;
-
-const SectionTitle = styled.Text`
-  font-size: ${typography.h3.fontSize}px;
-  font-weight: ${typography.h3.fontWeight};
-  color: ${colors.text};
-`;
-
-const AddPlanFAB = styled.Pressable`
-  position: absolute;
-  bottom: ${spacing.xl}px;
-  align-self: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  background-color: ${colors.primary};
-  align-items: center;
-  justify-content: center;
-  elevation: 6;
-  shadow-color: ${colors.primary};
-  shadow-offset: 0px 4px;
-  shadow-opacity: 0.35;
-  shadow-radius: 8px;
-`;
-
-const WorkoutList = styled.View`
-  gap: ${spacing.sm}px;
-`;
-
-const WorkoutAccordion = styled.Pressable<{ $isNext: boolean }>`
-  background-color: ${colors.backgroundElevated};
-  border-radius: ${spacing.cardRadius}px;
-  border-width: 1px;
-  border-color: ${({ $isNext }) =>
-    $isNext ? colors.primary : colors.neutral600};
-  overflow: hidden;
-`;
-
-const WorkoutAccordionHeader = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${spacing.cardPadding}px;
-`;
-
-const WorkoutAccordionLeft = styled.View`
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-`;
-
-const WorkoutIconContainer = styled.View<{ $isNext: boolean }>`
-  width: 44px;
-  height: 44px;
-  border-radius: 22px;
-  background-color: ${({ $isNext }) =>
-    $isNext ? 'rgba(255, 214, 10, 0.15)' : colors.backgroundHighlight};
-  align-items: center;
-  justify-content: center;
-  margin-right: ${spacing.md}px;
-`;
-
-const WorkoutAccordionInfo = styled.View`
-  flex: 1;
-`;
-
-const WorkoutAccordionTitle = styled.Text<{ $isNext: boolean }>`
-  font-size: ${typography.bodyBold.fontSize}px;
-  font-weight: ${typography.bodyBold.fontWeight};
-  color: ${({ $isNext }) => ($isNext ? colors.primary : colors.text)};
-`;
-
-const WorkoutAccordionSubtitle = styled.Text`
-  font-size: ${typography.caption.fontSize}px;
-  font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
-  margin-top: ${spacing.xxs}px;
-`;
-
-const WorkoutAccordionRight = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: ${spacing.sm}px;
-`;
-
-const NextBadge = styled.View`
-  background-color: rgba(255, 214, 10, 0.15);
-  padding-horizontal: ${spacing.sm}px;
-  padding-vertical: ${spacing.xxs}px;
-  border-radius: ${spacing.buttonRadius}px;
-`;
-
-const NextBadgeText = styled.Text`
-  font-size: ${typography.small.fontSize}px;
-  font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.primary};
-`;
-
-const WorkoutAccordionBody = styled.View`
-  padding-horizontal: ${spacing.cardPadding}px;
-  padding-bottom: ${spacing.cardPadding}px;
-  border-top-width: 1px;
-  border-top-color: ${colors.neutral600};
-`;
-
-const WorkoutDetail = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: ${spacing.xs}px;
-  margin-top: ${spacing.md}px;
-`;
-
-const WorkoutDetailText = styled.Text`
-  font-size: ${typography.caption.fontSize}px;
-  font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
-`;
 
 export default HomeScreen;

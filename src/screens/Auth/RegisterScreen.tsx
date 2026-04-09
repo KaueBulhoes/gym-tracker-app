@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform } from 'react-native';
-import styled from 'styled-components/native';
+import { Platform } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import { colors, spacing, typography } from '../../constants';
 import type { RegisterScreenProps } from '../../navigation/types';
 import { useAuthStore } from '../../stores/authStore';
+import { Container, Content, Header, Title, Subtitle, Form, ErrorText } from './RegisterScreen.styles';
 
 const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -104,44 +103,5 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
     </Container>
   );
 };
-
-const Container = styled(KeyboardAvoidingView)`
-  flex: 1;
-  background-color: ${colors.background};
-`;
-
-const Content = styled.ScrollView`
-  padding-horizontal: ${spacing.screenHorizontal}px;
-  padding-vertical: ${spacing.xxxl}px;
-`;
-
-const Header = styled.View`
-  align-items: center;
-  margin-bottom: ${spacing.xxxl}px;
-`;
-
-const Title = styled.Text`
-  font-size: ${typography.h1.fontSize}px;
-  font-weight: ${typography.h1.fontWeight};
-  color: ${colors.primary};
-  margin-bottom: ${spacing.sm}px;
-`;
-
-const Subtitle = styled.Text`
-  font-size: ${typography.body.fontSize}px;
-  font-weight: ${typography.body.fontWeight};
-  color: ${colors.textSecondary};
-`;
-
-const Form = styled.View`
-  gap: ${spacing.base}px;
-`;
-
-const ErrorText = styled.Text`
-  font-size: ${typography.caption.fontSize}px;
-  font-weight: ${typography.caption.fontWeight};
-  color: ${colors.error};
-  text-align: center;
-`;
 
 export default RegisterScreen;

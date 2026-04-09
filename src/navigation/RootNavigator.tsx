@@ -1,11 +1,11 @@
 import type { Session } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
-import styled from 'styled-components/native';
 import { colors } from '../constants';
 import { supabase } from '../services/supabase';
 import AuthNavigator from './AuthNavigator';
 import AppNavigator from './AppNavigator';
+import { LoadingContainer } from './RootNavigator.styles';
 
 const RootNavigator = () => {
     const [session, setSession] = useState<Session | null>(null);
@@ -36,12 +36,5 @@ const RootNavigator = () => {
 
     return session ? <AppNavigator /> : <AuthNavigator />;
 };
-
-const LoadingContainer = styled.View`
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    background-color: ${colors.background};
-`;
 
 export default RootNavigator;
