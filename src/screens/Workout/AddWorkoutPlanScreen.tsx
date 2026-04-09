@@ -114,6 +114,20 @@ const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation 
         (planType === 'weekdays' && weekdaySelected.length > 0) ||
         (planType === 'custom' && customDays.length > 0);
 
+    const handleCreatePlan = () => {
+        let days: string[] = [];
+        if (planType === 'abcde') {
+            days = abcdeItems
+                .filter(i => abcdeSelected.includes(i))
+                .map(d => `Treino ${d}`);
+        } else if (planType === 'weekdays') {
+            days = weekdayItems.filter(i => weekdaySelected.includes(i));
+        } else if (planType === 'custom') {
+            days = customDays;
+        }
+        navigation.navigate('AddWorkoutExercises', { days });
+    };
+
     return (
         <Container>
             <StatusBar barStyle="light-content" backgroundColor={colors.secondaryDark} />
@@ -196,7 +210,7 @@ const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation 
 
                     <Button
                         title="Criar Plano"
-                        onPress={() => { }}
+                        onPress={handleCreatePlan}
                         disabled={!canCreate}
                         style={{ marginTop: spacing.xl }}
                     />
