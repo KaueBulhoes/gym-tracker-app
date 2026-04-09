@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Analisa tudo que foi criado/modificado na sessão e registra automaticamente na documentação
 ---
 

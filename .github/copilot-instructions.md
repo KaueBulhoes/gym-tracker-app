@@ -91,6 +91,7 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Um componente por arquivo
 - Props tipadas com interface dedicada
 - Estilização com `styled-components/native` (não usar StyleSheet.create nem styles inline)
+- Estilos em arquivo separado: `NomeComponente.styles.ts` na mesma pasta do componente
 - Nomes em PascalCase para componentes, camelCase para hooks e utils
 
 ### Hooks
@@ -127,6 +128,9 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Tema de cores definido em `src/constants/colors.ts`
 - Espaçamentos padronizados em `src/constants/spacing.ts`
 - Componentes base reutilizáveis (Button, Input, Card) antes de compor telas
+- Estilos em arquivo separado do componente: `NomeComponente.styles.ts` na mesma pasta
+  - Ex: `Button.tsx` + `Button.styles.ts`, `HomeScreen.tsx` + `HomeScreen.styles.ts`
+  - O arquivo de estilos exporta os styled-components nomeados; o componente apenas importa
 
 ## Regras de Desenvolvimento
 

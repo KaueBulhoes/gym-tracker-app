@@ -15,10 +15,10 @@ Ao finalizar, pressiona "Criar Plano" (habilitado somente quando há ao menos um
 
 ## Dados e integrações
 
-| Recurso | Tipo | Descrição |
-|---------|------|-----------|
-| `DayChipSelector` | Componente local | Chips togláveis para modos ABCDE e Seg a Sex |
-| `CustomDayForm` | Componente local | Formulário sequencial para o modo personalizável |
+| Recurso           | Tipo             | Descrição                                        |
+| ----------------- | ---------------- | ------------------------------------------------ |
+| `DayChipSelector` | Componente local | Chips togláveis para modos ABCDE e Seg a Sex     |
+| `CustomDayForm`   | Componente local | Formulário sequencial para o modo personalizável |
 
 > Ainda sem integração com Supabase — lógica de persistência a implementar.
 

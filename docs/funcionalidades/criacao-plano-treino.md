@@ -9,12 +9,12 @@ Permite ao usuário criar um plano de treino escolhendo entre três modelos de d
 
 ## Composição
 
-| Camada | Arquivo | Descrição |
-|--------|---------|-----------|
-| Tela | `src/screens/Workout/AddWorkoutPlanScreen.tsx` | Radio buttons de tipo + painel dinâmico de seleção/criação |
-| Componente | `src/screens/Workout/components/DayChipSelector.tsx` | Chips para modos ABCDE e Seg a Sex |
-| Componente | `src/screens/Workout/components/CustomDayForm.tsx` | Form sequencial para modo personalizável com rename/delete |
-| Navegação | `src/navigation/AppNavigator.tsx` | Stack Navigator que expõe a rota `AddWorkoutPlan` |
+| Camada     | Arquivo                                              | Descrição                                                  |
+| ---------- | ---------------------------------------------------- | ---------------------------------------------------------- |
+| Tela       | `src/screens/Workout/AddWorkoutPlanScreen.tsx`       | Radio buttons de tipo + painel dinâmico de seleção/criação |
+| Componente | `src/screens/Workout/components/DayChipSelector.tsx` | Chips para modos ABCDE e Seg a Sex                         |
+| Componente | `src/screens/Workout/components/CustomDayForm.tsx`   | Form sequencial para modo personalizável com rename/delete |
+| Navegação  | `src/navigation/AppNavigator.tsx`                    | Stack Navigator que expõe a rota `AddWorkoutPlan`          |
 
 ## Tabelas Supabase envolvidas
 

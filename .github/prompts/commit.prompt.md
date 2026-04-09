@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Registra atividades na documentação e faz o commit com mensagem padronizada
 ---
 

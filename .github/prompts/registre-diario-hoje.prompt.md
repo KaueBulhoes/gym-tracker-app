@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: Registra o progresso de hoje no diário de desenvolvimento
 ---
 

@@ -78,6 +78,7 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 ## Convenções de Código
 
 ### TypeScript
+
 - Strict mode sempre habilitado
 - Interfaces para props de componentes: `interface NomeComponenteProps {}`
 - Types para modelos de dados: `type Workout = {}`
@@ -85,28 +86,34 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Enums apenas quando necessário; preferir union types (`type MuscleGroup = 'chest' | 'back' | ...`)
 
 ### Componentes
+
 - Sempre funcionais com arrow functions
 - Um componente por arquivo
 - Props tipadas com interface dedicada
 - Estilização com `styled-components/native` (não usar StyleSheet.create nem styles inline)
+- Estilos em arquivo separado: `NomeComponente.styles.ts` na mesma pasta do componente
 - Nomes em PascalCase para componentes, camelCase para hooks e utils
 
 ### Hooks
+
 - Prefixo `use` (ex: `useWorkout`, `useTimer`, `useAuth`)
 - Um hook por arquivo em `src/hooks/`
 
 ### Navegação
+
 - Stack Navigator para fluxos lineares
 - Bottom Tab Navigator para navegação principal
 - Tipos de rotas definidos em `src/navigation/types.ts`
 
 ### Supabase
+
 - Client inicializado em `src/services/supabase.ts`
 - Queries encapsuladas em funções em `src/services/` (ex: `workoutService.ts`)
 - Row Level Security (RLS) habilitado em todas as tabelas
 - Chaves do Supabase em variáveis de ambiente (.env), nunca hardcoded
 
 ### Tratamento de Erros
+
 - Nunca `throw error` cru do Supabase — sempre usar `mapAuthError(error)` ou `mapDatabaseError(error)`
 - Classe `AppError` em `src/types/errors.ts` com `code` (programático) + `message` (PT-BR para o usuário) + `originalError` (debug)
 - Mappers em `src/utils/errorMapper.ts` traduzem erros do Supabase para mensagens amigáveis
@@ -117,9 +124,13 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Ao adicionar novas operações: verificar se o código de erro já está mapeado, senão adicionar ao mapper
 
 ### Estilo e UI
+
 - Tema de cores definido em `src/constants/colors.ts`
 - Espaçamentos padronizados em `src/constants/spacing.ts`
 - Componentes base reutilizáveis (Button, Input, Card) antes de compor telas
+- Estilos em arquivo separado do componente: `NomeComponente.styles.ts` na mesma pasta
+  - Ex: `Button.tsx` + `Button.styles.ts`, `HomeScreen.tsx` + `HomeScreen.styles.ts`
+  - O arquivo de estilos exporta os styled-components nomeados; o componente apenas importa
 
 ## Regras para o Claude
 
