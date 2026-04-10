@@ -9,12 +9,10 @@ import {
     BackButton,
     CancelButton,
     CancelButtonText,
-    ConjugatedConnectorLabel,
-    ConjugatedConnectorText,
-    ConjugatedDot,
-    ConjugatedHorizontal,
+    ConjugatedHookBottom,
+    ConjugatedHookTop,
     ConjugatedRail,
-    ConjugatedVertical,
+    ConjugatedSpacer,
     ConfirmButton,
     ConfirmButtonText,
     Container,
@@ -35,6 +33,7 @@ import {
     ExerciseCardRow,
     ExerciseItemRow,
     ExerciseMeta,
+    ExerciseMetaRow,
     ExerciseName,
     ExerciseNotesText,
     ExerciseTag,
@@ -267,8 +266,8 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                     </ToggleSection>
 
                     {exercises.map((exercise, idx) => {
+                        const isConjugatedFirst = Boolean(exercise.conjugatedId);
                         const isConjugatedSecond = idx > 0 && exercises[idx - 1]?.conjugatedId === exercise.id;
-                        const showTags = !exercise.fixedReps || Boolean(exercise.conjugatedId);
                         const schemeLabel = exercise.fixedReps
                             ? `${exercise.sets}x${exercise.reps || '?'}`
                             : (exercise.repSchemes ?? []).map(item => `${item.sets}x${item.reps}`).join(' + ');
@@ -276,15 +275,16 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                         return (
                             <ExerciseItemRow key={exercise.id}>
                                 <ConjugatedRail>
-                                    {exercise.conjugatedId ? <ConjugatedVertical $height={44} /> : null}
+                                    {isConjugatedFirst ? (
+                                        <>
+                                            <ConjugatedSpacer />
+                                            <ConjugatedHookTop />
+                                        </>
+                                    ) : null}
                                     {isConjugatedSecond ? (
                                         <>
-                                            <ConjugatedVertical $height={14} />
-                                            <ConjugatedDot />
-                                            <ConjugatedHorizontal />
-                                            <ConjugatedConnectorLabel>
-                                                <ConjugatedConnectorText>conjugado</ConjugatedConnectorText>
-                                            </ConjugatedConnectorLabel>
+                                            <ConjugatedHookBottom />
+                                            <ConjugatedSpacer />
                                         </>
                                     ) : null}
                                 </ConjugatedRail>
@@ -310,25 +310,24 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                             </DeleteButton>
                                         </ExerciseCardRow>
 
-                                        <ExerciseMeta>
-                                            {schemeLabel}
-                                            {exercise.restSeconds ? ` · ${exercise.restSeconds}s descanso` : ''}
-                                        </ExerciseMeta>
-
-                                        {showTags ? (
+                                        <ExerciseMetaRow>
+                                            <ExerciseMeta>
+                                                {schemeLabel}
+                                                {exercise.restSeconds ? ` · ${exercise.restSeconds}s descanso` : ''}
+                                            </ExerciseMeta>
                                             <ExerciseTagsRow>
                                                 {!exercise.fixedReps ? (
                                                     <ExerciseTag $variant="dropset">
                                                         <ExerciseTagText $variant="dropset">drop set</ExerciseTagText>
                                                     </ExerciseTag>
                                                 ) : null}
-                                                {exercise.conjugatedId ? (
+                                                {isConjugatedFirst ? (
                                                     <ExerciseTag $variant="conjugated">
                                                         <ExerciseTagText $variant="conjugated">conjugado</ExerciseTagText>
                                                     </ExerciseTag>
                                                 ) : null}
                                             </ExerciseTagsRow>
-                                        ) : null}
+                                        </ExerciseMetaRow>
 
                                         {exercise.notes ? <ExerciseNotesText>{exercise.notes}</ExerciseNotesText> : null}
                                     </ExerciseCard>

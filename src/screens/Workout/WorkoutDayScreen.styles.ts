@@ -126,11 +126,16 @@ export const ExerciseName = styled.Text`
   color: ${colors.text};
 `;
 
+export const ExerciseMetaRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 export const ExerciseMeta = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
   color: ${colors.textSecondary};
-  padding-left: ${spacing.xxl}px;
 `;
 
 export const DeleteButton = styled.Pressable`
@@ -306,92 +311,34 @@ export const SchemeActionButton = styled.Pressable<{
 
 /* Conjugated connector */
 
-export const ConjugatedConnectorRow = styled.View`
-  width: 18px;
-  align-items: center;
-  justify-content: center;
-`;
-
 export const ConjugatedRail = styled.View`
   width: 18px;
-  align-items: center;
 `;
 
-export const ConjugatedVertical = styled.View<{ $height: number }>`
-  width: 0px;
-  height: ${({ $height }) => $height}px;
+export const ConjugatedSpacer = styled.View`
+  flex: 1;
+`;
+
+export const ConjugatedHookTop = styled.View`
+  flex: 1;
+  align-self: stretch;
+  border-style: dashed;
+  border-color: ${colors.secondary};
   border-left-width: 2px;
-  border-left-color: ${colors.secondary};
-  border-style: dashed;
-`;
-
-export const ConjugatedHorizontal = styled.View`
-  width: 12px;
-  height: 0px;
   border-top-width: 2px;
-  border-top-color: ${colors.secondary};
-  border-style: dashed;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
 `;
 
-export const ConjugatedDot = styled.View`
-  width: 6px;
-  height: 6px;
-  border-radius: 3px;
-  background-color: ${colors.secondary};
-`;
-
-export const ConjugatedCardSpacer = styled.View`
+export const ConjugatedHookBottom = styled.View`
   flex: 1;
-`;
-
-export const ConjugatedConnectorLabel = styled.View`
-  margin-top: ${spacing.xxs}px;
-  background-color: rgba(139, 92, 246, 0.15);
-  border-radius: 10px;
-  border-width: 1px;
-  border-color: ${colors.secondary};
-  padding-horizontal: ${spacing.sm}px;
-  padding-vertical: ${spacing.xxs}px;
-`;
-
-export const ConjugatedConnectorText = styled.Text`
-  font-size: ${typography.small.fontSize}px;
-  font-weight: ${typography.small.fontWeight};
-  color: ${colors.secondary};
-`;
-
-/* Legacy center connector (kept only for compatibility) */
-
-export const ConjugatedConnectorRowCenter = styled.View`
-  flex-direction: row;
-  align-items: center;
-  padding-horizontal: ${spacing.base}px;
-  gap: ${spacing.sm}px;
-  margin-top: -${spacing.xs}px;
-  margin-bottom: -${spacing.xs}px;
-`;
-
-export const ConjugatedLine = styled.View`
-  flex: 1;
-  height: 1px;
-  border-top-width: 1.5px;
-  border-color: ${colors.secondary};
+  align-self: stretch;
   border-style: dashed;
-`;
-
-export const ConjugatedBadge = styled.View`
-  background-color: rgba(139, 92, 246, 0.15);
-  border-radius: 10px;
-  border-width: 1px;
   border-color: ${colors.secondary};
-  padding-horizontal: ${spacing.sm}px;
-  padding-vertical: ${spacing.xxs}px;
-`;
-
-export const ConjugatedBadgeText = styled.Text`
-  font-size: ${typography.small.fontSize}px;
-  font-weight: ${typography.small.fontWeight};
-  color: ${colors.secondary};
+  border-left-width: 2px;
+  border-bottom-width: 2px;
+  border-right-width: 0px;
+  border-top-width: 0px;
 `;
 
 /* Exercise tags */
@@ -400,7 +347,6 @@ export const ExerciseTagsRow = styled.View`
   flex-direction: row;
   gap: ${spacing.xs}px;
   flex-wrap: wrap;
-  padding-left: ${spacing.xxl}px;
 `;
 
 export const ExerciseTag = styled.View<{ $variant: 'dropset' | 'conjugated' }>`
@@ -429,6 +375,5 @@ export const ExerciseNotesText = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
   color: ${colors.textSecondary};
-  padding-left: ${spacing.xxl}px;
   font-style: italic;
 `;
