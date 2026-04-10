@@ -33,4 +33,3 @@ export type WorkoutDayScreenProps = NativeStackScreenProps<
   AppStackParamList,
   'WorkoutDay'
 >;
-

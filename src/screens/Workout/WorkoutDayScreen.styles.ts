@@ -103,6 +103,16 @@ export const ExerciseCard = styled.View`
   gap: ${spacing.xs}px;
 `;
 
+export const ExerciseItemRow = styled.View`
+  flex-direction: row;
+  align-items: stretch;
+  gap: ${spacing.sm}px;
+`;
+
+export const ExerciseCardContainer = styled.View`
+  flex: 1;
+`;
+
 export const ExerciseCardRow = styled.View`
   flex-direction: row;
   align-items: center;
@@ -161,12 +171,20 @@ export const Overlay = styled.View`
 
 export const Dialog = styled.View`
   width: 100%;
+  max-height: 80%;
   background-color: ${colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
-  padding: ${spacing.xl}px;
+  padding: ${spacing.lg}px;
   gap: ${spacing.md}px;
   border-width: 1px;
   border-color: ${colors.neutral600};
+`;
+
+export const DialogScroll = styled.ScrollView``;
+
+export const DialogContent = styled.View`
+  gap: ${spacing.sm}px;
+  padding-bottom: ${spacing.sm}px;
 `;
 
 export const DialogTitle = styled.Text`
@@ -177,7 +195,7 @@ export const DialogTitle = styled.Text`
 `;
 
 export const DialogInput = styled.TextInput`
-  height: 48px;
+  height: 44px;
   background-color: ${colors.backgroundInput};
   border-radius: ${spacing.inputRadius}px;
   border-width: 1.5px;
@@ -222,4 +240,195 @@ export const ConfirmButtonText = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
   color: ${colors.background};
+`;
+
+export const DialogInputDynamic = styled.TextInput`
+  flex: 1;
+  height: 44px;
+  background-color: ${colors.backgroundInput};
+  border-radius: ${spacing.inputRadius}px;
+  border-width: 1.5px;
+  border-color: ${colors.border};
+  padding-horizontal: ${spacing.md}px;
+  font-size: ${typography.body.fontSize}px;
+  color: ${colors.text};
+`;
+
+/* Dialog extras */
+
+export const DialogInputGroup = styled.View`
+  flex: 1;
+  gap: ${spacing.xs}px;
+`;
+
+export const DialogLabel = styled.Text`
+  font-size: ${typography.small.fontSize}px;
+  font-weight: ${typography.small.fontWeight};
+  color: ${colors.textSecondary};
+`;
+
+export const DialogHalfRow = styled.View`
+  flex-direction: row;
+  gap: ${spacing.sm}px;
+`;
+
+export const SchemeList = styled.View`
+  gap: ${spacing.sm}px;
+`;
+
+export const SchemeRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${spacing.sm}px;
+`;
+
+export const SchemeFields = styled.View`
+  flex: 1;
+  flex-direction: row;
+  gap: ${spacing.sm}px;
+`;
+
+export const SchemeActionButton = styled.Pressable<{
+  $variant: 'add' | 'remove';
+}>`
+  width: 38px;
+  height: 38px;
+  border-radius: ${spacing.buttonRadius}px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ $variant }) =>
+    $variant === 'add' ? colors.primary : colors.backgroundInput};
+  border-width: 1.5px;
+  border-color: ${({ $variant }) =>
+    $variant === 'add' ? colors.primary : colors.neutral500};
+`;
+
+
+/* Conjugated connector */
+
+export const ConjugatedConnectorRow = styled.View`
+  width: 18px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ConjugatedRail = styled.View`
+  width: 18px;
+  align-items: center;
+`;
+
+export const ConjugatedVertical = styled.View<{ $height: number }>`
+  width: 0px;
+  height: ${({ $height }) => $height}px;
+  border-left-width: 2px;
+  border-left-color: ${colors.secondary};
+  border-style: dashed;
+`;
+
+export const ConjugatedHorizontal = styled.View`
+  width: 12px;
+  height: 0px;
+  border-top-width: 2px;
+  border-top-color: ${colors.secondary};
+  border-style: dashed;
+`;
+
+export const ConjugatedDot = styled.View`
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: ${colors.secondary};
+`;
+
+export const ConjugatedCardSpacer = styled.View`
+  flex: 1;
+`;
+
+export const ConjugatedConnectorLabel = styled.View`
+  margin-top: ${spacing.xxs}px;
+  background-color: rgba(139, 92, 246, 0.15);
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: ${colors.secondary};
+  padding-horizontal: ${spacing.sm}px;
+  padding-vertical: ${spacing.xxs}px;
+`;
+
+export const ConjugatedConnectorText = styled.Text`
+  font-size: ${typography.small.fontSize}px;
+  font-weight: ${typography.small.fontWeight};
+  color: ${colors.secondary};
+`;
+
+/* Legacy center connector (kept only for compatibility) */
+
+export const ConjugatedConnectorRowCenter = styled.View`
+  flex-direction: row;
+  align-items: center;
+  padding-horizontal: ${spacing.base}px;
+  gap: ${spacing.sm}px;
+  margin-top: -${spacing.xs}px;
+  margin-bottom: -${spacing.xs}px;
+`;
+
+export const ConjugatedLine = styled.View`
+  flex: 1;
+  height: 1px;
+  border-top-width: 1.5px;
+  border-color: ${colors.secondary};
+  border-style: dashed;
+`;
+
+export const ConjugatedBadge = styled.View`
+  background-color: rgba(139, 92, 246, 0.15);
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: ${colors.secondary};
+  padding-horizontal: ${spacing.sm}px;
+  padding-vertical: ${spacing.xxs}px;
+`;
+
+export const ConjugatedBadgeText = styled.Text`
+  font-size: ${typography.small.fontSize}px;
+  font-weight: ${typography.small.fontWeight};
+  color: ${colors.secondary};
+`;
+
+/* Exercise tags */
+
+export const ExerciseTagsRow = styled.View`
+  flex-direction: row;
+  gap: ${spacing.xs}px;
+  flex-wrap: wrap;
+  padding-left: ${spacing.xxl}px;
+`;
+
+export const ExerciseTag = styled.View<{ $variant: 'dropset' | 'conjugated' }>`
+  border-radius: 4px;
+  padding-horizontal: ${spacing.xs}px;
+  padding-vertical: ${spacing.xxs}px;
+  background-color: ${({ $variant }) =>
+    $variant === 'dropset'
+      ? 'rgba(245, 158, 11, 0.15)'
+      : 'rgba(139, 92, 246, 0.15)'};
+  border-width: 1px;
+  border-color: ${({ $variant }) =>
+    $variant === 'dropset' ? colors.warning : colors.secondary};
+`;
+
+export const ExerciseTagText = styled.Text<{
+  $variant: 'dropset' | 'conjugated';
+}>`
+  font-size: ${typography.small.fontSize}px;
+  font-weight: ${typography.small.fontWeight};
+  color: ${({ $variant }) =>
+    $variant === 'dropset' ? colors.warning : colors.secondary};
+`;
+
+export const ExerciseNotesText = styled.Text`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.caption.fontWeight};
+  color: ${colors.textSecondary};
+  padding-left: ${spacing.xxl}px;
+  font-style: italic;
 `;

@@ -107,4 +107,3 @@ export const DayCount = styled.Text`
   color: ${colors.textSecondary};
   margin-top: ${spacing.xxs}px;
 `;
-
