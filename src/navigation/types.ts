@@ -10,6 +10,7 @@ export type AppStackParamList = {
   AddWorkoutPlan: undefined;
   AddWorkoutExercises: { days: string[] };
   WorkoutDay: { day: string };
+  ActiveWorkout: { planId: string; dayName: string };
 };
 
 export type LoginScreenProps = NativeStackScreenProps<
@@ -32,4 +33,8 @@ export type AddWorkoutExercisesScreenProps = NativeStackScreenProps<
 export type WorkoutDayScreenProps = NativeStackScreenProps<
   AppStackParamList,
   'WorkoutDay'
+>;
+export type ActiveWorkoutScreenProps = NativeStackScreenProps<
+  AppStackParamList,
+  'ActiveWorkout'
 >;

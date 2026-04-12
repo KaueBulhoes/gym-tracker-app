@@ -47,7 +47,7 @@ export const ProfileButton = styled.Pressable`
 export const ContentArea = styled.View`
   padding-horizontal: ${spacing.screenHorizontal}px;
   padding-top: ${spacing.lg}px;
-  padding-bottom: 55px;
+  padding-bottom: 100px;
   gap: ${spacing.base}px;
 `;
 
@@ -128,47 +128,62 @@ export const MetricSub = styled.Text`
   color: ${colors.neutral400};
 `;
 
-export const NextWorkoutHeader = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: ${spacing.base}px;
-`;
-
-export const NextWorkoutTitle = styled.Text`
-  font-size: ${typography.h3.fontSize}px;
-  font-weight: ${typography.h3.fontWeight};
-  color: ${colors.text};
-`;
-
-export const SectionHeader = styled.Pressable`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: ${spacing.sm}px;
-`;
-
 export const SectionTitle = styled.Text`
   font-size: ${typography.h3.fontSize}px;
   font-weight: ${typography.h3.fontWeight};
   color: ${colors.text};
+  margin-top: ${spacing.sm}px;
 `;
 
-export const AddPlanFAB = styled.Pressable`
+export const BottomBar = styled.View`
   position: absolute;
-  bottom: ${spacing.xl}px;
-  align-self: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  background-color: ${colors.primary};
+  bottom: 0;
+  left: 0;
+  right: 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding-vertical: ${spacing.sm}px;
+  padding-bottom: ${spacing.md}px;
+  background-color: ${colors.backgroundElevated};
+  border-top-width: 1px;
+  border-top-color: ${colors.neutral600};
+`;
+
+export const BottomBarButton = styled.Pressable`
   align-items: center;
   justify-content: center;
+  gap: ${spacing.xxs}px;
+  flex: 1;
+`;
+
+export const BottomBarLabel = styled.Text`
+  font-size: ${typography.small.fontSize}px;
+  font-weight: ${typography.small.fontWeight};
+  color: ${colors.neutral300};
+`;
+
+export const BottomBarStartButton = styled.Pressable<{ $disabled?: boolean }>`
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 32px;
+  background-color: ${colors.primary};
+  margin-top: -${spacing.xl}px;
   elevation: 6;
   shadow-color: ${colors.primary};
   shadow-offset: 0px 4px;
   shadow-opacity: 0.35;
   shadow-radius: 8px;
+  opacity: ${({ $disabled }) => ($disabled ? 0.4 : 1)};
+`;
+
+export const BottomBarStartLabel = styled.Text`
+  font-size: 10px;
+  font-weight: ${typography.bodyBold.fontWeight};
+  color: ${colors.textInverse};
+  margin-top: 1px;
 `;
 
 export const WorkoutList = styled.View`

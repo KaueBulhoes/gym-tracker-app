@@ -27,3 +27,19 @@ export type WorkoutPlan = {
   days: WorkoutDay[];
   createdAt: string;
 };
+
+export type ExerciseWeight = {
+  exerciseId: string;
+  uniform: boolean;
+  weights: string[];
+};
+
+export type WorkoutSession = {
+  id: string;
+  planId: string;
+  dayName: string;
+  startedAt: string;
+  finishedAt: string;
+  durationSeconds: number;
+  exerciseWeights: ExerciseWeight[];
+};

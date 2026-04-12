@@ -112,6 +112,13 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Bottom Tab Navigator para navegação principal
 - Tipos de rotas definidos em `src/navigation/types.ts`
 
+### Persistência de dados
+
+- Toda informação produzida pelo usuário (treinos, cargas, sessões, planos) deve ser salva no Zustand store
+- Nunca descartar dados silenciosamente — se o usuário inseriu, persiste
+- Stores ficam em `src/stores/` e tipos em `src/types/`
+- Ao criar uma nova feature, sempre incluir a action de salvar no store e conectar na UI
+
 ### Supabase
 
 - Client inicializado em `src/services/supabase.ts`

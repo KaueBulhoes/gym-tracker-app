@@ -9,10 +9,9 @@ Catálogo de features do app com suas composições (telas + services + tabelas)
 ## Em desenvolvimento
 
 - [Criação de Plano de Treino](criacao-plano-treino.md) — criação de planos com divisão ABCDE, dias da semana ou personalizada, persistência mock in-memory via Zustand
+- [Sessão de Treino](sessao-treino.md) — execução de treino com cronômetro, registro de cargas e timer de descanso
 
 ## Planejadas
 
-- Registro de treino (exercício, séries, reps, carga)
 - Histórico e gráficos de evolução
-- Planos de treino (ABC, Push/Pull/Legs)
-- Timer de descanso entre séries
+- Estatísticas de treino

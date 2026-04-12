@@ -65,6 +65,8 @@ type RepSchemeInput = {
 
 type DialogMode = 'none' | 'main' | 'conjugated';
 
+const numericOnly = (text: string) => text.replace(/[^0-9]/g, '');
+
 const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }) => {
     const { day } = route.params;
 
@@ -258,7 +260,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                     placeholder="0"
                                     placeholderTextColor={colors.neutral400}
                                     value={defaultRestSeconds}
-                                    onChangeText={setDefaultRestSeconds}
+                                    onChangeText={text => setDefaultRestSeconds(numericOnly(text))}
                                     keyboardType="number-pad"
                                     maxLength={4}
                                     accessibilityLabel="Tempo de descanso padrao em segundos"
@@ -370,7 +372,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                                     placeholder="3"
                                                     placeholderTextColor={colors.neutral400}
                                                     value={inputSets}
-                                                    onChangeText={setInputSets}
+                                                    onChangeText={text => setInputSets(numericOnly(text))}
                                                     keyboardType="number-pad"
                                                     maxLength={3}
                                                     accessibilityLabel="Numero de series"
@@ -382,7 +384,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                                     placeholder="12"
                                                     placeholderTextColor={colors.neutral400}
                                                     value={inputReps}
-                                                    onChangeText={setInputReps}
+                                                    onChangeText={text => setInputReps(numericOnly(text))}
                                                     keyboardType="number-pad"
                                                     maxLength={3}
                                                     accessibilityLabel="Numero de repeticoes"
@@ -402,7 +404,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                                             placeholder="1"
                                                             placeholderTextColor={colors.neutral400}
                                                             value={scheme.sets}
-                                                            onChangeText={text => updateRepScheme(scheme.id, 'sets', text)}
+                                                            onChangeText={text => updateRepScheme(scheme.id, 'sets', numericOnly(text))}
                                                             keyboardType="number-pad"
                                                             maxLength={3}
                                                             accessibilityLabel={`Series ${index + 1}`}
@@ -411,7 +413,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                                             placeholder="12"
                                                             placeholderTextColor={colors.neutral400}
                                                             value={scheme.reps}
-                                                            onChangeText={text => updateRepScheme(scheme.id, 'reps', text)}
+                                                            onChangeText={text => updateRepScheme(scheme.id, 'reps', numericOnly(text))}
                                                             keyboardType="number-pad"
                                                             maxLength={3}
                                                             accessibilityLabel={`Repeticoes ${index + 1}`}
@@ -453,7 +455,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                             placeholder="Descanso (segundos)"
                                             placeholderTextColor={colors.neutral400}
                                             value={inputRest}
-                                            onChangeText={setInputRest}
+                                            onChangeText={text => setInputRest(numericOnly(text))}
                                             keyboardType="number-pad"
                                             maxLength={4}
                                             accessibilityLabel="Descanso em segundos"

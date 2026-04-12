@@ -8,7 +8,11 @@ import Card from '../../components/Card';
 import ProgressBar from '../../components/ProgressBar';
 import { colors, spacing } from '../../constants';
 import {
-  AddPlanFAB,
+  BottomBar,
+  BottomBarButton,
+  BottomBarLabel,
+  BottomBarStartButton,
+  BottomBarStartLabel,
   Container,
   ContentArea,
   GoalCount,
@@ -26,12 +30,9 @@ import {
   MetricsRow,
   NextBadge,
   NextBadgeText,
-  NextWorkoutHeader,
-  NextWorkoutTitle,
   ProfileButton,
   ProgressBarWrapper,
   ScrollContent,
-  SectionHeader,
   SectionTitle,
   UserName,
   WelcomeText,
@@ -69,10 +70,8 @@ const HomeScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const plans = useWorkoutStore(state => state.plans);
   const lastCompleted = useWorkoutStore(state => state.lastCompleted);
-  const startLastWorkout = useWorkoutStore(state => state.startLastWorkout);
 
   const remaining = mockWeeklyGoal.target - mockWeeklyGoal.completed;
-  const [isWorkoutSectionOpen, setIsWorkoutSectionOpen] = useState(false);
   const [expandedWorkout, setExpandedWorkout] = useState<string | null>(null);
 
   const hasPlan = plans.length > 0;
@@ -83,7 +82,7 @@ const HomeScreen: React.FC = () => {
 
   const nextDay = (() => {
     if (!lastCompleted || allDays.length === 0) {
-      return null;
+      return allDays[0] ?? null;
     }
     const currentIndex = allDays.findIndex(
       d => d.planId === lastCompleted.planId && d.name === lastCompleted.dayName,
@@ -93,11 +92,6 @@ const HomeScreen: React.FC = () => {
     }
     return allDays[(currentIndex + 1) % allDays.length];
   })();
-
-  const toggleWorkoutSection = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setIsWorkoutSectionOpen(prev => !prev);
-  };
 
   const toggleWorkout = (key: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -168,117 +162,117 @@ const HomeScreen: React.FC = () => {
             </MetricCard>
           </MetricsRow>
 
-          {hasPlan && !lastCompleted && (
-            <Card variant="highlighted">
-              <NextWorkoutHeader>
-                <NextWorkoutTitle>Pronto para treinar?</NextWorkoutTitle>
-              </NextWorkoutHeader>
-              <Button title="Começar Treino" onPress={startLastWorkout} />
-            </Card>
-          )}
-
-          {hasPlan && lastCompleted && nextDay && (
-            <Card variant="highlighted">
-              <NextWorkoutHeader>
-                <NextWorkoutTitle>{nextDay.name}</NextWorkoutTitle>
-                <NextBadge>
-                  <NextBadgeText>Próximo</NextBadgeText>
-                </NextBadge>
-              </NextWorkoutHeader>
-              <Button title="Começar Treino" onPress={() => { }} />
-            </Card>
-          )}
-
           {hasPlan && (
             <>
-              <SectionHeader onPress={toggleWorkoutSection} accessibilityLabel="Meus Treinos">
-                <SectionTitle>Meus Treinos</SectionTitle>
-                <MaterialCommunityIcons
-                  name={isWorkoutSectionOpen ? 'chevron-up' : 'chevron-down'}
-                  size={spacing.iconSize.md}
-                  color={colors.neutral400}
-                />
-              </SectionHeader>
-              {isWorkoutSectionOpen && (
-                <WorkoutList>
-                  {allDays.map(day => {
-                    const key = `${day.planId}-${day.name}`;
-                    const isNext = nextDay?.planId === day.planId && nextDay?.name === day.name;
-                    const isExpanded = expandedWorkout === key;
-                    const exerciseCount = day.exercises.length;
+              <SectionTitle>Meus Treinos</SectionTitle>
+              <WorkoutList>
+                {allDays.map(day => {
+                  const key = `${day.planId}-${day.name}`;
+                  const isNext = nextDay?.planId === day.planId && nextDay?.name === day.name;
+                  const isExpanded = expandedWorkout === key;
+                  const exerciseCount = day.exercises.length;
 
-                    return (
-                      <WorkoutAccordion
-                        key={key}
-                        $isNext={isNext}
-                        onPress={() => toggleWorkout(key)}
-                        accessibilityLabel={day.name}
-                      >
-                        <WorkoutAccordionHeader>
-                          <WorkoutAccordionLeft>
-                            <WorkoutIconContainer $isNext={isNext}>
-                              <MaterialCommunityIcons
-                                name="dumbbell"
-                                size={spacing.iconSize.md}
-                                color={isNext ? colors.primary : colors.secondary}
-                              />
-                            </WorkoutIconContainer>
-                            <WorkoutAccordionInfo>
-                              <WorkoutAccordionTitle $isNext={isNext}>
-                                {day.name}
-                              </WorkoutAccordionTitle>
-                              <WorkoutAccordionSubtitle>
-                                {exerciseCount} {exerciseCount === 1 ? 'exercício' : 'exercícios'}
-                              </WorkoutAccordionSubtitle>
-                            </WorkoutAccordionInfo>
-                          </WorkoutAccordionLeft>
-                          <WorkoutAccordionRight>
-                            {isNext && <NextBadge><NextBadgeText>Próximo</NextBadgeText></NextBadge>}
+                  return (
+                    <WorkoutAccordion
+                      key={key}
+                      $isNext={isNext}
+                      onPress={() => toggleWorkout(key)}
+                      accessibilityLabel={day.name}
+                    >
+                      <WorkoutAccordionHeader>
+                        <WorkoutAccordionLeft>
+                          <WorkoutIconContainer $isNext={isNext}>
                             <MaterialCommunityIcons
-                              name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                              name="dumbbell"
                               size={spacing.iconSize.md}
-                              color={colors.neutral400}
+                              color={isNext ? colors.primary : colors.secondary}
                             />
-                          </WorkoutAccordionRight>
-                        </WorkoutAccordionHeader>
+                          </WorkoutIconContainer>
+                          <WorkoutAccordionInfo>
+                            <WorkoutAccordionTitle $isNext={isNext}>
+                              {day.name}
+                            </WorkoutAccordionTitle>
+                            <WorkoutAccordionSubtitle>
+                              {exerciseCount} {exerciseCount === 1 ? 'exercício' : 'exercícios'}
+                            </WorkoutAccordionSubtitle>
+                          </WorkoutAccordionInfo>
+                        </WorkoutAccordionLeft>
+                        <WorkoutAccordionRight>
+                          {isNext && <NextBadge><NextBadgeText>Próximo</NextBadgeText></NextBadge>}
+                          <MaterialCommunityIcons
+                            name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                            size={spacing.iconSize.md}
+                            color={colors.neutral400}
+                          />
+                        </WorkoutAccordionRight>
+                      </WorkoutAccordionHeader>
 
-                        {isExpanded && (
-                          <WorkoutAccordionBody>
-                            {day.exercises.map(exercise => {
-                              const schemeLabel = exercise.fixedReps
-                                ? `${exercise.sets}x${exercise.reps}`
-                                : (exercise.repSchemes ?? []).map(s => `${s.sets}x${s.reps}`).join(' + ');
-                              return (
-                                <WorkoutDetail key={exercise.id}>
-                                  <MaterialCommunityIcons
-                                    name="dumbbell"
-                                    size={16}
-                                    color={colors.textSecondary}
-                                  />
-                                  <WorkoutDetailText>
-                                    {exercise.name} — {schemeLabel}
-                                  </WorkoutDetailText>
-                                </WorkoutDetail>
-                              );
-                            })}
-                          </WorkoutAccordionBody>
-                        )}
-                      </WorkoutAccordion>
-                    );
-                  })}
-                </WorkoutList>
-              )}
+                      {isExpanded && (
+                        <WorkoutAccordionBody>
+                          {day.exercises.map(exercise => {
+                            const schemeLabel = exercise.fixedReps
+                              ? `${exercise.sets}x${exercise.reps}`
+                              : (exercise.repSchemes ?? []).map(s => `${s.sets}x${s.reps}`).join(' + ');
+                            return (
+                              <WorkoutDetail key={exercise.id}>
+                                <MaterialCommunityIcons
+                                  name="dumbbell"
+                                  size={16}
+                                  color={colors.textSecondary}
+                                />
+                                <WorkoutDetailText>
+                                  {exercise.name} — {schemeLabel}
+                                </WorkoutDetailText>
+                              </WorkoutDetail>
+                            );
+                          })}
+                          <Button
+                            title="Começar Treino"
+                            onPress={() => navigation.navigate('ActiveWorkout', { planId: day.planId, dayName: day.name })}
+                            style={{ marginTop: spacing.md }}
+                          />
+                        </WorkoutAccordionBody>
+                      )}
+                    </WorkoutAccordion>
+                  );
+                })}
+              </WorkoutList>
             </>
           )}
         </ContentArea>
       </ScrollContent>
 
-      <AddPlanFAB
-        onPress={() => navigation.navigate('AddWorkoutPlan')}
-        accessibilityLabel="Novo plano de treino"
-      >
-        <MaterialCommunityIcons name="plus" size={28} color={colors.textInverse} />
-      </AddPlanFAB>
+      <BottomBar>
+        <BottomBarButton
+          onPress={() => navigation.navigate('AddWorkoutPlan')}
+          accessibilityLabel="Novo plano de treino"
+        >
+          <MaterialCommunityIcons name="plus" size={24} color={colors.neutral300} />
+          <BottomBarLabel>Adicionar</BottomBarLabel>
+        </BottomBarButton>
+
+        <BottomBarStartButton
+          $disabled={!hasPlan}
+          disabled={!hasPlan}
+          onPress={() => {
+            if (nextDay) {
+              navigation.navigate('ActiveWorkout', { planId: nextDay.planId, dayName: nextDay.name });
+            }
+          }}
+          accessibilityLabel="Começar treino do dia"
+        >
+          <MaterialCommunityIcons name="play" size={28} color={colors.textInverse} />
+          <BottomBarStartLabel>Começar</BottomBarStartLabel>
+        </BottomBarStartButton>
+
+        <BottomBarButton
+          onPress={() => { }}
+          accessibilityLabel="Estatísticas"
+        >
+          <MaterialCommunityIcons name="chart-line" size={24} color={colors.neutral300} />
+          <BottomBarLabel>Estatísticas</BottomBarLabel>
+        </BottomBarButton>
+      </BottomBar>
     </Container>
   );
 };

@@ -5,7 +5,7 @@ export const Container = styled.Pressable<{
   $variant: 'primary' | 'outline';
   $isDisabled: boolean;
 }>`
-  height: 52px;
+  height: 42px;
   border-radius: ${spacing.buttonRadius}px;
   align-items: center;
   justify-content: center;

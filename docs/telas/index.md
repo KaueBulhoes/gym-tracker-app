@@ -11,10 +11,12 @@ App
 │   └── Cadastro
 └── App (Stack)
     ├── Home
-    │   └── FAB (+) → AddWorkoutPlan
+    │   ├── BottomBar (+) → AddWorkoutPlan
+    │   └── BottomBar/Accordion (Começar) → ActiveWorkout
     ├── AddWorkoutPlan → AddWorkoutExercises
     ├── AddWorkoutExercises → WorkoutDay
-    └── WorkoutDay
+    ├── WorkoutDay
+    └── ActiveWorkout → Home (ao finalizar)
 ```
 
 ## Telas implementadas
@@ -27,3 +29,4 @@ App
 | [Adicionar Plano de Treino](add-workout-plan.md)           | `src/screens/Workout/AddWorkoutPlanScreen.tsx`       | workoutStore.startDraft   | — (mock in-memory)         |
 | [Adicionar Exercícios](add-workout-exercises.md)           | `src/screens/Workout/AddWorkoutExercisesScreen.tsx`  | workoutStore.saveDraft    | — (mock in-memory)         |
 | [Dia do Treino](workout-day.md)                            | `src/screens/Workout/WorkoutDayScreen.tsx`           | workoutStore.updateDraftDay | — (mock in-memory)       |
+| [Treino Ativo](active-workout.md)                          | `src/screens/Workout/ActiveWorkoutScreen.tsx`        | workoutStore.finishWorkout  | — (mock in-memory)       |

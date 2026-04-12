@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { WorkoutDay, WorkoutPlan } from '../types/workout';
+import type { WorkoutDay, WorkoutPlan, WorkoutSession } from '../types/workout';
 
 interface LastCompleted {
   planId: string;
@@ -10,11 +10,13 @@ interface WorkoutState {
   plans: WorkoutPlan[];
   draft: WorkoutPlan | null;
   lastCompleted: LastCompleted | null;
+  sessions: WorkoutSession[];
   startDraft: (dayNames: string[]) => void;
   updateDraftDay: (dayName: string, updater: (day: WorkoutDay) => WorkoutDay) => void;
   saveDraft: () => void;
   discardDraft: () => void;
   startLastWorkout: () => void;
+  finishWorkout: (session: WorkoutSession) => void;
 }
 
 const createEmptyDay = (name: string): WorkoutDay => ({
@@ -28,6 +30,7 @@ export const useWorkoutStore = create<WorkoutState>((set) => ({
   plans: [],
   draft: null,
   lastCompleted: null,
+  sessions: [],
 
   startDraft: (dayNames) => {
     set({
@@ -67,6 +70,13 @@ export const useWorkoutStore = create<WorkoutState>((set) => ({
 
   discardDraft: () => {
     set({ draft: null });
+  },
+
+  finishWorkout: (session) => {
+    set((state) => ({
+      sessions: [...state.sessions, session],
+      lastCompleted: { planId: session.planId, dayName: session.dayName },
+    }));
   },
 
   startLastWorkout: () => {
