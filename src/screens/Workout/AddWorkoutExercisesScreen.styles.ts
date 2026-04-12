@@ -38,11 +38,14 @@ export const HeaderTitle = styled.Text`
   color: ${colors.neutral50};
 `;
 
-export const SaveButton = styled.Pressable`
-  padding-horizontal: ${spacing.md}px;
-  padding-vertical: ${spacing.sm}px;
+export const SaveButton = styled.Pressable<{ $disabled?: boolean }>`
+  padding-vertical: ${spacing.md}px;
   border-radius: ${spacing.buttonRadius}px;
   background-color: ${colors.primary};
+  align-items: center;
+  justify-content: center;
+  margin-top: ${spacing.md}px;
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
 `;
 
 export const SaveButtonText = styled.Text`

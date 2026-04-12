@@ -23,7 +23,7 @@ App
 | ---------------------------------------------------------- | ---------------------------------------------------- | ------------------------ | -------------------------- |
 | [Login](login.md)                                          | `src/screens/Auth/LoginScreen.tsx`                   | authStore.signIn         | auth.users                 |
 | [Cadastro](cadastro.md)                                    | `src/screens/Auth/RegisterScreen.tsx`                | authStore.signUp         | auth.users                 |
-| [Home](home.md)                                            | `src/screens/Home/HomeScreen.tsx`                    | authStore.signOut, mocks | — (mock por enquanto)      |
-| [Adicionar Plano de Treino](add-workout-plan.md)           | `src/screens/Workout/AddWorkoutPlanScreen.tsx`       | — (a integrar)           | workout_plans (a integrar) |
-| [Adicionar Exercícios](add-workout-exercises.md)           | `src/screens/Workout/AddWorkoutExercisesScreen.tsx`  | — (a integrar)           | — (a integrar)             |
-| [Dia do Treino](workout-day.md)                            | `src/screens/Workout/WorkoutDayScreen.tsx`           | — (a integrar)           | workout_plan_exercises     |
+| [Home](home.md)                                            | `src/screens/Home/HomeScreen.tsx`                    | authStore, workoutStore   | — (mock in-memory)         |
+| [Adicionar Plano de Treino](add-workout-plan.md)           | `src/screens/Workout/AddWorkoutPlanScreen.tsx`       | workoutStore.startDraft   | — (mock in-memory)         |
+| [Adicionar Exercícios](add-workout-exercises.md)           | `src/screens/Workout/AddWorkoutExercisesScreen.tsx`  | workoutStore.saveDraft    | — (mock in-memory)         |
+| [Dia do Treino](workout-day.md)                            | `src/screens/Workout/WorkoutDayScreen.tsx`           | workoutStore.updateDraftDay | — (mock in-memory)       |

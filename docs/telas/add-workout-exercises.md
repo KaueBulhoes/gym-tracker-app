@@ -1,24 +1,25 @@
 # Tela: Adicionar Exercícios ao Plano
 
 **Arquivo:** `src/screens/Workout/AddWorkoutExercisesScreen.tsx`
-**Data:** 2026-04-09
+**Data:** 2026-04-11
 
 ## O que o usuário faz
 
-Visualiza a lista de divisões (dias) do plano recém-criado e toca em cada dia para configurar os exercícios daquele dia. Pode salvar o plano ao finalizar.
+Visualiza a lista de divisões (dias) do plano em criação. Cada card mostra a contagem de exercícios já adicionados. Toca em um dia para configurar exercícios. Ao final, salva o plano com o botão na parte inferior da lista.
 
 ## Dados e integrações
 
 | Recurso | Tipo | Descrição |
 |---------|------|-----------|
 | `route.params.days` | Param | Array de nomes dos dias vindos da tela anterior |
-| — | — | Sem integração com Supabase ainda |
+| `useWorkoutStore.draft` | Store | Rascunho do plano com exercícios por dia |
+| `useWorkoutStore.saveDraft` | Store | Salva o rascunho como plano definitivo |
 
 ## Componentes usados
 
-- `DayCard` — card clicável representando cada dia do plano
+- `DayCard` — card clicável representando cada dia do plano, com contagem de exercícios
 - `DayIconContainer` — ícone de haltere dentro do card
-- `SaveButton` — botão "Salvar" no header
+- `SaveButton` — botão "Salvar" full-width no final da lista (desabilitado enquanto nenhum exercício existir)
 
 ## Navegação
 

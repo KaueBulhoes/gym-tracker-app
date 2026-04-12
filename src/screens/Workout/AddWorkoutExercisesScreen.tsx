@@ -3,6 +3,7 @@ import { StatusBar } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, spacing } from '../../constants';
 import type { AddWorkoutExercisesScreenProps } from '../../navigation/types';
+import { useWorkoutStore } from '../../stores/workoutStore';
 import {
     BackButton,
     Container,
@@ -27,6 +28,22 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
     route,
 }) => {
     const { days } = route.params;
+    const draft = useWorkoutStore(state => state.draft);
+    const saveDraft = useWorkoutStore(state => state.saveDraft);
+    const draftDays = draft?.days ?? [];
+
+    const hasAnyExercise = draftDays.some(d => d.exercises.length > 0);
+
+    const handleSave = () => {
+        if (!hasAnyExercise) {
+            return;
+        }
+        saveDraft();
+        navigation.navigate('Home');
+    };
+
+    const exerciseCountFor = (dayName: string) =>
+        draftDays.find(d => d.name === dayName)?.exercises.length ?? 0;
 
     return (
         <Container>
@@ -39,14 +56,17 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
                     </BackButton>
                     <HeaderTitle>Adicionar Exercícios</HeaderTitle>
                 </HeaderLeft>
-                <SaveButton onPress={() => navigation.navigate('Home')} accessibilityLabel="Salvar plano">
-                    <SaveButtonText>Salvar</SaveButtonText>
-                </SaveButton>
             </Header>
 
             <ScrollContent showsVerticalScrollIndicator={false}>
                 <Content>
-                    {days.map(day => (
+                    {days.map(day => {
+                        const count = exerciseCountFor(day);
+                        const countLabel =
+                            count === 0
+                                ? 'Toque para adicionar exercícios'
+                                : `${count} ${count === 1 ? 'exercício' : 'exercícios'}`;
+                        return (
                         <DayCard
                             key={day}
                             onPress={() => navigation.navigate('WorkoutDay', { day })}
@@ -63,7 +83,7 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
                                     </DayIconContainer>
                                     <DayInfo>
                                         <DayName>{day}</DayName>
-                                        <DayCount>Toque para adicionar exercícios</DayCount>
+                                        <DayCount>{countLabel}</DayCount>
                                     </DayInfo>
                                 </DayHeaderLeft>
                                 <MaterialCommunityIcons
@@ -73,7 +93,18 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
                                 />
                             </DayHeader>
                         </DayCard>
-                    ))}
+                        );
+                    })}
+
+                    <SaveButton
+                        onPress={handleSave}
+                        disabled={!hasAnyExercise}
+                        $disabled={!hasAnyExercise}
+                        accessibilityLabel="Salvar plano"
+                        accessibilityState={{ disabled: !hasAnyExercise }}
+                    >
+                        <SaveButtonText>Salvar</SaveButtonText>
+                    </SaveButton>
                 </Content>
             </ScrollContent>
         </Container>

@@ -8,7 +8,7 @@ Catálogo de features do app com suas composições (telas + services + tabelas)
 
 ## Em desenvolvimento
 
-- [Criação de Plano de Treino](criacao-plano-treino.md) — tela de criação de planos com divisão ABCDE, dias da semana ou personalizada (sem persistência ainda)
+- [Criação de Plano de Treino](criacao-plano-treino.md) — criação de planos com divisão ABCDE, dias da semana ou personalizada, persistência mock in-memory via Zustand
 
 ## Planejadas
 

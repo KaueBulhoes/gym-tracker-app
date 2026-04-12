@@ -3,6 +3,8 @@ import { KeyboardAvoidingView, Modal, Platform, StatusBar, Switch } from 'react-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, spacing } from '../../constants';
 import type { WorkoutDayScreenProps } from '../../navigation/types';
+import { useWorkoutStore } from '../../stores/workoutStore';
+import type { Exercise } from '../../types/workout';
 import {
     AddExerciseButton,
     AddExerciseButtonText,
@@ -61,26 +63,26 @@ type RepSchemeInput = {
     reps: string;
 };
 
-type Exercise = {
-    id: string;
-    name: string;
-    sets: string;
-    reps: string;
-    fixedReps: boolean;
-    repSchemes?: Array<{ sets: string; reps: string }>;
-    restSeconds?: string;
-    notes?: string;
-    conjugatedId?: string;
-};
-
 type DialogMode = 'none' | 'main' | 'conjugated';
 
 const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }) => {
     const { day } = route.params;
 
-    const [defaultRest, setDefaultRest] = useState(false);
-    const [defaultRestSeconds, setDefaultRestSeconds] = useState('');
-    const [exercises, setExercises] = useState<Exercise[]>([]);
+    const draftDay = useWorkoutStore(state =>
+        state.draft?.days.find(d => d.name === day),
+    );
+    const updateDraftDay = useWorkoutStore(state => state.updateDraftDay);
+
+    const exercises = draftDay?.exercises ?? [];
+    const defaultRest = draftDay?.defaultRest ?? false;
+    const defaultRestSeconds = draftDay?.defaultRestSeconds ?? '';
+
+    const setDefaultRest = (value: boolean) =>
+        updateDraftDay(day, d => ({ ...d, defaultRest: value }));
+    const setDefaultRestSeconds = (value: string) =>
+        updateDraftDay(day, d => ({ ...d, defaultRestSeconds: value }));
+    const addExercises = (items: Exercise[]) =>
+        updateDraftDay(day, d => ({ ...d, exercises: [...d.exercises, ...items] }));
 
     const [dialogMode, setDialogMode] = useState<DialogMode>('none');
     const [pendingExercise, setPendingExercise] = useState<Exercise | null>(null);
@@ -197,7 +199,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
             return;
         }
 
-        setExercises(prev => [...prev, exercise]);
+        addExercises([exercise]);
         closeDialog();
     };
 
@@ -209,16 +211,17 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
         const conjugatedId = String(Date.now());
         const conjugated = buildExercise(conjugatedId);
 
-        setExercises(prev => [...prev, { ...pendingExercise, conjugatedId }, conjugated]);
+        addExercises([{ ...pendingExercise, conjugatedId }, conjugated]);
         closeDialog();
     };
 
     const removeExercise = (id: string) => {
-        setExercises(prev =>
-            prev
+        updateDraftDay(day, d => ({
+            ...d,
+            exercises: d.exercises
                 .filter(e => e.id !== id)
                 .map(e => (e.conjugatedId === id ? { ...e, conjugatedId: undefined } : e)),
-        );
+        }));
     };
 
     const isDialogOpen = dialogMode !== 'none';

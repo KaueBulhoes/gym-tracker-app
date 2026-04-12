@@ -49,14 +49,12 @@ import {
   WorkoutList,
 } from './HomeScreen.styles';
 import {
-  mockLastWorkout,
   mockMonthlyTotal,
-  mockNextWorkout,
   mockUser,
   mockWeeklyGoal,
-  mockWorkoutPlan,
 } from '../../mocks/homeData';
 import { useAuthStore } from '../../stores/authStore';
+import { useWorkoutStore } from '../../stores/workoutStore';
 import type { AppStackParamList } from '../../navigation/types';
 
 if (
@@ -66,41 +64,54 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const formatDate = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-  const day = days[date.getDay()];
-  const dd = String(date.getDate()).padStart(2, '0');
-  const mm = String(date.getMonth() + 1).padStart(2, '0');
-  return `${day} ${dd}/${mm}`;
-};
-
 const HomeScreen: React.FC = () => {
   const { signOut } = useAuthStore();
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
+  const plans = useWorkoutStore(state => state.plans);
+  const lastCompleted = useWorkoutStore(state => state.lastCompleted);
+  const startLastWorkout = useWorkoutStore(state => state.startLastWorkout);
+
   const remaining = mockWeeklyGoal.target - mockWeeklyGoal.completed;
   const [isWorkoutSectionOpen, setIsWorkoutSectionOpen] = useState(false);
   const [expandedWorkout, setExpandedWorkout] = useState<string | null>(null);
+
+  const hasPlan = plans.length > 0;
+
+  const allDays = plans.flatMap(plan =>
+    plan.days.map(day => ({ ...day, planId: plan.id })),
+  );
+
+  const nextDay = (() => {
+    if (!lastCompleted || allDays.length === 0) {
+      return null;
+    }
+    const currentIndex = allDays.findIndex(
+      d => d.planId === lastCompleted.planId && d.name === lastCompleted.dayName,
+    );
+    if (currentIndex === -1) {
+      return allDays[0];
+    }
+    return allDays[(currentIndex + 1) % allDays.length];
+  })();
 
   const toggleWorkoutSection = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsWorkoutSectionOpen(prev => !prev);
   };
 
-  const toggleWorkout = (id: string) => {
+  const toggleWorkout = (key: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setExpandedWorkout(prev => (prev === id ? null : id));
+    setExpandedWorkout(prev => (prev === key ? null : key));
   };
 
   return (
     <Container>
       <StatusBar barStyle="light-content" backgroundColor={colors.secondaryDark} />
       <ScrollContent showsVerticalScrollIndicator={false}>
-        {/* Header */}
         <Header>
           <HeaderContent>
             <WelcomeText>Bem-vindo de volta,</WelcomeText>
-            <UserName>{mockUser.name}! 💪</UserName>
+            <UserName>{mockUser.name}!</UserName>
           </HeaderContent>
           <ProfileButton
             onPress={signOut}
@@ -115,7 +126,6 @@ const HomeScreen: React.FC = () => {
         </Header>
 
         <ContentArea>
-          {/* Meta Semanal */}
           <Card variant="purple">
             <GoalHeader>
               <GoalTitleRow>
@@ -139,20 +149,17 @@ const HomeScreen: React.FC = () => {
             <GoalMotivation>
               {remaining > 0
                 ? `Falta${remaining > 1 ? 'm' : ''} apenas ${remaining} treino${remaining > 1 ? 's' : ''} para bater sua meta!`
-                : 'Parabéns! Você bateu sua meta semanal! 🎉'}
+                : 'Parabéns! Você bateu sua meta semanal!'}
             </GoalMotivation>
           </Card>
 
-          {/* Métricas */}
           <MetricsRow>
             <MetricCard>
               <MetricLabel>Último treino</MetricLabel>
-              <MetricValue>Treino {mockLastWorkout.type}</MetricValue>
-              <MetricSub>
-                {mockLastWorkout.completedAt
-                  ? formatDate(mockLastWorkout.completedAt)
-                  : '-'}
-              </MetricSub>
+              <MetricValue>
+                {lastCompleted ? lastCompleted.dayName : '-'}
+              </MetricValue>
+              <MetricSub>-</MetricSub>
             </MetricCard>
 
             <MetricCard>
@@ -161,91 +168,108 @@ const HomeScreen: React.FC = () => {
             </MetricCard>
           </MetricsRow>
 
-          {/* Próximo Treino */}
-          <Card variant="highlighted">
-            <NextWorkoutHeader>
-              <NextWorkoutTitle>
-                Treino {mockNextWorkout.type} - {mockNextWorkout.description}
-              </NextWorkoutTitle>
-              <NextBadge>
-                <NextBadgeText>Próximo</NextBadgeText>
-              </NextBadge>
-            </NextWorkoutHeader>
-            <Button title="Começar Treino" onPress={() => { }} />
-          </Card>
+          {hasPlan && !lastCompleted && (
+            <Card variant="highlighted">
+              <NextWorkoutHeader>
+                <NextWorkoutTitle>Pronto para treinar?</NextWorkoutTitle>
+              </NextWorkoutHeader>
+              <Button title="Começar Treino" onPress={startLastWorkout} />
+            </Card>
+          )}
 
-          {/* Meus Treinos */}
-          <SectionHeader onPress={toggleWorkoutSection} accessibilityLabel="Meus Treinos">
-            <SectionTitle>Meus Treinos</SectionTitle>
-            <MaterialCommunityIcons
-              name={isWorkoutSectionOpen ? 'chevron-up' : 'chevron-down'}
-              size={spacing.iconSize.md}
-              color={colors.neutral400}
-            />
-          </SectionHeader>
-          {isWorkoutSectionOpen && <WorkoutList>
-            {mockWorkoutPlan.map(workout => {
-              const isNext = workout.id === mockNextWorkout.id;
-              const isExpanded = expandedWorkout === workout.id;
+          {hasPlan && lastCompleted && nextDay && (
+            <Card variant="highlighted">
+              <NextWorkoutHeader>
+                <NextWorkoutTitle>{nextDay.name}</NextWorkoutTitle>
+                <NextBadge>
+                  <NextBadgeText>Próximo</NextBadgeText>
+                </NextBadge>
+              </NextWorkoutHeader>
+              <Button title="Começar Treino" onPress={() => { }} />
+            </Card>
+          )}
 
-              return (
-                <WorkoutAccordion
-                  key={workout.id}
-                  $isNext={isNext}
-                  onPress={() => toggleWorkout(workout.id)}
-                  accessibilityLabel={`Treino ${workout.type} - ${workout.description}`}
-                >
-                  <WorkoutAccordionHeader>
-                    <WorkoutAccordionLeft>
-                      <WorkoutIconContainer $isNext={isNext}>
-                        <MaterialCommunityIcons
-                          name="dumbbell"
-                          size={spacing.iconSize.md}
-                          color={isNext ? colors.primary : colors.secondary}
-                        />
-                      </WorkoutIconContainer>
-                      <WorkoutAccordionInfo>
-                        <WorkoutAccordionTitle $isNext={isNext}>
-                          Treino {workout.type}
-                        </WorkoutAccordionTitle>
-                        <WorkoutAccordionSubtitle>
-                          {workout.description}
-                        </WorkoutAccordionSubtitle>
-                      </WorkoutAccordionInfo>
-                    </WorkoutAccordionLeft>
-                    <WorkoutAccordionRight>
-                      {isNext && <NextBadge><NextBadgeText>Próximo</NextBadgeText></NextBadge>}
-                      <MaterialCommunityIcons
-                        name={isExpanded ? 'chevron-up' : 'chevron-down'}
-                        size={spacing.iconSize.md}
-                        color={colors.neutral400}
-                      />
-                    </WorkoutAccordionRight>
-                  </WorkoutAccordionHeader>
+          {hasPlan && (
+            <>
+              <SectionHeader onPress={toggleWorkoutSection} accessibilityLabel="Meus Treinos">
+                <SectionTitle>Meus Treinos</SectionTitle>
+                <MaterialCommunityIcons
+                  name={isWorkoutSectionOpen ? 'chevron-up' : 'chevron-down'}
+                  size={spacing.iconSize.md}
+                  color={colors.neutral400}
+                />
+              </SectionHeader>
+              {isWorkoutSectionOpen && (
+                <WorkoutList>
+                  {allDays.map(day => {
+                    const key = `${day.planId}-${day.name}`;
+                    const isNext = nextDay?.planId === day.planId && nextDay?.name === day.name;
+                    const isExpanded = expandedWorkout === key;
+                    const exerciseCount = day.exercises.length;
 
-                  {isExpanded && (
-                    <WorkoutAccordionBody>
-                      <WorkoutDetail>
-                        <MaterialCommunityIcons
-                          name="clock-outline"
-                          size={16}
-                          color={colors.textSecondary}
-                        />
-                        <WorkoutDetailText>
-                          Duração média: {workout.durationMinutes} min
-                        </WorkoutDetailText>
-                      </WorkoutDetail>
-                      <Button
-                        title="Iniciar Treino"
-                        onPress={() => { }}
-                        style={{ marginTop: spacing.md }}
-                      />
-                    </WorkoutAccordionBody>
-                  )}
-                </WorkoutAccordion>
-              );
-            })}
-          </WorkoutList>}
+                    return (
+                      <WorkoutAccordion
+                        key={key}
+                        $isNext={isNext}
+                        onPress={() => toggleWorkout(key)}
+                        accessibilityLabel={day.name}
+                      >
+                        <WorkoutAccordionHeader>
+                          <WorkoutAccordionLeft>
+                            <WorkoutIconContainer $isNext={isNext}>
+                              <MaterialCommunityIcons
+                                name="dumbbell"
+                                size={spacing.iconSize.md}
+                                color={isNext ? colors.primary : colors.secondary}
+                              />
+                            </WorkoutIconContainer>
+                            <WorkoutAccordionInfo>
+                              <WorkoutAccordionTitle $isNext={isNext}>
+                                {day.name}
+                              </WorkoutAccordionTitle>
+                              <WorkoutAccordionSubtitle>
+                                {exerciseCount} {exerciseCount === 1 ? 'exercício' : 'exercícios'}
+                              </WorkoutAccordionSubtitle>
+                            </WorkoutAccordionInfo>
+                          </WorkoutAccordionLeft>
+                          <WorkoutAccordionRight>
+                            {isNext && <NextBadge><NextBadgeText>Próximo</NextBadgeText></NextBadge>}
+                            <MaterialCommunityIcons
+                              name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                              size={spacing.iconSize.md}
+                              color={colors.neutral400}
+                            />
+                          </WorkoutAccordionRight>
+                        </WorkoutAccordionHeader>
+
+                        {isExpanded && (
+                          <WorkoutAccordionBody>
+                            {day.exercises.map(exercise => {
+                              const schemeLabel = exercise.fixedReps
+                                ? `${exercise.sets}x${exercise.reps}`
+                                : (exercise.repSchemes ?? []).map(s => `${s.sets}x${s.reps}`).join(' + ');
+                              return (
+                                <WorkoutDetail key={exercise.id}>
+                                  <MaterialCommunityIcons
+                                    name="dumbbell"
+                                    size={16}
+                                    color={colors.textSecondary}
+                                  />
+                                  <WorkoutDetailText>
+                                    {exercise.name} — {schemeLabel}
+                                  </WorkoutDetailText>
+                                </WorkoutDetail>
+                              );
+                            })}
+                          </WorkoutAccordionBody>
+                        )}
+                      </WorkoutAccordion>
+                    );
+                  })}
+                </WorkoutList>
+              )}
+            </>
+          )}
         </ContentArea>
       </ScrollContent>
 

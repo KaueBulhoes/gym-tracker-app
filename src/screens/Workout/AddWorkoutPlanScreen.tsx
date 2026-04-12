@@ -23,6 +23,7 @@ import {
     SectionLabel,
 } from './AddWorkoutPlanScreen.styles';
 import type { AddWorkoutPlanScreenProps } from '../../navigation/types';
+import { useWorkoutStore } from '../../stores/workoutStore';
 import CustomDayForm from './components/CustomDayForm';
 import DayChipSelector from './components/DayChipSelector';
 
@@ -39,6 +40,7 @@ const PLAN_OPTIONS: { type: WorkoutPlanType; label: string; description: string 
 ];
 
 const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation }) => {
+    const startDraft = useWorkoutStore(state => state.startDraft);
     const [planType, setPlanType] = useState<WorkoutPlanType | null>(null);
 
     const [abcdeItems, setAbcdeItems] = useState(ABCDE_BASE);
@@ -125,6 +127,7 @@ const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation 
         } else if (planType === 'custom') {
             days = customDays;
         }
+        startDraft(days);
         navigation.navigate('AddWorkoutExercises', { days });
     };
 
