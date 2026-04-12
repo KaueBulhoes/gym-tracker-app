@@ -51,10 +51,9 @@ import {
 } from './HomeScreen.styles';
 import {
   mockMonthlyTotal,
-  mockUser,
-  mockWeeklyGoal,
 } from '../../../mocks/homeData';
 import { useAuthStore } from '../../../stores/authStore';
+import { useProfileStore } from '../../../stores/profileStore';
 import { useWorkoutStore } from '../../../stores/workoutStore';
 import type { AppStackParamList } from '../../../navigation/types';
 
@@ -65,13 +64,30 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
+const getWeekStart = (): string => {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = day === 0 ? 6 : day - 1;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - diff);
+  monday.setHours(0, 0, 0, 0);
+  return monday.toISOString();
+};
+
 const HomeScreen: React.FC = () => {
   const { signOut } = useAuthStore();
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const plans = useWorkoutStore(state => state.plans);
   const lastCompleted = useWorkoutStore(state => state.lastCompleted);
+  const profile = useProfileStore(state => state.profile);
+  const sessions = useWorkoutStore(state => state.sessions);
 
-  const remaining = mockWeeklyGoal.target - mockWeeklyGoal.completed;
+  const weeklyTarget = profile?.weeklyGoal ?? 5;
+  const weekStart = getWeekStart();
+  const weeklyCompleted = sessions.filter(
+    s => s.finishedAt >= weekStart,
+  ).length;
+  const remaining = weeklyTarget - weeklyCompleted;
   const [expandedWorkout, setExpandedWorkout] = useState<string | null>(null);
 
   const hasPlan = plans.length > 0;
@@ -105,7 +121,7 @@ const HomeScreen: React.FC = () => {
         <Header>
           <HeaderContent>
             <WelcomeText>Bem-vindo de volta,</WelcomeText>
-            <UserName>{mockUser.name}!</UserName>
+            <UserName>{profile?.firstName ?? 'Atleta'}!</UserName>
           </HeaderContent>
           <ProfileButton
             onPress={signOut}
@@ -131,13 +147,13 @@ const HomeScreen: React.FC = () => {
                 <GoalTitle>Meta Semanal</GoalTitle>
               </GoalTitleRow>
               <GoalCount>
-                {mockWeeklyGoal.completed}/{mockWeeklyGoal.target}
+                {weeklyCompleted}/{weeklyTarget}
               </GoalCount>
             </GoalHeader>
             <ProgressBarWrapper>
               <ProgressBar
-                current={mockWeeklyGoal.completed}
-                total={mockWeeklyGoal.target}
+                current={weeklyCompleted}
+                total={weeklyTarget}
               />
             </ProgressBarWrapper>
             <GoalMotivation>

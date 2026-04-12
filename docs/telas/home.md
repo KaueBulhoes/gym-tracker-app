@@ -1,7 +1,7 @@
 # Tela: Home
 
 **Arquivo:** `src/screens/Home/HomeScreen/HomeScreen.tsx`
-**Data:** 2026-04-11
+**Data:** 2026-04-12
 
 ## O que o usuário faz
 
@@ -24,8 +24,8 @@ Tela principal do app após login. Vê métricas do seu treino e lista dos trein
 | `useWorkoutStore.plans` | Store | Planos de treino salvos |
 | `useWorkoutStore.lastCompleted` | Store | Último dia marcado como feito |
 | `useWorkoutStore.startLastWorkout` | Store | Ativa o primeiro dia do último plano |
-| `mockUser` | Mock | Nome do usuário |
-| `mockWeeklyGoal` | Mock | Meta semanal (target/completed) |
+| `useWorkoutStore.sessions` | Store | Sessões finalizadas (conta treinos da semana) |
+| `useProfileStore.profile` | Store | Nome do usuário e meta semanal |
 | `mockMonthlyTotal` | Mock | Total de treinos no mês |
 
 ## Componentes usados

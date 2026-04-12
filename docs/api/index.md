@@ -9,6 +9,7 @@ Registro de todos os services e integração com Supabase.
 | [Supabase Client](supabase-client.md) | `src/services/supabase.ts` | RootNavigator, todos os services | Todas |
 | [Auth Service](auth-service.md) | `src/services/authService.ts` | authStore, LoginScreen, RegisterScreen | auth.users |
 | [Auth Store](auth-store.md) | `src/stores/authStore.ts` | LoginScreen, RegisterScreen, HomeScreen, RootNavigator | auth.users (via authService) |
+| [Profile Store](profile-store.md) | `src/stores/profileStore.ts` | OnboardingScreen, HomeScreen, AppNavigator | — (mock in-memory) |
 | [Workout Store](workout-store.md) | `src/stores/workoutStore.ts` | HomeScreen, AddWorkoutPlan, AddWorkoutExercises, WorkoutDay | — (mock in-memory) |
 
 ## Tabelas Supabase
