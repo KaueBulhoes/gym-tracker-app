@@ -56,28 +56,42 @@ export const Content = styled.View`
   gap: ${spacing.sm}px;
 `;
 
-export const ExerciseCard = styled.View`
+export const ExerciseAccordion = styled.Pressable<{ $done: boolean }>`
   background-color: ${colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   border-width: 1px;
-  border-color: ${colors.neutral600};
+  border-color: ${({ $done }) => ($done ? colors.success : colors.neutral600)};
+  overflow: hidden;
+`;
+
+export const ExerciseHeader = styled.View`
+  flex-direction: row;
+  align-items: center;
   padding: ${spacing.cardPadding}px;
 `;
 
-export const ExerciseRow = styled.View`
-  flex-direction: row;
+export const Checkbox = styled.Pressable<{ $checked: boolean }>`
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border-width: 2px;
+  border-color: ${({ $checked }) =>
+    $checked ? colors.success : colors.neutral500};
+  background-color: ${({ $checked }) =>
+    $checked ? colors.success : 'transparent'};
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  margin-right: ${spacing.md}px;
 `;
 
 export const ExerciseInfo = styled.View`
   flex: 1;
 `;
 
-export const ExerciseName = styled.Text`
+export const ExerciseName = styled.Text<{ $done: boolean }>`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.text};
+  color: ${({ $done }) => ($done ? colors.success : colors.text)};
 `;
 
 export const ExerciseMeta = styled.Text`
@@ -87,26 +101,65 @@ export const ExerciseMeta = styled.Text`
   margin-top: ${spacing.xxs}px;
 `;
 
-export const ExerciseActions = styled.View`
+export const ExerciseHeaderRight = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: ${spacing.xs}px;
+  gap: ${spacing.sm}px;
 `;
 
-export const ActionButton = styled.Pressable`
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  background-color: ${colors.backgroundHighlight};
+export const WeightButton = styled.Pressable`
   align-items: center;
   justify-content: center;
+  gap: 2px;
+  margin-right: 10px;
 `;
 
-export const WeightBadge = styled.Text`
-  font-size: ${typography.small.fontSize}px;
+export const WeightButtonLabel = styled.Text`
+  font-size: 10px;
   font-weight: ${typography.bodyBold.fontWeight};
   color: ${colors.primary};
-  margin-top: ${spacing.xs}px;
+`;
+
+export const ExerciseBody = styled.View`
+  padding-horizontal: ${spacing.cardPadding}px;
+  padding-bottom: ${spacing.cardPadding}px;
+  border-top-width: 1px;
+  border-top-color: ${colors.neutral600};
+  gap: ${spacing.xs}px;
+  padding-top: ${spacing.sm}px;
+`;
+
+export const SetRow = styled.Pressable`
+  flex-direction: row;
+  align-items: center;
+  padding-vertical: ${spacing.xs}px;
+`;
+
+export const SetCheckbox = styled.View<{ $checked: boolean }>`
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border-width: 2px;
+  border-color: ${({ $checked }) =>
+    $checked ? colors.success : colors.neutral500};
+  background-color: ${({ $checked }) =>
+    $checked ? colors.success : 'transparent'};
+  align-items: center;
+  justify-content: center;
+  margin-right: ${spacing.md}px;
+`;
+
+export const SetText = styled.Text<{ $checked: boolean }>`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.caption.fontWeight};
+  color: ${({ $checked }) => ($checked ? colors.neutral400 : colors.text)};
+  flex: 1;
+`;
+
+export const SetWeight = styled.Text<{ $checked: boolean }>`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.bodyBold.fontWeight};
+  color: ${({ $checked }) => ($checked ? colors.neutral500 : colors.primary)};
 `;
 
 export const FinishButton = styled.Pressable`

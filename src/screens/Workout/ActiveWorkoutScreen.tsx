@@ -1,23 +1,24 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Modal, StatusBar, Switch } from 'react-native';
+import { LayoutAnimation, Modal, Platform, StatusBar, Switch, UIManager } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, spacing } from '../../constants';
 import type { ActiveWorkoutScreenProps } from '../../navigation/types';
 import { useWorkoutStore } from '../../stores/workoutStore';
-import type { ExerciseWeight } from '../../types/workout';
+import type { Exercise, ExerciseWeight } from '../../types/workout';
 import {
-    ActionButton,
     BackButton,
+    Checkbox,
     Container,
     Content,
     DaySubtitle,
     DayTitle,
-    ExerciseActions,
-    ExerciseCard,
+    ExerciseAccordion,
+    ExerciseBody,
+    ExerciseHeader,
+    ExerciseHeaderRight,
     ExerciseInfo,
     ExerciseMeta,
     ExerciseName,
-    ExerciseRow,
     FinishButton,
     FinishButtonText,
     Header,
@@ -28,8 +29,13 @@ import {
     RestModalTimer,
     RestModalTitle,
     ScrollContent,
+    SetCheckbox,
+    SetRow,
+    SetText,
+    SetWeight,
     TimerText,
-    WeightBadge,
+    WeightButton,
+    WeightButtonLabel,
     WeightInput,
     WeightModal,
     WeightModalTitle,
@@ -41,6 +47,13 @@ import {
     WeightToggleRow,
     WeightUnit,
 } from './ActiveWorkoutScreen.styles';
+
+if (
+    Platform.OS === 'android' &&
+    UIManager.setLayoutAnimationEnabledExperimental
+) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const numericOnly = (text: string) => text.replace(/[^0-9.,]/g, '');
 
@@ -55,6 +68,23 @@ const formatRest = (totalSeconds: number): string => {
     const m = Math.floor(totalSeconds / 60);
     const s = totalSeconds % 60;
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+};
+
+type SetInfo = { index: number; reps: string };
+
+const buildSetList = (exercise: Exercise): SetInfo[] => {
+    if (exercise.fixedReps) {
+        const count = parseInt(exercise.sets, 10) || 1;
+        return Array.from({ length: count }, (_, i) => ({ index: i, reps: exercise.reps }));
+    }
+    const list: SetInfo[] = [];
+    for (const scheme of exercise.repSchemes ?? []) {
+        const count = parseInt(scheme.sets, 10) || 1;
+        for (let i = 0; i < count; i++) {
+            list.push({ index: list.length, reps: scheme.reps });
+        }
+    }
+    return list;
 };
 
 const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, navigation }) => {
@@ -83,6 +113,8 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
     }, []);
 
     const [exerciseWeights, setExerciseWeights] = useState<Record<string, ExerciseWeight>>({});
+    const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
+    const [completedSets, setCompletedSets] = useState<Record<string, Set<number>>>({});
 
     const [restSeconds, setRestSeconds] = useState(0);
     const restRef = useRef(0);
@@ -131,6 +163,56 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         return 0;
     };
 
+    const toggleExpanded = (exerciseId: string) => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setExpandedExercise(prev => (prev === exerciseId ? null : exerciseId));
+    };
+
+    const isSetCompleted = (exerciseId: string, setIndex: number) =>
+        completedSets[exerciseId]?.has(setIndex) ?? false;
+
+    const toggleSet = (exerciseId: string, setIndex: number, totalSets: number) => {
+        setCompletedSets(prev => {
+            const current = new Set(prev[exerciseId] ?? []);
+            if (current.has(setIndex)) {
+                current.delete(setIndex);
+            } else {
+                current.add(setIndex);
+                const rest = getRestForExercise(exerciseId);
+                if (rest > 0 && current.size < totalSets) {
+                    startRest(rest);
+                }
+            }
+            return { ...prev, [exerciseId]: current };
+        });
+    };
+
+    const isExerciseDone = (exerciseId: string, totalSets: number) => {
+        const done = completedSets[exerciseId];
+        return done ? done.size >= totalSets : false;
+    };
+
+    const toggleExercise = (exerciseId: string, setList: SetInfo[]) => {
+        const allDone = isExerciseDone(exerciseId, setList.length);
+        setCompletedSets(prev => ({
+            ...prev,
+            [exerciseId]: allDone
+                ? new Set<number>()
+                : new Set(setList.map(s => s.index)),
+        }));
+    };
+
+    const getWeightForSet = (exerciseId: string, setIndex: number): string | null => {
+        const w = exerciseWeights[exerciseId];
+        if (!w) {
+            return null;
+        }
+        if (w.uniform) {
+            return w.weights[0] || null;
+        }
+        return w.weights[setIndex] || null;
+    };
+
     const [weightModalExerciseId, setWeightModalExerciseId] = useState<string | null>(null);
     const [weightDifferent, setWeightDifferent] = useState(false);
     const [weightInputs, setWeightInputs] = useState<string[]>([]);
@@ -140,7 +222,8 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         if (!exercise) {
             return;
         }
-        const totalSets = getTotalSets(exercise);
+        const setList = buildSetList(exercise);
+        const totalSets = setList.length;
         const existing = exerciseWeights[exerciseId];
         if (existing) {
             setWeightDifferent(!existing.uniform);
@@ -177,25 +260,6 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         closeWeightModal();
     };
 
-    const getTotalSets = (exercise: { sets: string; fixedReps: boolean; repSchemes?: Array<{ sets: string }> }): number => {
-        if (exercise.fixedReps) {
-            return parseInt(exercise.sets, 10) || 1;
-        }
-        return (exercise.repSchemes ?? []).reduce((sum, s) => sum + (parseInt(s.sets, 10) || 0), 0);
-    };
-
-    const getWeightLabel = (exerciseId: string): string | null => {
-        const w = exerciseWeights[exerciseId];
-        if (!w) {
-            return null;
-        }
-        if (w.uniform) {
-            return w.weights[0] ? `${w.weights[0]} kg` : null;
-        }
-        const filled = w.weights.filter(v => v);
-        return filled.length > 0 ? filled.join('/') + ' kg' : null;
-    };
-
     const handleFinish = () => {
         finishWorkout({
             id: String(Date.now()),
@@ -210,7 +274,7 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
     };
 
     const weightModalExercise = exercises.find(e => e.id === weightModalExerciseId);
-    const weightModalSets = weightModalExercise ? getTotalSets(weightModalExercise) : 0;
+    const weightModalSets = weightModalExercise ? buildSetList(weightModalExercise).length : 0;
 
     return (
         <Container>
@@ -228,46 +292,82 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
             <ScrollContent showsVerticalScrollIndicator={false}>
                 <Content>
                     {exercises.map(exercise => {
+                        const setList = buildSetList(exercise);
                         const schemeLabel = exercise.fixedReps
                             ? `${exercise.sets}x${exercise.reps}`
                             : (exercise.repSchemes ?? []).map(s => `${s.sets}x${s.reps}`).join(' + ');
-                        const hasRest = getRestForExercise(exercise.id) > 0;
-                        const weightLabel = getWeightLabel(exercise.id);
+                        const done = isExerciseDone(exercise.id, setList.length);
+                        const isExpanded = expandedExercise === exercise.id;
 
                         return (
-                            <ExerciseCard key={exercise.id}>
-                                <ExerciseRow>
+                            <ExerciseAccordion
+                                key={exercise.id}
+                                $done={done}
+                                onPress={() => toggleExpanded(exercise.id)}
+                                accessibilityLabel={exercise.name}
+                            >
+                                <ExerciseHeader>
+                                    <Checkbox
+                                        $checked={done}
+                                        onPress={() => toggleExercise(exercise.id, setList)}
+                                        accessibilityLabel={`Marcar ${exercise.name} como concluído`}
+                                    >
+                                        {done && (
+                                            <MaterialCommunityIcons name="check" size={16} color={colors.background} />
+                                        )}
+                                    </Checkbox>
                                     <ExerciseInfo>
-                                        <ExerciseName>{exercise.name}</ExerciseName>
+                                        <ExerciseName $done={done}>{exercise.name}</ExerciseName>
                                         <ExerciseMeta>{schemeLabel}</ExerciseMeta>
-                                        {weightLabel && <WeightBadge>{weightLabel}</WeightBadge>}
                                     </ExerciseInfo>
-                                    <ExerciseActions>
-                                        <ActionButton
+                                    <ExerciseHeaderRight>
+                                        <WeightButton
                                             onPress={() => openWeightModal(exercise.id)}
                                             accessibilityLabel={`Carga de ${exercise.name}`}
                                         >
                                             <MaterialCommunityIcons
                                                 name="weight-kilogram"
-                                                size={spacing.iconSize.sm}
+                                                size={spacing.iconSize.md}
                                                 color={colors.primary}
                                             />
-                                        </ActionButton>
-                                        {hasRest && (
-                                            <ActionButton
-                                                onPress={() => startRest(getRestForExercise(exercise.id))}
-                                                accessibilityLabel={`Descanso de ${exercise.name}`}
-                                            >
-                                                <MaterialCommunityIcons
-                                                    name="timer-outline"
-                                                    size={spacing.iconSize.sm}
-                                                    color={colors.secondary}
-                                                />
-                                            </ActionButton>
-                                        )}
-                                    </ExerciseActions>
-                                </ExerciseRow>
-                            </ExerciseCard>
+                                            <WeightButtonLabel>Carga</WeightButtonLabel>
+                                        </WeightButton>
+                                        <MaterialCommunityIcons
+                                            name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                                            size={spacing.iconSize.md}
+                                            color={colors.neutral400}
+                                        />
+                                    </ExerciseHeaderRight>
+                                </ExerciseHeader>
+
+                                {isExpanded && (
+                                    <ExerciseBody>
+                                        {setList.map(set => {
+                                            const checked = isSetCompleted(exercise.id, set.index);
+                                            const weight = getWeightForSet(exercise.id, set.index);
+                                            return (
+                                                <SetRow
+                                                    key={set.index}
+                                                    onPress={() => toggleSet(exercise.id, set.index, setList.length)}
+                                                    accessibilityLabel={`Série ${set.index + 1}`}
+                                                >
+                                                    <SetCheckbox $checked={checked}>
+                                                        {checked && (
+                                                            <MaterialCommunityIcons name="check" size={12} color={colors.background} />
+                                                        )}
+                                                    </SetCheckbox>
+                                                    <SetText $checked={checked}>
+                                                        Série {set.index + 1} x {set.reps}
+                                                    </SetText>
+                                                    <SetWeight $checked={checked}>
+                                                        {weight ? `${weight} kg` : '-'}
+                                                    </SetWeight>
+                                                </SetRow>
+                                            );
+                                        })}
+                                    </ExerciseBody>
+                                )}
+                            </ExerciseAccordion>
                         );
                     })}
                 </Content>
