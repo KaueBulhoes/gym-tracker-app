@@ -149,6 +149,39 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
   - Módulos não-visuais (stores, services, types, utils, constants) ficam flat, sem pasta
   - O arquivo de estilos exporta os styled-components nomeados; o componente apenas importa
 
+## Documentação (Obsidian)
+
+O projeto mantém uma base de documentação em `docs/` estruturada para Obsidian. Ela é a fonte de verdade sobre o que foi implementado.
+
+### Estrutura
+
+```
+docs/
+├── README.md              # Índice geral
+├── setup.md               # Setup do ambiente
+├── backlog.md             # MVP, Fase 2, Fase 3 com status
+├── diario/                # Entradas diárias (YYYY-MM-DD.md)
+├── funcionalidades/       # Features completas (tela + service + lógica)
+├── api/                   # Services e integração Supabase
+├── telas/                 # Registro de cada tela (navegação, dados, componentes)
+└── decisoes/              # ADRs (Architecture Decision Records)
+```
+
+### Workflow de documentação
+
+1. Ao criar/modificar telas, services ou features: rodar `/registre-atividade`
+2. Ao finalizar o dia: rodar `/registre-diario-hoje`
+3. Ao commitar: rodar `/commit` (que inclui docs no commit)
+4. Para verificar se docs estão em dia: rodar `/revisar-docs`
+
+### Regras
+
+- Docs acompanham o código — se criou tela nova, documenta em `docs/telas/`
+- Se criou service novo, documenta em `docs/api/`
+- Se completou feature, documenta em `docs/funcionalidades/`
+- Links entre docs: usar caminhos relativos (ex: `[workoutStore](../api/workout-store.md)`)
+- Datas absolutas (nunca "hoje" ou "ontem" nos docs)
+
 ## Regras para o Claude
 
 1. **Sempre TypeScript** — nunca gerar código .js ou .jsx
