@@ -3,10 +3,10 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { LayoutAnimation, Platform, StatusBar, UIManager } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Button from '../../components/Button';
-import Card from '../../components/Card';
-import ProgressBar from '../../components/ProgressBar';
-import { colors, spacing } from '../../constants';
+import Button from '../../../components/Button';
+import Card from '../../../components/Card';
+import ProgressBar from '../../../components/ProgressBar';
+import { colors, spacing } from '../../../constants';
 import {
   BottomBar,
   BottomBarButton,
@@ -53,10 +53,10 @@ import {
   mockMonthlyTotal,
   mockUser,
   mockWeeklyGoal,
-} from '../../mocks/homeData';
-import { useAuthStore } from '../../stores/authStore';
-import { useWorkoutStore } from '../../stores/workoutStore';
-import type { AppStackParamList } from '../../navigation/types';
+} from '../../../mocks/homeData';
+import { useAuthStore } from '../../../stores/authStore';
+import { useWorkoutStore } from '../../../stores/workoutStore';
+import type { AppStackParamList } from '../../../navigation/types';
 
 if (
   Platform.OS === 'android' &&

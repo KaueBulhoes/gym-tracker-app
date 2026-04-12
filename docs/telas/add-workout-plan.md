@@ -1,6 +1,6 @@
 # Tela: Adicionar Plano de Treino
 
-**Arquivo:** `src/screens/Workout/AddWorkoutPlanScreen.tsx`
+**Arquivo:** `src/screens/Workout/AddWorkoutPlanScreen/AddWorkoutPlanScreen.tsx`
 **Data:** 2026-04-09
 
 ## O que o usuário faz

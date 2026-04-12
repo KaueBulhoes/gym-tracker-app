@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
-import type { LoginScreenProps } from '../../navigation/types';
-import { useAuthStore } from '../../stores/authStore';
+import Button from '../../../components/Button';
+import Input from '../../../components/Input';
+import type { LoginScreenProps } from '../../../navigation/types';
+import { useAuthStore } from '../../../stores/authStore';
 import { Container, Content, Header, Title, Subtitle, Form, ErrorText } from './LoginScreen.styles';
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {

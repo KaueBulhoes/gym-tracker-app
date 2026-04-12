@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, StatusBar, Switch } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors, spacing } from '../../constants';
-import type { WorkoutDayScreenProps } from '../../navigation/types';
-import { useWorkoutStore } from '../../stores/workoutStore';
-import type { Exercise } from '../../types/workout';
+import { colors, spacing } from '../../../constants';
+import type { WorkoutDayScreenProps } from '../../../navigation/types';
+import { useWorkoutStore } from '../../../stores/workoutStore';
+import type { Exercise } from '../../../types/workout';
 import {
     AddExerciseButton,
     AddExerciseButtonText,

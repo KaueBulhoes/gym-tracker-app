@@ -11,14 +11,14 @@ Permite ao usuário criar um plano de treino escolhendo entre três modelos de d
 
 | Camada     | Arquivo                                              | Descrição                                                  |
 | ---------- | ---------------------------------------------------- | ---------------------------------------------------------- |
-| Tela       | `src/screens/Workout/AddWorkoutPlanScreen.tsx`       | Radio buttons de tipo + painel dinâmico de seleção/criação |
-| Tela       | `src/screens/Workout/AddWorkoutExercisesScreen.tsx`  | Lista de dias do plano com contagem de exercícios + Salvar |
-| Tela       | `src/screens/Workout/WorkoutDayScreen.tsx`           | Configuração de exercícios por dia com dialog modal        |
+| Tela       | `src/screens/Workout/AddWorkoutPlanScreen/AddWorkoutPlanScreen.tsx`       | Radio buttons de tipo + painel dinâmico de seleção/criação |
+| Tela       | `src/screens/Workout/AddWorkoutExercisesScreen/AddWorkoutExercisesScreen.tsx`  | Lista de dias do plano com contagem de exercícios + Salvar |
+| Tela       | `src/screens/Workout/WorkoutDayScreen/WorkoutDayScreen.tsx`           | Configuração de exercícios por dia com dialog modal        |
 | Store      | `src/stores/workoutStore.ts`                         | Rascunho (draft), planos salvos, último treino ativado     |
 | Tipos      | `src/types/workout.ts`                               | Exercise, WorkoutDay, WorkoutPlan                          |
 | Componente | `src/screens/Workout/components/DayChipSelector.tsx` | Chips para modos ABCDE e Seg a Sex                         |
 | Componente | `src/screens/Workout/components/CustomDayForm.tsx`   | Form sequencial para modo personalizável com rename/delete |
-| Navegação  | `src/navigation/AppNavigator.tsx`                    | Stack Navigator que expõe as rotas do fluxo                |
+| Navegação  | `src/navigation/AppNavigator/AppNavigator.tsx`                    | Stack Navigator que expõe as rotas do fluxo                |
 
 ## Fluxo de telas
 

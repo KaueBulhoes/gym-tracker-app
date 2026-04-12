@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Button from '../../components/Button';
-import { colors, spacing } from '../../constants';
+import Button from '../../../components/Button';
+import { colors, spacing } from '../../../constants';
 import {
     BackButton,
     Container,
@@ -22,10 +22,10 @@ import {
     ScrollContent,
     SectionLabel,
 } from './AddWorkoutPlanScreen.styles';
-import type { AddWorkoutPlanScreenProps } from '../../navigation/types';
-import { useWorkoutStore } from '../../stores/workoutStore';
-import CustomDayForm from './components/CustomDayForm';
-import DayChipSelector from './components/DayChipSelector';
+import type { AddWorkoutPlanScreenProps } from '../../../navigation/types';
+import { useWorkoutStore } from '../../../stores/workoutStore';
+import CustomDayForm from '../components/CustomDayForm';
+import DayChipSelector from '../components/DayChipSelector';
 
 type WorkoutPlanType = 'abcde' | 'weekdays' | 'custom';
 

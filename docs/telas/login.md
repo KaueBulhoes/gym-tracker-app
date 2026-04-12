@@ -1,6 +1,6 @@
 # Tela: Login
 
-**Arquivo:** `src/screens/Auth/LoginScreen.tsx`
+**Arquivo:** `src/screens/Auth/LoginScreen/LoginScreen.tsx`
 **Data:** 2026-04-07
 
 ## O que o usuário faz

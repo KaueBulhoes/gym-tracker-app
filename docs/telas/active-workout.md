@@ -1,6 +1,6 @@
 # Tela: Treino Ativo
 
-**Arquivo:** `src/screens/Workout/ActiveWorkoutScreen.tsx`
+**Arquivo:** `src/screens/Workout/ActiveWorkoutScreen/ActiveWorkoutScreen.tsx`
 **Data:** 2026-04-11
 
 ## O que o usuário faz

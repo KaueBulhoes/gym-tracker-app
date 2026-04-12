@@ -1,9 +1,9 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors, spacing } from '../../constants';
-import type { AddWorkoutExercisesScreenProps } from '../../navigation/types';
-import { useWorkoutStore } from '../../stores/workoutStore';
+import { colors, spacing } from '../../../constants';
+import type { AddWorkoutExercisesScreenProps } from '../../../navigation/types';
+import { useWorkoutStore } from '../../../stores/workoutStore';
 import {
     BackButton,
     Container,

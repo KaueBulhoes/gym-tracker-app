@@ -1,10 +1,10 @@
 import type { Session } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
-import { colors } from '../constants';
-import { supabase } from '../services/supabase';
-import AuthNavigator from './AuthNavigator';
-import AppNavigator from './AppNavigator';
+import { colors } from '../../constants';
+import { supabase } from '../../services/supabase';
+import AuthNavigator from '../AuthNavigator';
+import AppNavigator from '../AppNavigator';
 import { LoadingContainer } from './RootNavigator.styles';
 
 const RootNavigator = () => {

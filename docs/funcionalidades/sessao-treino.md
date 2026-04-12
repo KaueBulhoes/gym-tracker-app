@@ -11,10 +11,10 @@ Permite ao usuário executar um treino em tempo real com cronômetro, registrar 
 
 | Camada | Arquivo | Descrição |
 |--------|---------|-----------|
-| Tela | `src/screens/Workout/ActiveWorkoutScreen.tsx` | Cronômetro, lista de exercícios, modais de descanso e carga |
+| Tela | `src/screens/Workout/ActiveWorkoutScreen/ActiveWorkoutScreen.tsx` | Cronômetro, lista de exercícios, modais de descanso e carga |
 | Store | `src/stores/workoutStore.ts` | `finishWorkout()` salva sessão com duração e cargas |
 | Tipos | `src/types/workout.ts` | `WorkoutSession`, `ExerciseWeight` |
-| Home | `src/screens/Home/HomeScreen.tsx` | Botões de navegação para iniciar treino |
+| Home | `src/screens/Home/HomeScreen/HomeScreen.tsx` | Botões de navegação para iniciar treino |
 
 ## Fluxo
 

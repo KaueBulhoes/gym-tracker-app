@@ -1,6 +1,6 @@
 # Tela: Cadastro
 
-**Arquivo:** `src/screens/Auth/RegisterScreen.tsx`
+**Arquivo:** `src/screens/Auth/RegisterScreen/RegisterScreen.tsx`
 **Data:** 2026-04-07
 
 ## O que o usuário faz

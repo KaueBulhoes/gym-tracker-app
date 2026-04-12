@@ -1,6 +1,6 @@
 # Tela: Dia do Treino
 
-**Arquivo:** `src/screens/Workout/WorkoutDayScreen.tsx`
+**Arquivo:** `src/screens/Workout/WorkoutDayScreen/WorkoutDayScreen.tsx`
 **Data:** 2026-04-11
 
 ## O que o usuário faz

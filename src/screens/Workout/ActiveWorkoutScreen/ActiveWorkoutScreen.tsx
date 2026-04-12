@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LayoutAnimation, Modal, Platform, StatusBar, Switch, UIManager } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors, spacing } from '../../constants';
-import type { ActiveWorkoutScreenProps } from '../../navigation/types';
-import { useWorkoutStore } from '../../stores/workoutStore';
-import type { Exercise, ExerciseWeight } from '../../types/workout';
+import { colors, spacing } from '../../../constants';
+import type { ActiveWorkoutScreenProps } from '../../../navigation/types';
+import { useWorkoutStore } from '../../../stores/workoutStore';
+import type { Exercise, ExerciseWeight } from '../../../types/workout';
 import {
     BackButton,
     Checkbox,

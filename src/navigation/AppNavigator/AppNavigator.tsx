@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import HomeScreen from '../screens/Home/HomeScreen';
-import ActiveWorkoutScreen from '../screens/Workout/ActiveWorkoutScreen';
-import AddWorkoutExercisesScreen from '../screens/Workout/AddWorkoutExercisesScreen';
-import AddWorkoutPlanScreen from '../screens/Workout/AddWorkoutPlanScreen';
-import WorkoutDayScreen from '../screens/Workout/WorkoutDayScreen';
-import type { AppStackParamList } from './types';
+import HomeScreen from '../../screens/Home/HomeScreen';
+import ActiveWorkoutScreen from '../../screens/Workout/ActiveWorkoutScreen';
+import AddWorkoutExercisesScreen from '../../screens/Workout/AddWorkoutExercisesScreen';
+import AddWorkoutPlanScreen from '../../screens/Workout/AddWorkoutPlanScreen';
+import WorkoutDayScreen from '../../screens/Workout/WorkoutDayScreen';
+import type { AppStackParamList } from '../types';
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 

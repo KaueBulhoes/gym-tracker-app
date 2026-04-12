@@ -11,8 +11,8 @@ Permite que o usuário crie uma conta e faça login com e-mail e senha. A sessã
 
 | Camada    | Arquivo                               | Descrição                                                     |
 | --------- | ------------------------------------- | ------------------------------------------------------------- |
-| Tela      | `src/screens/Auth/LoginScreen.tsx`    | Formulário de e-mail e senha + botão de login                 |
-| Tela      | `src/screens/Auth/RegisterScreen.tsx` | Formulário de cadastro com e-mail e senha                     |
+| Tela      | `src/screens/Auth/LoginScreen/LoginScreen.tsx`    | Formulário de e-mail e senha + botão de login                 |
+| Tela      | `src/screens/Auth/RegisterScreen/RegisterScreen.tsx` | Formulário de cadastro com e-mail e senha                     |
 | Service   | `src/services/supabase.ts`            | Client base com sessão persistida                             |
 | Service   | `src/services/authService.ts`         | `signIn`, `signUp`, `signOut` via Supabase Auth               |
 | Store     | `src/stores/authStore.ts`             | Estado global: `user`, `session`, `isLoading`, `error`        |

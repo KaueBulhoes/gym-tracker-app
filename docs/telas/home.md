@@ -1,6 +1,6 @@
 # Tela: Home
 
-**Arquivo:** `src/screens/Home/HomeScreen.tsx`
+**Arquivo:** `src/screens/Home/HomeScreen/HomeScreen.tsx`
 **Data:** 2026-04-11
 
 ## O que o usuário faz

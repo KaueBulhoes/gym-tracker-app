@@ -143,8 +143,10 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Espaçamentos padronizados em `src/constants/spacing.ts`
 - Componentes base reutilizáveis (Button, Input, Card) antes de compor telas
 - Estilos em arquivo separado do componente: `NomeComponente.styles.ts` na mesma pasta do `.tsx`
-  - Componentes reutilizáveis: pasta própria — `Button/Button.tsx` + `Button/Button.styles.ts` + `Button/index.ts`
-  - Telas: o par `NomeTela.tsx` + `NomeTela.styles.ts` fica junto na pasta da feature (sem subpasta extra)
+  - **Todo componente visual** (telas, navegadores, componentes reutilizáveis) fica em pasta própria:
+    `NomeScreen/NomeScreen.tsx` + `NomeScreen.styles.ts` + `index.ts`
+  - Isso inclui telas (`src/screens/`), navegadores (`src/navigation/`) e componentes (`src/components/`)
+  - Módulos não-visuais (stores, services, types, utils, constants) ficam flat, sem pasta
   - O arquivo de estilos exporta os styled-components nomeados; o componente apenas importa
 
 ## Regras para o Claude

@@ -1,6 +1,6 @@
 # Tela: Adicionar Exercícios ao Plano
 
-**Arquivo:** `src/screens/Workout/AddWorkoutExercisesScreen.tsx`
+**Arquivo:** `src/screens/Workout/AddWorkoutExercisesScreen/AddWorkoutExercisesScreen.tsx`
 **Data:** 2026-04-11
 
 ## O que o usuário faz
