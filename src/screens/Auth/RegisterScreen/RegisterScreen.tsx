@@ -1,16 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { Modal, Platform } from 'react-native';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import type { RegisterScreenProps } from '../../../navigation/types';
 import { useAuthStore } from '../../../stores/authStore';
-import { Container, Content, Header, Title, Subtitle, Form, ErrorText } from './RegisterScreen.styles';
+import {
+  Container,
+  Content,
+  Header,
+  Title,
+  Subtitle,
+  Form,
+  ErrorText,
+  ModalOverlay,
+  ModalCard,
+  ModalIcon,
+  ModalTitle,
+  ModalMessage,
+} from './RegisterScreen.styles';
 
 const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const { signUp, isLoading, error, clearError } = useAuthStore();
 
@@ -27,11 +41,19 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
     password.length >= 6 &&
     password === confirmPassword;
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!isFormValid) {
       return;
     }
-    signUp(email.trim(), password, name.trim());
+    const success = await signUp(email.trim(), password, name.trim());
+    if (success) {
+      setShowConfirmModal(true);
+    }
+  };
+
+  const handleConfirmOk = () => {
+    setShowConfirmModal(false);
+    navigation.goBack();
   };
 
   return (
@@ -100,6 +122,27 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
           />
         </Form>
       </Content>
+
+      <Modal
+        visible={showConfirmModal}
+        transparent
+        animationType="fade"
+        statusBarTranslucent
+        onRequestClose={handleConfirmOk}
+      >
+        <ModalOverlay>
+          <ModalCard>
+            <ModalIcon accessibilityLabel="Ícone de e-mail">✉️</ModalIcon>
+            <ModalTitle>Verifique seu e-mail</ModalTitle>
+            <ModalMessage>
+              Enviamos um link de confirmação para{'\n'}
+              {email.trim()}.{'\n\n'}
+              Acesse sua caixa de entrada e clique no link para ativar sua conta.
+            </ModalMessage>
+            <Button title="Ok" onPress={handleConfirmOk} />
+          </ModalCard>
+        </ModalOverlay>
+      </Modal>
     </Container>
   );
 };

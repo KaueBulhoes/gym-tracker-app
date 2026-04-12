@@ -9,7 +9,7 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, name: string) => Promise<void>;
+  signUp: (email: string, password: string, name: string) => Promise<boolean>;
   signOut: () => Promise<void>;
   setSession: (session: Session | null) => void;
   clearError: () => void;
@@ -40,12 +40,14 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       const { session, user } = await authService.signUp(email, password, name);
       set({ session, user, isLoading: false });
+      return true;
     } catch (err) {
       const appError =
         err instanceof AppError
           ? err
           : new AppError('UNKNOWN', 'Erro ao criar conta', err);
       set({ error: appError.message, isLoading: false });
+      return false;
     }
   },
 

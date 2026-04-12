@@ -40,3 +40,41 @@ export const ErrorText = styled.Text`
   color: ${colors.error};
   text-align: center;
 `;
+
+export const ModalOverlay = styled.View`
+  flex: 1;
+  background-color: ${colors.overlay};
+  justify-content: center;
+  align-items: center;
+  padding-horizontal: ${spacing.screenHorizontal}px;
+`;
+
+export const ModalCard = styled.View`
+  background-color: ${colors.backgroundElevated};
+  border-radius: ${spacing.cardRadius}px;
+  padding: ${spacing.xxl}px;
+  width: 100%;
+  align-items: center;
+`;
+
+export const ModalIcon = styled.Text`
+  font-size: 48px;
+  margin-bottom: ${spacing.base}px;
+`;
+
+export const ModalTitle = styled.Text`
+  font-size: ${typography.h2.fontSize}px;
+  font-weight: ${typography.h2.fontWeight};
+  color: ${colors.primary};
+  text-align: center;
+  margin-bottom: ${spacing.md}px;
+`;
+
+export const ModalMessage = styled.Text`
+  font-size: ${typography.body.fontSize}px;
+  font-weight: ${typography.body.fontWeight};
+  line-height: ${typography.body.lineHeight}px;
+  color: ${colors.textSecondary};
+  text-align: center;
+  margin-bottom: ${spacing.xl}px;
+`;
