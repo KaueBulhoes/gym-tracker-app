@@ -11,6 +11,7 @@ interface AuthState {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name: string) => Promise<boolean>;
   signOut: () => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
   setSession: (session: Session | null) => void;
   clearError: () => void;
 }
@@ -62,6 +63,22 @@ export const useAuthStore = create<AuthState>((set) => ({
           ? err
           : new AppError('UNKNOWN', 'Erro ao sair', err);
       set({ error: appError.message, isLoading: false });
+    }
+  },
+
+  changePassword: async (currentPassword, newPassword) => {
+    set({ isLoading: true, error: null });
+    try {
+      await authService.changePassword(currentPassword, newPassword);
+      set({ isLoading: false });
+      return true;
+    } catch (err) {
+      const appError =
+        err instanceof AppError
+          ? err
+          : new AppError('UNKNOWN', 'Erro ao alterar senha', err);
+      set({ error: appError.message, isLoading: false });
+      return false;
     }
   },
 

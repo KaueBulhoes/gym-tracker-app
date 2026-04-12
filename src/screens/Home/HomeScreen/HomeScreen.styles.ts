@@ -278,3 +278,40 @@ export const WorkoutDetailText = styled.Text`
   font-weight: ${typography.caption.fontWeight};
   color: ${colors.textSecondary};
 `;
+
+export const ProfileMenuOverlay = styled.Pressable`
+  flex: 1;
+  background-color: ${colors.overlay};
+  justify-content: flex-start;
+  align-items: flex-end;
+  padding-top: 90px;
+  padding-right: ${spacing.screenHorizontal}px;
+`;
+
+export const ProfileMenuCard = styled.View`
+  background-color: ${colors.backgroundElevated};
+  border-radius: ${spacing.cardRadius}px;
+  border-width: 1px;
+  border-color: ${colors.neutral600};
+  min-width: 180px;
+  overflow: hidden;
+`;
+
+export const ProfileMenuItem = styled.Pressable`
+  flex-direction: row;
+  align-items: center;
+  gap: ${spacing.md}px;
+  padding-horizontal: ${spacing.base}px;
+  padding-vertical: ${spacing.md}px;
+`;
+
+export const ProfileMenuItemText = styled.Text<{ $danger?: boolean }>`
+  font-size: ${typography.body.fontSize}px;
+  font-weight: ${typography.body.fontWeight};
+  color: ${({ $danger }) => ($danger ? colors.error : colors.text)};
+`;
+
+export const ProfileMenuDivider = styled.View`
+  height: 1px;
+  background-color: ${colors.neutral600};
+`;

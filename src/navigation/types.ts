@@ -8,6 +8,7 @@ export type AuthStackParamList = {
 export type AppStackParamList = {
   Onboarding: undefined;
   Home: undefined;
+  Settings: undefined;
   AddWorkoutPlan: undefined;
   AddWorkoutExercises: { days: string[] };
   WorkoutDay: { day: string };
@@ -42,4 +43,8 @@ export type ActiveWorkoutScreenProps = NativeStackScreenProps<
 export type OnboardingScreenProps = NativeStackScreenProps<
   AppStackParamList,
   'Onboarding'
+>;
+export type SettingsScreenProps = NativeStackScreenProps<
+  AppStackParamList,
+  'Settings'
 >;

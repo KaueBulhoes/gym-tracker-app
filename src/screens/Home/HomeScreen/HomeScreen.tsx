@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import { LayoutAnimation, Platform, StatusBar, UIManager } from 'react-native';
+import { LayoutAnimation, Modal, Platform, StatusBar, UIManager } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from '../../../components/Button';
 import Card from '../../../components/Card';
@@ -48,6 +48,11 @@ import {
   WorkoutDetailText,
   WorkoutIconContainer,
   WorkoutList,
+  ProfileMenuOverlay,
+  ProfileMenuCard,
+  ProfileMenuItem,
+  ProfileMenuItemText,
+  ProfileMenuDivider,
 } from './HomeScreen.styles';
 import {
   mockMonthlyTotal,
@@ -89,6 +94,7 @@ const HomeScreen: React.FC = () => {
   ).length;
   const remaining = weeklyTarget - weeklyCompleted;
   const [expandedWorkout, setExpandedWorkout] = useState<string | null>(null);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const hasPlan = plans.length > 0;
 
@@ -124,8 +130,8 @@ const HomeScreen: React.FC = () => {
             <UserName>{profile?.firstName ?? 'Atleta'}!</UserName>
           </HeaderContent>
           <ProfileButton
-            onPress={signOut}
-            accessibilityLabel="Perfil"
+            onPress={() => setShowProfileMenu(true)}
+            accessibilityLabel="Menu do perfil"
           >
             <MaterialCommunityIcons
               name="account-outline"
@@ -289,6 +295,40 @@ const HomeScreen: React.FC = () => {
           <BottomBarLabel>Estatísticas</BottomBarLabel>
         </BottomBarButton>
       </BottomBar>
+
+      <Modal
+        visible={showProfileMenu}
+        transparent
+        animationType="fade"
+        statusBarTranslucent
+        onRequestClose={() => setShowProfileMenu(false)}
+      >
+        <ProfileMenuOverlay onPress={() => setShowProfileMenu(false)}>
+          <ProfileMenuCard>
+            <ProfileMenuItem
+              onPress={() => {
+                setShowProfileMenu(false);
+                navigation.navigate('Settings');
+              }}
+              accessibilityLabel="Editar perfil"
+            >
+              <MaterialCommunityIcons name="pencil-outline" size={20} color={colors.text} />
+              <ProfileMenuItemText>Editar perfil</ProfileMenuItemText>
+            </ProfileMenuItem>
+            <ProfileMenuDivider />
+            <ProfileMenuItem
+              onPress={() => {
+                setShowProfileMenu(false);
+                signOut();
+              }}
+              accessibilityLabel="Sair"
+            >
+              <MaterialCommunityIcons name="logout" size={20} color={colors.error} />
+              <ProfileMenuItemText $danger>Sair</ProfileMenuItemText>
+            </ProfileMenuItem>
+          </ProfileMenuCard>
+        </ProfileMenuOverlay>
+      </Modal>
     </Container>
   );
 };

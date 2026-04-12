@@ -11,7 +11,8 @@ App
 │   └── Cadastro
 └── App (Stack)
     ├── Onboarding (rota inicial se perfil incompleto) → Home
-    ├── Home
+    ├── Home → Settings (menu perfil)
+    ├── Settings
     │   ├── BottomBar (+) → AddWorkoutPlan
     │   └── BottomBar/Accordion (Começar) → ActiveWorkout
     ├── AddWorkoutPlan → AddWorkoutExercises
@@ -32,3 +33,4 @@ App
 | [Dia do Treino](workout-day.md)                            | `src/screens/Workout/WorkoutDayScreen/WorkoutDayScreen.tsx`           | workoutStore.updateDraftDay | — (mock in-memory)       |
 | [Treino Ativo](active-workout.md)                          | `src/screens/Workout/ActiveWorkoutScreen/ActiveWorkoutScreen.tsx`        | workoutStore.finishWorkout  | — (mock in-memory)       |
 | [Onboarding](onboarding.md)                                | `src/screens/Onboarding/OnboardingScreen/OnboardingScreen.tsx`          | profileStore.saveProfile    | — (mock in-memory)       |
+| [Configurações](settings.md)                               | `src/screens/Settings/SettingsScreen/SettingsScreen.tsx`                | profileStore, authStore     | — (mock in-memory)       |

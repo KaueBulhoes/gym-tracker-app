@@ -41,4 +41,25 @@ export const authService = {
     }
     return data.session;
   },
+
+  async changePassword(currentPassword: string, newPassword: string) {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const email = sessionData.session?.user?.email;
+    if (!email) {
+      throw mapAuthError({ message: 'session_not_found', name: 'AuthError', status: 401 } as never);
+    }
+
+    const { error: verifyError } = await supabase.auth.signInWithPassword({
+      email,
+      password: currentPassword,
+    });
+    if (verifyError) {
+      throw mapAuthError(verifyError);
+    }
+
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) {
+      throw mapAuthError(error);
+    }
+  },
 };
