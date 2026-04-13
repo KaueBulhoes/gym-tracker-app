@@ -30,6 +30,7 @@ export type WorkoutPlan = {
 
 export type ExerciseWeight = {
   exerciseId: string;
+  exerciseName: string;
   uniform: boolean;
   weights: string[];
 };

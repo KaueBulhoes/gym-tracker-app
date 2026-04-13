@@ -1,6 +1,6 @@
 # Tabela: exercise_rep_schemes
 
-**Status:** A criar
+**Status:** Integrada (2026-04-13)
 
 ## Descrição
 

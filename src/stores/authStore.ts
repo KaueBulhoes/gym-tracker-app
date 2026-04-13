@@ -2,6 +2,8 @@ import type { Session, User } from '@supabase/supabase-js';
 import { create } from 'zustand';
 import { authService } from '../services/authService';
 import { AppError } from '../types/errors';
+import { useProfileStore } from './profileStore';
+import { useWorkoutStore } from './workoutStore';
 
 interface AuthState {
   user: User | null;
@@ -56,6 +58,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       await authService.signOut();
+      useProfileStore.getState().reset();
+      useWorkoutStore.getState().reset();
       set({ user: null, session: null, isLoading: false });
     } catch (err) {
       const appError =

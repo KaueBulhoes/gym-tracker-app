@@ -32,14 +32,18 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
     const saveDraft = useWorkoutStore(state => state.saveDraft);
     const draftDays = draft?.days ?? [];
 
+    const isLoading = useWorkoutStore(state => state.isLoading);
+
     const hasAnyExercise = draftDays.some(d => d.exercises.length > 0);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!hasAnyExercise) {
             return;
         }
-        saveDraft();
-        navigation.navigate('Home');
+        const success = await saveDraft();
+        if (success) {
+            navigation.navigate('Home');
+        }
     };
 
     const exerciseCountFor = (dayName: string) =>
@@ -98,12 +102,12 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
 
                     <SaveButton
                         onPress={handleSave}
-                        disabled={!hasAnyExercise}
-                        $disabled={!hasAnyExercise}
+                        disabled={!hasAnyExercise || isLoading}
+                        $disabled={!hasAnyExercise || isLoading}
                         accessibilityLabel="Salvar plano"
-                        accessibilityState={{ disabled: !hasAnyExercise }}
+                        accessibilityState={{ disabled: !hasAnyExercise || isLoading }}
                     >
-                        <SaveButtonText>Salvar</SaveButtonText>
+                        <SaveButtonText>{isLoading ? 'Salvando...' : 'Salvar'}</SaveButtonText>
                     </SaveButton>
                 </Content>
             </ScrollContent>

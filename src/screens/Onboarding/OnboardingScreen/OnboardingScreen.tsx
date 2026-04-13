@@ -8,6 +8,7 @@ import type { FitnessGoal } from '../../../types/profile';
 import {
   Container,
   Content,
+  ErrorText,
   Footer,
   Header,
   Row,
@@ -55,6 +56,8 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   const [fitnessGoals, setFitnessGoals] = useState<string[]>([]);
 
   const saveProfile = useProfileStore((s) => s.saveProfile);
+  const isLoading = useProfileStore((s) => s.isLoading);
+  const error = useProfileStore((s) => s.error);
 
   const isFormValid =
     firstName.trim() &&
@@ -65,12 +68,12 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
     weeklyGoal &&
     fitnessGoals.length > 0;
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!isFormValid) {
       return;
     }
 
-    saveProfile({
+    const success = await saveProfile({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       birthDate,
@@ -80,7 +83,9 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
       fitnessGoals: fitnessGoals as FitnessGoal[],
     });
 
-    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+    if (success) {
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+    }
   };
 
   const handleBirthDateChange = (text: string) => {
@@ -175,10 +180,12 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
       </Content>
 
       <Footer>
+        {error && <ErrorText>{error}</ErrorText>}
         <Button
           title="Começar"
           onPress={handleSave}
           disabled={!isFormValid}
+          isLoading={isLoading}
         />
       </Footer>
     </Container>

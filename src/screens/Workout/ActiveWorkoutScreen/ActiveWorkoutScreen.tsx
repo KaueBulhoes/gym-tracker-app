@@ -247,12 +247,14 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         if (!weightModalExerciseId) {
             return;
         }
+        const exercise = exercises.find(e => e.id === weightModalExerciseId);
         const uniform = !weightDifferent;
         const weights = uniform ? [weightInputs[0] ?? ''] : [...weightInputs];
         setExerciseWeights(prev => ({
             ...prev,
             [weightModalExerciseId]: {
                 exerciseId: weightModalExerciseId,
+                exerciseName: exercise?.name ?? '',
                 uniform,
                 weights,
             },
@@ -260,8 +262,8 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         closeWeightModal();
     };
 
-    const handleFinish = () => {
-        finishWorkout({
+    const handleFinish = async () => {
+        const success = await finishWorkout({
             id: String(Date.now()),
             planId,
             dayName,
@@ -270,7 +272,9 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
             durationSeconds: elapsedRef.current,
             exerciseWeights: Object.values(exerciseWeights),
         });
-        navigation.navigate('Home');
+        if (success) {
+            navigation.navigate('Home');
+        }
     };
 
     const weightModalExercise = exercises.find(e => e.id === weightModalExerciseId);

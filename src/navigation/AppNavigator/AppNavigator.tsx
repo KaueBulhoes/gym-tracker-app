@@ -1,5 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { colors } from '../../constants';
 import HomeScreen from '../../screens/Home/HomeScreen';
 import OnboardingScreen from '../../screens/Onboarding/OnboardingScreen';
 import SettingsScreen from '../../screens/Settings/SettingsScreen';
@@ -8,12 +10,32 @@ import AddWorkoutExercisesScreen from '../../screens/Workout/AddWorkoutExercises
 import AddWorkoutPlanScreen from '../../screens/Workout/AddWorkoutPlanScreen';
 import WorkoutDayScreen from '../../screens/Workout/WorkoutDayScreen';
 import { useProfileStore } from '../../stores/profileStore';
+import { useWorkoutStore } from '../../stores/workoutStore';
 import type { AppStackParamList } from '../types';
+import { LoadingContainer } from './AppNavigator.styles';
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
 const AppNavigator: React.FC = () => {
     const isOnboardingComplete = useProfileStore((s) => s.isOnboardingComplete);
+    const isProfileLoaded = useProfileStore((s) => s.isProfileLoaded);
+    const loadProfile = useProfileStore((s) => s.loadProfile);
+    const loadPlans = useWorkoutStore((s) => s.loadPlans);
+    const loadSessions = useWorkoutStore((s) => s.loadSessions);
+
+    useEffect(() => {
+        loadProfile();
+        loadPlans();
+        loadSessions();
+    }, [loadProfile, loadPlans, loadSessions]);
+
+    if (!isProfileLoaded) {
+        return (
+            <LoadingContainer>
+                <ActivityIndicator size="large" color={colors.primary} />
+            </LoadingContainer>
+        );
+    }
 
     return (
         <Stack.Navigator

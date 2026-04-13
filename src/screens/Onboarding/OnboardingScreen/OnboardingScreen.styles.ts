@@ -45,6 +45,14 @@ export const Row = styled.View`
   gap: ${spacing.md}px;
 `;
 
+export const ErrorText = styled.Text`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.caption.fontWeight};
+  color: ${colors.error};
+  text-align: center;
+  margin-top: ${spacing.sm}px;
+`;
+
 export const Footer = styled.View`
   padding-horizontal: ${spacing.screenHorizontal}px;
   padding-vertical: ${spacing.base}px;

@@ -54,9 +54,6 @@ import {
   ProfileMenuItemText,
   ProfileMenuDivider,
 } from './HomeScreen.styles';
-import {
-  mockMonthlyTotal,
-} from '../../../mocks/homeData';
 import { useAuthStore } from '../../../stores/authStore';
 import { useProfileStore } from '../../../stores/profileStore';
 import { useWorkoutStore } from '../../../stores/workoutStore';
@@ -93,6 +90,13 @@ const HomeScreen: React.FC = () => {
     s => s.finishedAt >= weekStart,
   ).length;
   const remaining = weeklyTarget - weeklyCompleted;
+
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+  const monthlyTotal = sessions.filter(
+    s => s.finishedAt >= monthStart.toISOString(),
+  ).length;
   const [expandedWorkout, setExpandedWorkout] = useState<string | null>(null);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
@@ -180,7 +184,7 @@ const HomeScreen: React.FC = () => {
 
             <MetricCard>
               <MetricLabel>Treinos no mês</MetricLabel>
-              <MetricValueLarge>{mockMonthlyTotal}</MetricValueLarge>
+              <MetricValueLarge>{monthlyTotal}</MetricValueLarge>
             </MetricCard>
           </MetricsRow>
 

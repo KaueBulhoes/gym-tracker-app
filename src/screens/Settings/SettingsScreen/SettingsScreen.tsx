@@ -99,6 +99,8 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
 const ProfileTab: React.FC = () => {
   const profile = useProfileStore((s) => s.profile);
   const updateProfile = useProfileStore((s) => s.updateProfile);
+  const isLoading = useProfileStore((s) => s.isLoading);
+  const error = useProfileStore((s) => s.error);
 
   const [firstName, setFirstName] = useState(profile?.firstName ?? '');
   const [lastName, setLastName] = useState(profile?.lastName ?? '');
@@ -118,11 +120,11 @@ const ProfileTab: React.FC = () => {
     weeklyGoal &&
     fitnessGoals.length > 0;
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!isFormValid) {
       return;
     }
-    updateProfile({
+    const success = await updateProfile({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       birthDate,
@@ -131,8 +133,10 @@ const ProfileTab: React.FC = () => {
       weeklyGoal: Number(weeklyGoal),
       fitnessGoals: fitnessGoals as FitnessGoal[],
     });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    if (success) {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    }
   };
 
   return (
@@ -216,11 +220,12 @@ const ProfileTab: React.FC = () => {
           />
         </Section>
 
+        {error && <ErrorText>{error}</ErrorText>}
         {saved && <SuccessText>Perfil atualizado!</SuccessText>}
       </Content>
 
       <Footer>
-        <Button title="Salvar" onPress={handleSave} disabled={!isFormValid} />
+        <Button title="Salvar" onPress={handleSave} disabled={!isFormValid} isLoading={isLoading} />
       </Footer>
     </TabContent>
   );

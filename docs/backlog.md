@@ -13,7 +13,7 @@
 
 - [ ] Histórico de treinos
 - [ ] Gráficos de evolução de carga
-- [x] Planos de treino (ABC, Push/Pull/Legs, etc.) (2026-04-09) — persistência mock in-memory, falta integrar com Supabase
+- [x] Planos de treino (ABC, Push/Pull/Legs, etc.) (2026-04-09) — integração Supabase completa (2026-04-13)
 - [ ] Biblioteca de exercícios com filtro por grupo muscular
 
 ## Fase 3 (Futuro)

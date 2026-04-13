@@ -1,6 +1,6 @@
 # Tabela: workout_session_weights
 
-**Status:** A criar
+**Status:** Integrada (2026-04-13)
 
 ## Descrição
 
