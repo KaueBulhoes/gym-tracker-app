@@ -163,6 +163,7 @@ docs/
 ├── diario/                # Entradas diárias (YYYY-MM-DD.md)
 ├── funcionalidades/       # Features completas (tela + service + lógica)
 ├── api/                   # Services e integração Supabase
+├── banco/                 # Tabelas Supabase (schema, RLS, relacionamentos)
 ├── telas/                 # Registro de cada tela (navegação, dados, componentes)
 └── decisoes/              # ADRs (Architecture Decision Records)
 ```
@@ -178,6 +179,7 @@ docs/
 
 - Docs acompanham o código — se criou tela nova, documenta em `docs/telas/`
 - Se criou service novo, documenta em `docs/api/`
+- Se criou ou alterou tabela Supabase, documenta em `docs/banco/`
 - Se completou feature, documenta em `docs/funcionalidades/`
 - Links entre docs: usar caminhos relativos (ex: `[workoutStore](../api/workout-store.md)`)
 - Datas absolutas (nunca "hoje" ou "ontem" nos docs)

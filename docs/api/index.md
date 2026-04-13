@@ -14,11 +14,14 @@ Registro de todos os services e integração com Supabase.
 
 ## Tabelas Supabase
 
-| Tabela                 | RLS | Usada por (services) | Descrição                          |
-| ---------------------- | --- | -------------------- | ---------------------------------- |
-| profiles               | -   | -                    | Perfil do usuário                  |
-| exercises              | -   | -                    | Catálogo de exercícios             |
-| workout_plans          | -   | -                    | Planos de treino                   |
-| workout_plan_exercises | -   | -                    | Exercícios dentro de um plano      |
-| workouts               | -   | -                    | Treinos realizados                 |
-| workout_sets           | -   | -                    | Séries de cada exercício no treino |
+Documentação detalhada de cada tabela em [docs/banco/](../banco/index.md).
+
+| Tabela | Status | Service | Descrição |
+|--------|--------|---------|-----------|
+| [profiles](../banco/profiles.md) | A criar | profileService | Perfil do usuário (onboarding) |
+| [workout_plans](../banco/workout-plans.md) | A criar | workoutService | Planos de treino |
+| [workout_plan_days](../banco/workout-plan-days.md) | A criar | workoutService | Dias de cada plano |
+| [workout_plan_exercises](../banco/workout-plan-exercises.md) | A criar | workoutService | Exercícios de cada dia |
+| [exercise_rep_schemes](../banco/exercise-rep-schemes.md) | A criar | workoutService | Blocos de reps (drop sets) |
+| [workout_sessions](../banco/workout-sessions.md) | A criar | workoutService | Sessões de treino finalizadas |
+| [workout_session_weights](../banco/workout-session-weights.md) | A criar | workoutService | Cargas por exercício por sessão |
