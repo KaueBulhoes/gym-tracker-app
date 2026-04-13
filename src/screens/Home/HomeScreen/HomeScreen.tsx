@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { LayoutAnimation, Modal, Platform, StatusBar, TextInput, UIManager } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from '../../../components/Button';
 import Card from '../../../components/Card';
@@ -76,6 +77,7 @@ const getWeekStart = (): string => {
 };
 
 const HomeScreen: React.FC = () => {
+  const insets = useSafeAreaInsets();
   const { signOut } = useAuthStore();
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const plans = useWorkoutStore(state => state.plans);
@@ -221,7 +223,7 @@ const HomeScreen: React.FC = () => {
           </ProfileButton>
         </Header>
 
-        <ContentArea>
+        <ContentArea $bottomInset={insets.bottom}>
           <Card variant="purple">
             <GoalHeader>
               <GoalTitleRow>
@@ -364,7 +366,7 @@ const HomeScreen: React.FC = () => {
         </ContentArea>
       </ScrollContent>
 
-      <BottomBar>
+      <BottomBar $bottomInset={insets.bottom}>
         <BottomBarButton
           onPress={() => navigation.navigate('WorkoutPlans')}
           accessibilityLabel="Planos de treino"

@@ -44,10 +44,10 @@ export const ProfileButton = styled.Pressable`
   justify-content: center;
 `;
 
-export const ContentArea = styled.View`
+export const ContentArea = styled.View<{ $bottomInset: number }>`
   padding-horizontal: ${spacing.screenHorizontal}px;
   padding-top: ${spacing.lg}px;
-  padding-bottom: 100px;
+  padding-bottom: ${({ $bottomInset }) => 100 + $bottomInset}px;
   gap: ${spacing.base}px;
 `;
 
@@ -135,9 +135,9 @@ export const SectionTitle = styled.Text`
   margin-top: ${spacing.sm}px;
 `;
 
-export const BottomBar = styled.View`
+export const BottomBar = styled.View<{ $bottomInset: number }>`
   position: absolute;
-  bottom: 0;
+  bottom: ${({ $bottomInset }) => $bottomInset}px;
   left: 0;
   right: 0;
   flex-direction: row;
