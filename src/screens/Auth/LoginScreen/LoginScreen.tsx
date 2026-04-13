@@ -4,7 +4,17 @@ import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import type { LoginScreenProps } from '../../../navigation/types';
 import { useAuthStore } from '../../../stores/authStore';
-import { Container, Content, Header, Title, Subtitle, Form, ErrorText } from './LoginScreen.styles';
+import {
+  Container,
+  Content,
+  Header,
+  Title,
+  Subtitle,
+  Form,
+  ForgotPasswordButton,
+  ForgotPasswordText,
+  ErrorText,
+} from './LoginScreen.styles';
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -54,6 +64,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             secureTextEntry
             autoCapitalize="none"
           />
+
+          <ForgotPasswordButton
+            onPress={() => navigation.navigate('RecoverPassword')}
+            accessibilityLabel="Recuperar senha"
+          >
+            <ForgotPasswordText>Esqueceu sua senha?</ForgotPasswordText>
+          </ForgotPasswordButton>
 
           {error && <ErrorText>{error}</ErrorText>}
 

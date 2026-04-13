@@ -8,7 +8,9 @@ Registro de todas as telas do app com descrição, navegação e integrações.
 App
 ├── Auth (Stack)
 │   ├── Login
-│   └── Cadastro
+│   ├── Cadastro
+│   ├── Recuperar senha
+│   └── Redefinir senha
 └── App (Stack)
     ├── Onboarding (rota inicial se perfil incompleto) → Home
     ├── Home
@@ -31,6 +33,8 @@ App
 |------|---------|-----------------|---------|
 | [Login](login.md) | `src/screens/Auth/LoginScreen/` | authStore.signIn | auth.users |
 | [Cadastro](cadastro.md) | `src/screens/Auth/RegisterScreen/` | authStore.signUp | auth.users |
+| [Recuperar senha](recuperar-senha.md) | `src/screens/Auth/RecoverPasswordScreen/` | authStore.resetPassword | auth.users |
+| [Redefinir senha](redefinir-senha.md) | `src/screens/Auth/ResetPasswordScreen/` | authStore.updatePassword | auth.users |
 | [Home](home.md) | `src/screens/Home/HomeScreen/` | authStore, profileStore, workoutStore | profiles, workout_plans, workout_sessions |
 | [Planos de Treino](workout-plans.md) | `src/screens/Workout/WorkoutPlansScreen/` | workoutStore.setActivePlan | workout_plans |
 | [Adicionar Plano](add-workout-plan.md) | `src/screens/Workout/AddWorkoutPlanScreen/` | workoutStore.startDraft | — |

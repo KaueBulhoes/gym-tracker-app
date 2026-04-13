@@ -5,7 +5,7 @@
 
 ## O que o usuário faz
 
-Informa e-mail e senha para entrar no app. Pode navegar para a tela de cadastro.
+Informa e-mail e senha para entrar no app. Pode navegar para cadastro e recuperação de senha.
 
 ## Dados e integrações
 
@@ -23,4 +23,4 @@ Informa e-mail e senha para entrar no app. Pode navegar para a tela de cadastro.
 ## Navegação
 
 - **Vem de:** RootNavigator (quando não há sessão)
-- **Vai para:** RegisterScreen, HomeScreen (após login)
+- **Vai para:** RegisterScreen, RecoverPasswordScreen, HomeScreen (após login)

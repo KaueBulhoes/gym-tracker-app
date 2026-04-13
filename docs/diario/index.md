@@ -13,3 +13,4 @@ Registro cronológico do progresso do projeto.
 - [2026-04-13](2026-04-13.md) — Integração Supabase completa (perfil, planos, sessões, cargas)
 - [2026-04-13 (Fichas)](2026-04-13-fichas.md) — Gerenciamento de fichas: ativa/inativa, nome, duração, vencimento, descrição
 - [2026-04-13 (Estatísticas)](2026-04-13-estatisticas.md) — Tela de estatísticas e métricas customizáveis na Home
+- [2026-04-13 (Recuperação)](2026-04-13-recuperacao-senha.md) — Fluxo completo de recuperação e redefinição de senha com deep link

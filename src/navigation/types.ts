@@ -3,6 +3,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 export type AuthStackParamList = {
   Login: undefined;
   Register: undefined;
+  RecoverPassword: undefined;
+  ResetPassword: undefined;
 };
 
 export type AppStackParamList = {
@@ -15,6 +17,7 @@ export type AppStackParamList = {
   WorkoutDay: { day: string };
   ActiveWorkout: { planId: string; dayName: string };
   Statistics: undefined;
+  ResetPassword: undefined;
 };
 
 export type LoginScreenProps = NativeStackScreenProps<
@@ -24,6 +27,14 @@ export type LoginScreenProps = NativeStackScreenProps<
 export type RegisterScreenProps = NativeStackScreenProps<
   AuthStackParamList,
   'Register'
+>;
+export type RecoverPasswordScreenProps = NativeStackScreenProps<
+  AuthStackParamList,
+  'RecoverPassword'
+>;
+export type ResetPasswordScreenProps = NativeStackScreenProps<
+  AuthStackParamList,
+  'ResetPassword'
 >;
 export type HomeScreenProps = NativeStackScreenProps<AppStackParamList, 'Home'>;
 export type AddWorkoutPlanScreenProps = NativeStackScreenProps<

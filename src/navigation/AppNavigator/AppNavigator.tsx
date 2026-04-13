@@ -2,15 +2,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { colors } from '../../constants';
+import ResetPasswordScreen from '../../screens/Auth/ResetPasswordScreen/ResetPasswordScreen';
 import HomeScreen from '../../screens/Home/HomeScreen';
 import OnboardingScreen from '../../screens/Onboarding/OnboardingScreen';
 import SettingsScreen from '../../screens/Settings/SettingsScreen';
+import StatisticsScreen from '../../screens/Statistics/StatisticsScreen';
 import ActiveWorkoutScreen from '../../screens/Workout/ActiveWorkoutScreen';
 import AddWorkoutExercisesScreen from '../../screens/Workout/AddWorkoutExercisesScreen';
 import AddWorkoutPlanScreen from '../../screens/Workout/AddWorkoutPlanScreen';
 import WorkoutDayScreen from '../../screens/Workout/WorkoutDayScreen';
 import WorkoutPlansScreen from '../../screens/Workout/WorkoutPlansScreen';
-import StatisticsScreen from '../../screens/Statistics/StatisticsScreen';
 import { useProfileStore } from '../../stores/profileStore';
 import { useWorkoutStore } from '../../stores/workoutStore';
 import type { AppStackParamList } from '../types';
@@ -53,6 +54,7 @@ const AppNavigator: React.FC = () => {
             <Stack.Screen name="WorkoutDay" component={WorkoutDayScreen} />
             <Stack.Screen name="ActiveWorkout" component={ActiveWorkoutScreen} />
             <Stack.Screen name="Statistics" component={StatisticsScreen} />
+            <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
         </Stack.Navigator>
     );
 };

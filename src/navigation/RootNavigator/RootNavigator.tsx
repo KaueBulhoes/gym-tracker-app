@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { colors } from '../../constants';
 import { supabase } from '../../services/supabase';
+import { useAuthStore } from '../../stores/authStore';
 import AuthNavigator from '../AuthNavigator';
 import AppNavigator from '../AppNavigator';
 import { LoadingContainer } from './RootNavigator.styles';
@@ -10,6 +11,7 @@ import { LoadingContainer } from './RootNavigator.styles';
 const RootNavigator = () => {
     const [session, setSession] = useState<Session | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const isRecoveryFlow = useAuthStore(state => state.isRecoveryFlow);
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
@@ -32,6 +34,10 @@ const RootNavigator = () => {
                 <ActivityIndicator size="large" color={colors.primary} />
             </LoadingContainer>
         );
+    }
+
+    if (isRecoveryFlow) {
+        return <AuthNavigator initialRouteName="ResetPassword" />;
     }
 
     return session ? <AppNavigator /> : <AuthNavigator />;
