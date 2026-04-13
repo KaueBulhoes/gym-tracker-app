@@ -11,4 +11,5 @@ Documentação do desenvolvimento do app Gym Tracker.
 - [Banco de Dados](banco/index.md) — tabelas Supabase, relacionamentos e mapeamento com o código
 - [Decisões Técnicas](decisoes/index.md) — ADRs (Architecture Decision Records)
 - [Setup do Ambiente](setup.md) — como configurar o ambiente de desenvolvimento
+- [Gerar APK Android](gerar-apk-android.md) — passo a passo para build release e instalação no celular
 - [Backlog](backlog.md) — funcionalidades planejadas e ideias
