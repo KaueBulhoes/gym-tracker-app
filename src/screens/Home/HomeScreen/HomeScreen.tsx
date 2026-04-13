@@ -370,7 +370,7 @@ const HomeScreen: React.FC = () => {
           accessibilityLabel="Planos de treino"
         >
           <MaterialCommunityIcons name="clipboard-text-outline" size={24} color={colors.neutral300} />
-          <BottomBarLabel>Planos</BottomBarLabel>
+          <BottomBarLabel>Fichas</BottomBarLabel>
         </BottomBarButton>
 
         <BottomBarStartButton

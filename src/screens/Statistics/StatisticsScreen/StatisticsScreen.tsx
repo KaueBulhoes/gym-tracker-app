@@ -33,7 +33,6 @@ import {
   SelectRow,
   StatCard,
   StatLabel,
-  StatUnit,
   StatValue,
   StatsGrid,
 } from './StatisticsScreen.styles';
