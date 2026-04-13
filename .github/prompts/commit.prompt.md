@@ -13,7 +13,7 @@ Registre atividades relevantes na documentação e depois faça o commit de tudo
 
 ## Passo 2: Registrar atividade (se relevante)
 
-Use o prompt `#registre-atividade` ANTES do commit se houve algo relevante como:
+Rode `/registre-atividade` ANTES do commit se houve algo relevante como:
 
 - Nova tela criada ou modificada significativamente
 - Novo service/API criado
@@ -21,7 +21,7 @@ Use o prompt `#registre-atividade` ANTES do commit se houve algo relevante como:
 - Novo componente reutilizável criado
 - Mudança arquitetural relevante
 
-NÃO registre atividade para:
+NÃO rode `/registre-atividade` para:
 
 - Ajustes de estilo (padding, cor, fonte)
 - Correções pequenas de bug
@@ -30,13 +30,14 @@ NÃO registre atividade para:
 
 ## Passo 3: Commit
 
-1. Adicione os arquivos relevantes ao staging, incluindo as docs atualizadas (nunca adicione `.env`, `src/config.ts` ou secrets)
+1. Adicione os arquivos relevantes ao staging, incluindo as docs atualizadas (nunca adicione .env, config.ts, ou secrets)
 2. Crie um ÚNICO commit com mensagem clara seguindo o padrão:
    - `feat:` para nova funcionalidade
    - `fix:` para correção de bug
    - `chore:` para setup, config, dependências
    - `refactor:` para refatoração sem mudança de comportamento
    - `docs:` para documentação
+3. Inclua o trailer: `Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>`
 
 ## Passo 4: Push (apenas se solicitado)
 

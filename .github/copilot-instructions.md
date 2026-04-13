@@ -112,6 +112,13 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Bottom Tab Navigator para navegação principal
 - Tipos de rotas definidos em `src/navigation/types.ts`
 
+### Persistência de dados
+
+- Toda informação produzida pelo usuário (treinos, cargas, sessões, planos) deve ser salva no Zustand store
+- Nunca descartar dados silenciosamente — se o usuário inseriu, persiste
+- Stores ficam em `src/stores/` e tipos em `src/types/`
+- Ao criar uma nova feature, sempre incluir a action de salvar no store e conectar na UI
+
 ### Supabase
 
 - Client inicializado em `src/services/supabase.ts`
@@ -136,9 +143,46 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Espaçamentos padronizados em `src/constants/spacing.ts`
 - Componentes base reutilizáveis (Button, Input, Card) antes de compor telas
 - Estilos em arquivo separado do componente: `NomeComponente.styles.ts` na mesma pasta do `.tsx`
-  - Componentes reutilizáveis: pasta própria — `Button/Button.tsx` + `Button/Button.styles.ts` + `Button/index.ts`
-  - Telas: o par `NomeTela.tsx` + `NomeTela.styles.ts` fica junto na pasta da feature (sem subpasta extra)
+  - **Todo componente visual** (telas, navegadores, componentes reutilizáveis) fica em pasta própria:
+    `NomeScreen/NomeScreen.tsx` + `NomeScreen.styles.ts` + `index.ts`
+  - Isso inclui telas (`src/screens/`), navegadores (`src/navigation/`) e componentes (`src/components/`)
+  - Módulos não-visuais (stores, services, types, utils, constants) ficam flat, sem pasta
   - O arquivo de estilos exporta os styled-components nomeados; o componente apenas importa
+
+## Documentação (Obsidian)
+
+O projeto mantém uma base de documentação em `docs/` estruturada para Obsidian. Ela é a fonte de verdade sobre o que foi implementado.
+
+### Estrutura
+
+```
+docs/
+├── README.md              # Índice geral
+├── setup.md               # Setup do ambiente
+├── backlog.md             # MVP, Fase 2, Fase 3 com status
+├── diario/                # Entradas diárias (YYYY-MM-DD.md)
+├── funcionalidades/       # Features completas (tela + service + lógica)
+├── api/                   # Services e integração Supabase
+├── banco/                 # Tabelas Supabase (schema, RLS, relacionamentos)
+├── telas/                 # Registro de cada tela (navegação, dados, componentes)
+└── decisoes/              # ADRs (Architecture Decision Records)
+```
+
+### Workflow de documentação
+
+1. Ao criar/modificar telas, services ou features: rodar `/registre-atividade`
+2. Ao finalizar o dia: rodar `/registre-diario-hoje`
+3. Ao commitar: rodar `/commit` (que inclui docs no commit)
+4. Para verificar se docs estão em dia: rodar `/revisar-docs`
+
+### Regras
+
+- Docs acompanham o código — se criou tela nova, documenta em `docs/telas/`
+- Se criou service novo, documenta em `docs/api/`
+- Se criou ou alterou tabela Supabase, documenta em `docs/banco/`
+- Se completou feature, documenta em `docs/funcionalidades/`
+- Links entre docs: usar caminhos relativos (ex: `[workoutStore](../api/workout-store.md)`)
+- Datas absolutas (nunca "hoje" ou "ontem" nos docs)
 
 ## Regras de Desenvolvimento
 
