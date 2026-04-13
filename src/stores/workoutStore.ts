@@ -16,10 +16,14 @@ interface WorkoutState {
   isLoading: boolean;
   error: string | null;
 
+  editingPlanId: string | null;
+
   // Async (Supabase)
   loadPlans: () => Promise<void>;
   loadSessions: () => Promise<void>;
   saveDraft: () => Promise<boolean>;
+  saveEditDraft: () => Promise<boolean>;
+  deletePlan: (planId: string) => Promise<void>;
   finishWorkout: (session: WorkoutSession) => Promise<boolean>;
   setActivePlan: (planId: string) => Promise<void>;
   renewPlan: (planId: string, days: number) => Promise<void>;
@@ -27,6 +31,7 @@ interface WorkoutState {
 
   // Sync (local only)
   startDraft: (dayNames: string[], name: string, durationDays?: number | null) => void;
+  loadDraftFromPlan: (plan: WorkoutPlan) => void;
   updateDraftDuration: (days: number | null) => void;
   updateDraftDay: (dayName: string, updater: (day: WorkoutDay) => WorkoutDay) => void;
   discardDraft: () => void;
@@ -46,6 +51,7 @@ const createEmptyDay = (name: string): WorkoutDay => ({
 export const useWorkoutStore = create<WorkoutState>((set, get) => ({
   plans: [],
   draft: null,
+  editingPlanId: null,
   lastCompleted: null,
   sessions: [],
   isLoading: false,
@@ -85,7 +91,12 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
         days: dayNames.map(createEmptyDay),
         createdAt: new Date().toISOString(),
       },
+      editingPlanId: null,
     });
+  },
+
+  loadDraftFromPlan: (plan) => {
+    set({ draft: { ...plan }, editingPlanId: plan.id });
   },
 
   updateDraftDuration: (days) => {
@@ -121,6 +132,7 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
       set((state) => ({
         plans: state.plans.map((p) => (p.isActive ? { ...p, isActive: false, finishedAt: new Date().toISOString() } : p)).concat(savedPlan),
         draft: null,
+        editingPlanId: null,
         isLoading: false,
       }));
       return true;
@@ -131,8 +143,45 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
     }
   },
 
+  saveEditDraft: async () => {
+    const { draft, editingPlanId } = get();
+    if (!draft || !editingPlanId) {
+      return false;
+    }
+
+    try {
+      set({ isLoading: true, error: null });
+      const updatedPlan = await workoutService.updatePlan(editingPlanId, draft);
+      set((state) => ({
+        plans: state.plans.map((p) => (p.id === editingPlanId ? updatedPlan : p)),
+        draft: null,
+        editingPlanId: null,
+        isLoading: false,
+      }));
+      return true;
+    } catch (err) {
+      const message = err instanceof AppError ? err.message : 'Erro ao atualizar plano';
+      set({ error: message, isLoading: false });
+      return false;
+    }
+  },
+
+  deletePlan: async (planId) => {
+    try {
+      set({ isLoading: true, error: null });
+      await workoutService.deletePlan(planId);
+      set((state) => ({
+        plans: state.plans.filter((p) => p.id !== planId),
+        isLoading: false,
+      }));
+    } catch (err) {
+      const message = err instanceof AppError ? err.message : 'Erro ao excluir plano';
+      set({ error: message, isLoading: false });
+    }
+  },
+
   discardDraft: () => {
-    set({ draft: null });
+    set({ draft: null, editingPlanId: null });
   },
 
   finishWorkout: async (session) => {
@@ -214,6 +263,7 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
   reset: () => set({
     plans: [],
     draft: null,
+    editingPlanId: null,
     lastCompleted: null,
     sessions: [],
     isLoading: false,

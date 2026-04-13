@@ -113,10 +113,13 @@ const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation 
         weekdaySelected.length === weekdayItems.length &&
         weekdayItems.length < WEEKDAYS_BASE.length + WEEKDAYS_EXTRA.length;
 
+    const hasDuplicateCustomDays = customDays.length > 0 &&
+        new Set(customDays.map(d => d.toLowerCase())).size !== customDays.length;
+
     const canCreate =
         (planType === 'abcde' && abcdeSelected.length > 0) ||
         (planType === 'weekdays' && weekdaySelected.length > 0) ||
-        (planType === 'custom' && customDays.length > 0 && customTitle.trim().length > 0);
+        (planType === 'custom' && customDays.length > 0 && customTitle.trim().length > 0 && !hasDuplicateCustomDays);
 
     const handleCreatePlan = () => {
         let days: string[] = [];

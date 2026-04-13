@@ -54,19 +54,34 @@ export const SelectLabel = styled.Text`
   color: ${colors.text};
 `;
 
-export const PlanCard = styled.Pressable<{ $active?: boolean; $selectMode?: boolean }>`
+export const PlanCard = styled.Pressable<{
+  $active?: boolean;
+  $selectMode?: boolean;
+}>`
   background-color: ${colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   padding: ${spacing.base}px;
   margin-bottom: ${spacing.md}px;
   border-width: 2px;
-  border-color: ${({ $active }) => ($active ? colors.primary : colors.neutral600)};
+  border-color: ${({ $active }) =>
+    $active ? colors.primary : colors.neutral600};
+`;
+
+export const PlanCardHeader = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const GearButton = styled.Pressable`
+  padding: ${spacing.xs}px;
 `;
 
 export const PlanName = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
   color: ${colors.text};
+  flex: 1;
 `;
 
 export const PlanDate = styled.Text`
@@ -144,4 +159,41 @@ export const ModalExerciseName = styled.Text`
 
 export const ModalScroll = styled.ScrollView`
   max-height: 400px;
+`;
+
+// ─── Menu modal (gear) ────────────────────────────────
+
+export const MenuOverlay = styled.Pressable`
+  flex: 1;
+  background-color: ${colors.overlay};
+`;
+
+export const MenuModalCard = styled.View`
+  background-color: ${colors.backgroundElevated};
+  border-radius: ${spacing.cardRadius}px;
+  border-width: 1px;
+  border-color: ${colors.neutral600};
+  padding-vertical: ${spacing.xs}px;
+  min-width: 150px;
+`;
+
+export const MenuModalOption = styled.Pressable`
+
+  flex-direction: row;
+  align-items: center;
+  padding-horizontal: ${spacing.lg}px;
+  padding-vertical: ${spacing.md}px;
+  gap: ${spacing.md}px;
+`;
+
+export const MenuModalOptionText = styled.Text<{ $danger?: boolean }>`
+  font-size: ${typography.body.fontSize}px;
+  font-weight: ${typography.body.fontWeight};
+  color: ${({ $danger }) => ($danger ? colors.error : colors.text)};
+`;
+
+export const MenuModalSeparator = styled.View`
+  height: 1px;
+  background-color: ${colors.neutral600};
+  margin-horizontal: ${spacing.md}px;
 `;

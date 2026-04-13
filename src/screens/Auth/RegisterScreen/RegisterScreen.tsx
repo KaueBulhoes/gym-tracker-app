@@ -20,7 +20,6 @@ import {
 } from './RegisterScreen.styles';
 
 const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -36,7 +35,6 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
     confirmPassword.length > 0 && password !== confirmPassword;
 
   const isFormValid =
-    name.trim() &&
     email.trim() &&
     password.length >= 6 &&
     password === confirmPassword;
@@ -45,7 +43,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
     if (!isFormValid) {
       return;
     }
-    const success = await signUp(email.trim(), password, name.trim());
+    const success = await signUp(email.trim(), password, '');
     if (success) {
       setShowConfirmModal(true);
     }
@@ -69,14 +67,6 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
         </Header>
 
         <Form>
-          <Input
-            label="Nome"
-            value={name}
-            onChangeText={setName}
-            placeholder="Seu nome"
-            autoCapitalize="words"
-          />
-
           <Input
             label="E-mail"
             value={email}

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Modal, StatusBar, Switch } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Modal, StatusBar, Switch, type View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from '../../../components/Button';
 import { colors, spacing } from '../../../constants';
@@ -15,8 +15,14 @@ import {
   Content,
   EmptyText,
   Footer,
+  GearButton,
   Header,
   HeaderTitle,
+  MenuModalCard,
+  MenuModalOption,
+  MenuModalOptionText,
+  MenuModalSeparator,
+  MenuOverlay,
   ModalCard,
   ModalDayTitle,
   ModalExerciseName,
@@ -24,10 +30,10 @@ import {
   ModalScroll,
   ModalTitle,
   PlanCard,
+  PlanCardHeader,
   PlanDate,
   PlanName,
   ScrollContent,
-  SectionTitle,
   SelectLabel,
   SelectRow,
 } from './WorkoutPlansScreen.styles';
@@ -35,10 +41,15 @@ import {
 const WorkoutPlansScreen: React.FC<WorkoutPlansScreenProps> = ({ navigation }) => {
   const plans = useWorkoutStore(state => state.plans);
   const setActivePlan = useWorkoutStore(state => state.setActivePlan);
+  const loadDraftFromPlan = useWorkoutStore(state => state.loadDraftFromPlan);
+  const deletePlan = useWorkoutStore(state => state.deletePlan);
   const isLoading = useWorkoutStore(state => state.isLoading);
 
   const [selectMode, setSelectMode] = useState(false);
   const [detailPlan, setDetailPlan] = useState<WorkoutPlan | null>(null);
+  const [menuPlan, setMenuPlan] = useState<WorkoutPlan | null>(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 });
+  const gearRefs = useRef<Record<string, View | null>>({});
 
   const handleCardPress = (plan: WorkoutPlan) => {
     if (selectMode) {
@@ -47,6 +58,18 @@ const WorkoutPlansScreen: React.FC<WorkoutPlansScreenProps> = ({ navigation }) =
     } else {
       setDetailPlan(plan);
     }
+  };
+
+  const handleEdit = (plan: WorkoutPlan) => {
+    setMenuPlan(null);
+    loadDraftFromPlan(plan);
+    const days = plan.days.map(d => d.name);
+    navigation.navigate('AddWorkoutExercises', { days });
+  };
+
+  const handleDelete = async (plan: WorkoutPlan) => {
+    setMenuPlan(null);
+    await deletePlan(plan.id);
   };
 
   return (
@@ -66,8 +89,6 @@ const WorkoutPlansScreen: React.FC<WorkoutPlansScreenProps> = ({ navigation }) =
             <EmptyText>Nenhum plano criado ainda.</EmptyText>
           ) : (
             <>
-              <SectionTitle>Minhas fichas</SectionTitle>
-
               <SelectRow>
                 <SelectLabel>Selecionar ficha ativa</SelectLabel>
                 <Switch
@@ -92,7 +113,28 @@ const WorkoutPlansScreen: React.FC<WorkoutPlansScreenProps> = ({ navigation }) =
                     onPress={() => handleCardPress(plan)}
                     accessibilityLabel={`${plan.name}${plan.isActive ? ', ficha ativa' : ''}`}
                   >
-                    <PlanName>{plan.name}</PlanName>
+                    <PlanCardHeader>
+                      <PlanName>{plan.name}</PlanName>
+                      <GearButton
+                        ref={(ref: View | null) => { gearRefs.current[plan.id] = ref; }}
+                        onPress={() => {
+                          const ref = gearRefs.current[plan.id];
+                          if (ref) {
+                            (ref as unknown as { measureInWindow: (cb: (x: number, y: number, w: number, h: number) => void) => void })
+                              .measureInWindow((x, y, w, h) => {
+                                setMenuPosition({ top: y + h + 8, right: spacing.screenHorizontal });
+                                setMenuPlan(plan);
+                              });
+                          } else {
+                            setMenuPlan(plan);
+                          }
+                        }}
+                        accessibilityLabel={`Opções de ${plan.name}`}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      >
+                        <MaterialCommunityIcons name="cog-outline" size={20} color={colors.neutral400} />
+                      </GearButton>
+                    </PlanCardHeader>
                     <PlanDate>Criado em: {createdDate}</PlanDate>
                     {finishedDate && !plan.isActive && (
                       <PlanDate>Finalizado: {finishedDate}</PlanDate>
@@ -118,6 +160,7 @@ const WorkoutPlansScreen: React.FC<WorkoutPlansScreenProps> = ({ navigation }) =
         />
       </Footer>
 
+      {/* Detail modal */}
       <Modal
         visible={detailPlan !== null}
         transparent
@@ -165,6 +208,42 @@ const WorkoutPlansScreen: React.FC<WorkoutPlansScreenProps> = ({ navigation }) =
             )}
           </ModalCard>
         </ModalOverlay>
+      </Modal>
+
+      {/* Gear menu modal */}
+      <Modal
+        visible={menuPlan !== null}
+        transparent
+        animationType="fade"
+        statusBarTranslucent
+        onRequestClose={() => setMenuPlan(null)}
+      >
+        <MenuOverlay onPress={() => setMenuPlan(null)}>
+          <MenuModalCard
+            style={{ position: 'absolute', top: menuPosition.top, right: menuPosition.right }}
+            onStartShouldSetResponder={() => true}
+          >
+            {menuPlan && (
+              <>
+                <MenuModalOption
+                  onPress={() => handleEdit(menuPlan)}
+                  accessibilityLabel="Editar plano"
+                >
+                  <MaterialCommunityIcons name="pencil-outline" size={20} color={colors.text} />
+                  <MenuModalOptionText>Editar</MenuModalOptionText>
+                </MenuModalOption>
+                <MenuModalSeparator />
+                <MenuModalOption
+                  onPress={() => handleDelete(menuPlan)}
+                  accessibilityLabel="Excluir plano"
+                >
+                  <MaterialCommunityIcons name="trash-can-outline" size={20} color={colors.error} />
+                  <MenuModalOptionText $danger>Excluir</MenuModalOptionText>
+                </MenuModalOption>
+              </>
+            )}
+          </MenuModalCard>
+        </MenuOverlay>
       </Modal>
     </Container>
   );

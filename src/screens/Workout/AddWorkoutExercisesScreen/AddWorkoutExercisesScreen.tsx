@@ -34,9 +34,12 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
     const { days } = route.params;
     const draft = useWorkoutStore(state => state.draft);
     const saveDraft = useWorkoutStore(state => state.saveDraft);
+    const saveEditDraft = useWorkoutStore(state => state.saveEditDraft);
+    const editingPlanId = useWorkoutStore(state => state.editingPlanId);
     const updateDraftDuration = useWorkoutStore(state => state.updateDraftDuration);
     const draftDays = draft?.days ?? [];
 
+    const isEditing = editingPlanId !== null;
     const isLoading = useWorkoutStore(state => state.isLoading);
     const [durationInput, setDurationInput] = useState(
         draft?.durationDays ? String(draft.durationDays) : '',
@@ -54,9 +57,9 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
         if (!hasAnyExercise) {
             return;
         }
-        const success = await saveDraft();
+        const success = isEditing ? await saveEditDraft() : await saveDraft();
         if (success) {
-            navigation.navigate('Home');
+            navigation.navigate(isEditing ? 'WorkoutPlans' : 'Home');
         }
     };
 
@@ -72,7 +75,7 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
                     <BackButton onPress={() => navigation.goBack()} accessibilityLabel="Voltar">
                         <MaterialCommunityIcons name="arrow-left" size={24} color={colors.neutral50} />
                     </BackButton>
-                    <HeaderTitle>Adicionar Exercícios</HeaderTitle>
+                    <HeaderTitle>{isEditing ? 'Editar Exercícios' : 'Adicionar Exercícios'}</HeaderTitle>
                 </HeaderLeft>
             </Header>
 

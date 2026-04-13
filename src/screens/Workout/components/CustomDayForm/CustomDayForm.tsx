@@ -1,15 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { TextInput as RNTextInput } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors } from '../../../../constants';
 import {
-    ActionButton,
     AddButton,
-    ConfirmedRow,
-    ConfirmedText,
+    DayRow,
+    ErrorMessage,
     InputRow,
-    RenameInput,
-    RowActions,
+    RemoveButton,
+    RowInput,
     StyledInput,
     Wrapper,
 } from './CustomDayForm.styles';
@@ -32,96 +31,59 @@ const CustomDayForm: React.FC<CustomDayFormProps> = ({
     onRename,
 }) => {
     const inputRef = useRef<RNTextInput>(null);
-    const [editingIndex, setEditingIndex] = useState<number | null>(null);
-    const [editingValue, setEditingValue] = useState('');
+    const [removingIndex, setRemovingIndex] = useState<number | null>(null);
 
-    useEffect(() => {
-        if (days.length > 0 && editingIndex === null) {
-            inputRef.current?.focus();
+    const duplicateIndexes = new Set<number>();
+    const seen = new Map<string, number>();
+    days.forEach((day, index) => {
+        const key = day.toLowerCase();
+        if (seen.has(key)) {
+            duplicateIndexes.add(seen.get(key)!);
+            duplicateIndexes.add(index);
+        } else {
+            seen.set(key, index);
         }
-    }, [days.length, editingIndex]);
-
-    const startEditing = (index: number) => {
-        setEditingIndex(index);
-        setEditingValue(days[index]);
-    };
-
-    const confirmRename = () => {
-        if (editingIndex === null) { return; }
-        if (editingValue.trim()) {
-            onRename(editingIndex, editingValue.trim());
-        }
-        setEditingIndex(null);
-        setEditingValue('');
-    };
+    });
+    const hasDuplicates = duplicateIndexes.size > 0;
 
     return (
         <Wrapper>
             {days.map((day, index) => {
-                const isEditing = editingIndex === index;
+                const isDuplicate = duplicateIndexes.has(index);
                 return (
-                    <ConfirmedRow key={index}>
-                        {isEditing ? (
-                            <RenameInput
-                                value={editingValue}
-                                onChangeText={setEditingValue}
-                                onSubmitEditing={confirmRename}
-                                returnKeyType="done"
-                                autoFocus
-                                accessibilityLabel={`Renomear dia ${index + 1}`}
-                            />
-                        ) : (
-                            <>
-                                <MaterialCommunityIcons
-                                    name="check-circle"
-                                    size={18}
-                                    color={colors.success}
-                                />
-                                <ConfirmedText numberOfLines={1}>{day}</ConfirmedText>
-                            </>
-                        )}
-
-                        <RowActions>
-                            {isEditing ? (
-                                <ActionButton
-                                    onPress={confirmRename}
-                                    accessibilityLabel="Confirmar renomeamento"
-                                >
-                                    <MaterialCommunityIcons
-                                        name="check"
-                                        size={18}
-                                        color={colors.success}
-                                    />
-                                </ActionButton>
-                            ) : (
-                                <ActionButton
-                                    onPress={() => startEditing(index)}
-                                    accessibilityLabel={`Renomear ${day}`}
-                                >
-                                    <MaterialCommunityIcons
-                                        name="pencil-outline"
-                                        size={18}
-                                        color={colors.textSecondary}
-                                    />
-                                </ActionButton>
-                            )}
-                            <ActionButton
-                                onPress={() => {
-                                    if (editingIndex === index) { setEditingIndex(null); }
+                    <DayRow key={index}>
+                        <RowInput
+                            $error={isDuplicate}
+                            value={day}
+                            onChangeText={(text) => onRename(index, text)}
+                            placeholder={`Treino ${index + 1}`}
+                            placeholderTextColor={colors.textSecondary}
+                            accessibilityLabel={`Nome do treino ${index + 1}`}
+                        />
+                        <RemoveButton
+                            onPress={() => {
+                                setRemovingIndex(index);
+                                setTimeout(() => {
                                     onDelete(index);
-                                }}
-                                accessibilityLabel={`Remover ${day}`}
-                            >
-                                <MaterialCommunityIcons
-                                    name="trash-can-outline"
-                                    size={18}
-                                    color={colors.error}
-                                />
-                            </ActionButton>
-                        </RowActions>
-                    </ConfirmedRow>
+                                    setRemovingIndex(null);
+                                }, 150);
+                            }}
+                            style={removingIndex === index ? { backgroundColor: colors.error } : undefined}
+                            accessibilityLabel={`Remover treino ${index + 1}`}
+                        >
+                            <MaterialCommunityIcons
+                                name="minus"
+                                size={20}
+                                color={removingIndex === index ? colors.textInverse : colors.error}
+                            />
+                        </RemoveButton>
+                    </DayRow>
                 );
             })}
+
+            {hasDuplicates && (
+                <ErrorMessage>Treinos com mesmo nome. Mude o nome de um deles.</ErrorMessage>
+            )}
 
             <InputRow>
                 <StyledInput
@@ -138,7 +100,7 @@ const CustomDayForm: React.FC<CustomDayFormProps> = ({
                 <AddButton
                     onPress={onConfirm}
                     disabled={!currentInput.trim()}
-                    accessibilityLabel="Confirmar nome do dia"
+                    accessibilityLabel="Adicionar treino"
                     $disabled={!currentInput.trim()}
                 >
                     <MaterialCommunityIcons

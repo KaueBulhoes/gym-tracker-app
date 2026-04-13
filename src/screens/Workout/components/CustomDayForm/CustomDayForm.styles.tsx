@@ -8,43 +8,38 @@ export const Wrapper = styled.View`
   gap: ${spacing.sm}px;
 `;
 
-export const ConfirmedRow = styled.View`
+export const DayRow = styled.View`
   flex-direction: row;
   align-items: center;
   gap: ${spacing.sm}px;
-  padding: ${spacing.sm}px ${spacing.md}px;
-  background-color: ${colors.backgroundHighlight};
-  border-radius: ${spacing.cardRadius}px;
-  border-width: 1px;
-  border-color: ${colors.success}40;
 `;
 
-export const ConfirmedText = styled.Text`
+export const RowInput = styled.TextInput<{ $error?: boolean }>`
   flex: 1;
-  font-size: ${typography.body.fontSize}px;
-  font-weight: ${typography.body.fontWeight};
-  color: ${colors.text};
-`;
-
-export const RenameInput = styled.TextInput`
-  flex: 1;
+  height: 48px;
+  background-color: ${colors.backgroundInput};
+  border-radius: ${spacing.inputRadius}px;
+  border-width: 1.5px;
+  border-color: ${({ $error }) => ($error ? colors.error : colors.border)};
+  padding-horizontal: ${spacing.md}px;
   font-size: ${typography.body.fontSize}px;
   color: ${colors.text};
-  padding: 0px;
 `;
 
-export const RowActions = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: ${spacing.xs}px;
-  margin-left: auto;
-`;
-
-export const ActionButton = styled.Pressable`
-  width: 32px;
-  height: 32px;
+export const RemoveButton = styled.Pressable`
+  width: 48px;
+  height: 48px;
+  border-radius: ${spacing.buttonRadius}px;
   align-items: center;
   justify-content: center;
+  border-width: 1.5px;
+  border-color: ${colors.error};
+`;
+
+export const ErrorMessage = styled.Text`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.caption.fontWeight};
+  color: ${colors.error};
 `;
 
 export const InputRow = styled.View`
