@@ -162,7 +162,7 @@ export const SetWeight = styled.Text<{ $checked: boolean }>`
   color: ${({ $checked }) => ($checked ? colors.neutral500 : colors.primary)};
 `;
 
-export const FinishButton = styled.Pressable`
+export const FinishButton = styled.Pressable<{ $disabled?: boolean }>`
   margin-horizontal: ${spacing.screenHorizontal}px;
   margin-bottom: ${spacing.lg}px;
   padding-vertical: ${spacing.md}px;
@@ -170,6 +170,7 @@ export const FinishButton = styled.Pressable`
   background-color: ${colors.error};
   align-items: center;
   justify-content: center;
+  opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
 `;
 
 export const FinishButtonText = styled.Text`

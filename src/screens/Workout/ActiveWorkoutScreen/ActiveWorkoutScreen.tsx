@@ -94,6 +94,7 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         state.plans.find(p => p.id === planId),
     );
     const finishWorkout = useWorkoutStore(state => state.finishWorkout);
+    const sessions = useWorkoutStore(state => state.sessions);
     const day = plan?.days.find(d => d.name === dayName);
     const exercises = day?.exercises ?? [];
 
@@ -112,7 +113,31 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         return () => clearInterval(interval);
     }, []);
 
-    const [exerciseWeights, setExerciseWeights] = useState<Record<string, ExerciseWeight>>({});
+    // Pre-fill weights from last session of this plan+day
+    const buildInitialWeights = (): Record<string, ExerciseWeight> => {
+        const lastSession = sessions.find(
+            s => s.planId === planId && s.dayName === dayName,
+        );
+        if (!lastSession) { return {}; }
+
+        const initial: Record<string, ExerciseWeight> = {};
+        for (const exercise of exercises) {
+            const prev = lastSession.exerciseWeights.find(
+                w => w.exerciseName === exercise.name,
+            );
+            if (prev) {
+                initial[exercise.id] = {
+                    exerciseId: exercise.id,
+                    exerciseName: exercise.name,
+                    uniform: prev.uniform,
+                    weights: prev.weights,
+                };
+            }
+        }
+        return initial;
+    };
+
+    const [exerciseWeights, setExerciseWeights] = useState<Record<string, ExerciseWeight>>(buildInitialWeights);
     const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
     const [completedSets, setCompletedSets] = useState<Record<string, Set<number>>>({});
 
@@ -262,7 +287,11 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         closeWeightModal();
     };
 
+    const [isSaving, setIsSaving] = useState(false);
+
     const handleFinish = async () => {
+        if (isSaving) { return; }
+        setIsSaving(true);
         const success = await finishWorkout({
             id: String(Date.now()),
             planId,
@@ -274,6 +303,8 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         });
         if (success) {
             navigation.navigate('Home');
+        } else {
+            setIsSaving(false);
         }
     };
 
@@ -346,9 +377,11 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
 
                                 {isExpanded && (
                                     <ExerciseBody>
-                                        {setList.map(set => {
+                                        {setList.map((set, setIdx) => {
                                             const checked = isSetCompleted(exercise.id, set.index);
                                             const weight = getWeightForSet(exercise.id, set.index);
+                                            const rest = getRestForExercise(exercise.id);
+                                            const isLastSet = setIdx === setList.length - 1;
                                             return (
                                                 <SetRow
                                                     key={set.index}
@@ -362,6 +395,7 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
                                                     </SetCheckbox>
                                                     <SetText $checked={checked}>
                                                         Série {set.index + 1} x {set.reps}
+                                                        {rest > 0 && !isLastSet ? `  •  Descanso: ${rest}s` : ''}
                                                     </SetText>
                                                     <SetWeight $checked={checked}>
                                                         {weight ? `${weight} kg` : '-'}
@@ -377,8 +411,13 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
                 </Content>
             </ScrollContent>
 
-            <FinishButton onPress={handleFinish} accessibilityLabel="Finalizar treino">
-                <FinishButtonText>Finalizar Treino</FinishButtonText>
+            <FinishButton
+                onPress={handleFinish}
+                disabled={isSaving}
+                $disabled={isSaving}
+                accessibilityLabel="Finalizar treino"
+            >
+                <FinishButtonText>{isSaving ? 'Salvando...' : 'Finalizar Treino'}</FinishButtonText>
             </FinishButton>
 
             <Modal visible={restSeconds > 0} transparent animationType="fade" onRequestClose={closeRest}>

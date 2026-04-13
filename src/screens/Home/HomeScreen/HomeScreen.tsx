@@ -86,9 +86,10 @@ const HomeScreen: React.FC = () => {
 
   const weeklyTarget = profile?.weeklyGoal ?? 5;
   const weekStart = getWeekStart();
-  const weeklyCompleted = sessions.filter(
+  const weeklyRaw = sessions.filter(
     s => s.finishedAt >= weekStart,
   ).length;
+  const weeklyCompleted = Math.min(weeklyRaw, weeklyTarget);
   const remaining = weeklyTarget - weeklyCompleted;
 
   const monthStart = new Date();
