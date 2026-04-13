@@ -35,8 +35,17 @@ const brDateToIso = (date: string): string => {
 };
 
 // YYYY-MM-DD → DD/MM/YYYY (app displays BR format)
-const isoDateToBr = (date: string): string => {
+export const isoDateToBr = (date: string): string => {
   const [year, month, day] = date.split('-');
+  return `${day}/${month}/${year}`;
+};
+
+// ISO timestamp → DD/MM/YYYY (extracts date from full timestamp)
+export const isoTimestampToBr = (timestamp: string): string => {
+  const date = new Date(timestamp);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
 
@@ -111,6 +120,7 @@ const rowToExercise = (
 
 const rowToDay = (row: DayRowWithNested): WorkoutDay => ({
   name: row.day_name,
+  description: row.description ?? null,
   exercises: row.workout_plan_exercises
     .sort((a, b) => a.sort_order - b.sort_order)
     .map(rowToExercise),
@@ -121,12 +131,24 @@ const rowToDay = (row: DayRowWithNested): WorkoutDay => ({
 type PlanRowWithNested = {
   id: string;
   user_id: string;
+  name: string;
+  is_active: boolean;
+  finished_at: string | null;
+  duration_days: number | null;
+  expires_at: string | null;
+  expiry_dismissed: boolean;
   created_at: string;
   workout_plan_days: DayRowWithNested[];
 };
 
 export const rowToPlan = (row: PlanRowWithNested): WorkoutPlan => ({
   id: row.id,
+  name: row.name,
+  isActive: row.is_active,
+  finishedAt: row.finished_at,
+  durationDays: row.duration_days,
+  expiresAt: row.expires_at,
+  expiryDismissed: row.expiry_dismissed,
   days: row.workout_plan_days
     .sort((a, b) => a.sort_order - b.sort_order)
     .map(rowToDay),
@@ -142,6 +164,7 @@ export const dayToRow = (
 ): Omit<DayRow, 'id' | 'created_at'> => ({
   plan_id: planId,
   day_name: day.name,
+  description: day.description ?? null,
   default_rest: day.defaultRest,
   default_rest_seconds: day.defaultRestSeconds ? Number(day.defaultRestSeconds) : 90,
   sort_order: sortOrder,

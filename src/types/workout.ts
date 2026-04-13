@@ -17,6 +17,7 @@ export type Exercise = {
 
 export type WorkoutDay = {
   name: string;
+  description: string | null;
   exercises: Exercise[];
   defaultRest: boolean;
   defaultRestSeconds: string;
@@ -24,6 +25,12 @@ export type WorkoutDay = {
 
 export type WorkoutPlan = {
   id: string;
+  name: string;
+  isActive: boolean;
+  finishedAt: string | null;
+  durationDays: number | null;
+  expiresAt: string | null;
+  expiryDismissed: boolean;
   days: WorkoutDay[];
   createdAt: string;
 };

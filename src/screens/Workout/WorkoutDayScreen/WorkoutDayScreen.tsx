@@ -76,9 +76,12 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
     const updateDraftDay = useWorkoutStore(state => state.updateDraftDay);
 
     const exercises = draftDay?.exercises ?? [];
+    const description = draftDay?.description ?? '';
     const defaultRest = draftDay?.defaultRest ?? false;
     const defaultRestSeconds = draftDay?.defaultRestSeconds ?? '';
 
+    const setDescription = (value: string) =>
+        updateDraftDay(day, d => ({ ...d, description: value || null }));
     const setDefaultRest = (value: boolean) =>
         updateDraftDay(day, d => ({ ...d, defaultRest: value }));
     const setDefaultRestSeconds = (value: string) =>
@@ -243,6 +246,17 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
 
             <ScrollContent showsVerticalScrollIndicator={false}>
                 <Content>
+                    <DialogInputGroup style={{ marginBottom: spacing.base }}>
+                        <DialogLabel>Descrição (opcional)</DialogLabel>
+                        <DialogInput
+                            value={description}
+                            onChangeText={setDescription}
+                            placeholder="Ex: Peito e Bíceps"
+                            placeholderTextColor={colors.neutral500}
+                            autoCapitalize="sentences"
+                        />
+                    </DialogInputGroup>
+
                     <ToggleSection>
                         <ToggleRow>
                             <ToggleLabel>Descanso padrao entre exercicios</ToggleLabel>

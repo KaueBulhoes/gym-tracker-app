@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StatusBar } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from '../../../components/Button';
+import Input from '../../../components/Input';
 import { colors, spacing } from '../../../constants';
 import {
     BackButton,
@@ -51,6 +52,7 @@ const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation 
 
     const [customDays, setCustomDays] = useState<string[]>([]);
     const [customInput, setCustomInput] = useState('');
+    const [customTitle, setCustomTitle] = useState('');
 
     const toggleAbcde = (item: string) => {
         const isExtra = !ABCDE_BASE.includes(item);
@@ -114,20 +116,25 @@ const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation 
     const canCreate =
         (planType === 'abcde' && abcdeSelected.length > 0) ||
         (planType === 'weekdays' && weekdaySelected.length > 0) ||
-        (planType === 'custom' && customDays.length > 0);
+        (planType === 'custom' && customDays.length > 0 && customTitle.trim().length > 0);
 
     const handleCreatePlan = () => {
         let days: string[] = [];
+        let planName = '';
+
         if (planType === 'abcde') {
-            days = abcdeItems
-                .filter(i => abcdeSelected.includes(i))
-                .map(d => `Treino ${d}`);
+            const selected = abcdeItems.filter(i => abcdeSelected.includes(i));
+            days = selected.map(d => `Treino ${d}`);
+            planName = `Treino ${selected.join('')}`;
         } else if (planType === 'weekdays') {
             days = weekdayItems.filter(i => weekdaySelected.includes(i));
+            planName = 'Treino Semanal';
         } else if (planType === 'custom') {
             days = customDays;
+            planName = customTitle.trim();
         }
-        startDraft(days);
+
+        startDraft(days, planName);
         navigation.navigate('AddWorkoutExercises', { days });
     };
 
@@ -199,6 +206,13 @@ const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation 
 
                     {planType === 'custom' && (
                         <Panel>
+                            <Input
+                                label="Título da Ficha"
+                                value={customTitle}
+                                onChangeText={setCustomTitle}
+                                placeholder="Ex: Meu Treino de Verão"
+                                autoCapitalize="sentences"
+                            />
                             <PanelLabel>Adicione seu treino</PanelLabel>
                             <CustomDayForm
                                 days={customDays}

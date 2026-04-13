@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import { LayoutAnimation, Modal, Platform, StatusBar, UIManager } from 'react-native';
+import { LayoutAnimation, Modal, Platform, StatusBar, TextInput, UIManager } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from '../../../components/Button';
 import Card from '../../../components/Card';
@@ -101,11 +101,21 @@ const HomeScreen: React.FC = () => {
   const [expandedWorkout, setExpandedWorkout] = useState<string | null>(null);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-  const hasPlan = plans.length > 0;
+  const activePlan = plans.find(p => p.isActive) ?? null;
+  const hasPlan = activePlan !== null;
 
-  const allDays = plans.flatMap(plan =>
-    plan.days.map(day => ({ ...day, planId: plan.id })),
-  );
+  const allDays = activePlan
+    ? activePlan.days.map(day => ({ ...day, planId: activePlan.id }))
+    : [];
+
+  const isExpired = activePlan?.expiresAt
+    && new Date(activePlan.expiresAt) <= new Date()
+    && !activePlan.expiryDismissed;
+
+  const renewPlan = useWorkoutStore(state => state.renewPlan);
+  const dismissExpiry = useWorkoutStore(state => state.dismissExpiry);
+  const [showExpiryModal, setShowExpiryModal] = useState(false);
+  const [renewDays, setRenewDays] = useState('');
 
   const nextDay = (() => {
     if (!lastCompleted || allDays.length === 0) {
@@ -191,7 +201,28 @@ const HomeScreen: React.FC = () => {
 
           {hasPlan && (
             <>
-              <SectionTitle>Meus Treinos</SectionTitle>
+              <SectionTitle>
+                Meus Treinos
+                {isExpired && (
+                  <>
+                    {'  '}
+                    <MaterialCommunityIcons
+                      name="alert"
+                      size={18}
+                      color={colors.primary}
+                      onPress={() => setShowExpiryModal(true)}
+                    />
+                  </>
+                )}
+              </SectionTitle>
+              {isExpired && (
+                <WorkoutDetailText
+                  style={{ color: colors.primary, marginBottom: spacing.sm, marginLeft: spacing.screenHorizontal }}
+                  onPress={() => setShowExpiryModal(true)}
+                >
+                  Sua ficha venceu
+                </WorkoutDetailText>
+              )}
               <WorkoutList>
                 {allDays.map(day => {
                   const key = `${day.planId}-${day.name}`;
@@ -217,7 +248,7 @@ const HomeScreen: React.FC = () => {
                           </WorkoutIconContainer>
                           <WorkoutAccordionInfo>
                             <WorkoutAccordionTitle $isNext={isNext}>
-                              {day.name}
+                              {day.name}{day.description ? ` - ${day.description}` : ''}
                             </WorkoutAccordionTitle>
                             <WorkoutAccordionSubtitle>
                               {exerciseCount} {exerciseCount === 1 ? 'exercício' : 'exercícios'}
@@ -271,11 +302,11 @@ const HomeScreen: React.FC = () => {
 
       <BottomBar>
         <BottomBarButton
-          onPress={() => navigation.navigate('AddWorkoutPlan')}
-          accessibilityLabel="Novo plano de treino"
+          onPress={() => navigation.navigate('WorkoutPlans')}
+          accessibilityLabel="Planos de treino"
         >
-          <MaterialCommunityIcons name="plus" size={24} color={colors.neutral300} />
-          <BottomBarLabel>Adicionar</BottomBarLabel>
+          <MaterialCommunityIcons name="clipboard-text-outline" size={24} color={colors.neutral300} />
+          <BottomBarLabel>Planos</BottomBarLabel>
         </BottomBarButton>
 
         <BottomBarStartButton
@@ -300,6 +331,62 @@ const HomeScreen: React.FC = () => {
           <BottomBarLabel>Estatísticas</BottomBarLabel>
         </BottomBarButton>
       </BottomBar>
+
+      <Modal
+        visible={showExpiryModal}
+        transparent
+        animationType="fade"
+        statusBarTranslucent
+        onRequestClose={() => setShowExpiryModal(false)}
+      >
+        <ProfileMenuOverlay onPress={() => setShowExpiryModal(false)}>
+          <ProfileMenuCard>
+            <SectionTitle style={{ marginBottom: spacing.md }}>Sua ficha venceu</SectionTitle>
+            <MetricLabel style={{ marginBottom: spacing.sm }}>Renovar por quantos dias?</MetricLabel>
+            <TextInput
+              value={renewDays}
+              onChangeText={t => setRenewDays(t.replace(/[^0-9]/g, ''))}
+              placeholder="Ex: 30"
+              placeholderTextColor={colors.neutral500}
+              keyboardType="number-pad"
+              maxLength={3}
+              style={{
+                backgroundColor: colors.backgroundElevated,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: colors.neutral600,
+                color: colors.text,
+                fontSize: 16,
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                marginBottom: spacing.md,
+              }}
+            />
+            <Button
+              title="Renovar ficha"
+              onPress={async () => {
+                if (renewDays && activePlan) {
+                  await renewPlan(activePlan.id, Number(renewDays));
+                  setRenewDays('');
+                  setShowExpiryModal(false);
+                }
+              }}
+              disabled={!renewDays}
+              style={{ marginBottom: spacing.sm }}
+            />
+            <Button
+              title="Dispensar aviso"
+              onPress={async () => {
+                if (activePlan) {
+                  await dismissExpiry(activePlan.id);
+                  setShowExpiryModal(false);
+                }
+              }}
+              style={{ marginBottom: spacing.sm, backgroundColor: colors.neutral600 }}
+            />
+          </ProfileMenuCard>
+        </ProfileMenuOverlay>
+      </Modal>
 
       <Modal
         visible={showProfileMenu}

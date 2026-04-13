@@ -63,6 +63,38 @@ export const Content = styled.View`
   gap: ${spacing.sm}px;
 `;
 
+export const DurationRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: ${spacing.md}px;
+  gap: ${spacing.sm}px;
+`;
+
+export const DurationLabel = styled.Text`
+  font-size: ${typography.body.fontSize}px;
+  font-weight: ${typography.body.fontWeight};
+  color: ${colors.text};
+`;
+
+export const DurationInput = styled.TextInput`
+  background-color: ${colors.backgroundElevated};
+  border-radius: ${spacing.inputRadius}px;
+  border-width: 1px;
+  border-color: ${colors.neutral600};
+  color: ${colors.text};
+  font-size: ${typography.body.fontSize}px;
+  padding-horizontal: ${spacing.md}px;
+  padding-vertical: ${spacing.sm}px;
+  width: 70px;
+  text-align: center;
+`;
+
+export const DurationUnit = styled.Text`
+  font-size: ${typography.body.fontSize}px;
+  font-weight: ${typography.body.fontWeight};
+  color: ${colors.textSecondary};
+`;
+
 export const DayCard = styled.Pressable`
   background-color: ${colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;

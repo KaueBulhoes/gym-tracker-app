@@ -13,6 +13,7 @@ Dias de treino dentro de um plano. Cada dia tem um nome (A, B, C, Segunda, etc.)
 | `id` | `uuid` | NOT NULL | `gen_random_uuid()` | PK |
 | `plan_id` | `uuid` | NOT NULL | — | FK → `workout_plans.id` ON DELETE CASCADE |
 | `day_name` | `text` | NOT NULL | — | Nome do dia (A, B, Segunda, etc.) |
+| `description` | `text` | NULL | — | Descrição do dia (ex: "Peito e Bíceps") |
 | `default_rest` | `boolean` | NOT NULL | `true` | Usar descanso padrão global |
 | `default_rest_seconds` | `integer` | NOT NULL | `90` | Segundos de descanso padrão |
 | `sort_order` | `integer` | NOT NULL | `0` | Ordem do dia dentro do plano |

@@ -27,6 +27,21 @@
 - **Tabelas:** `workout_sessions`, `workout_session_weights` (SELECT com nested select)
 - **Usada em:** [workoutStore](workout-store.md) (`loadSessions`)
 
+### `setActivePlan(planId: string): Promise<WorkoutPlan[]>`
+- **O que faz:** Desativa o plano ativo atual e ativa o plano alvo. Re-fetch todos os planos
+- **Tabelas:** `workout_plans` (UPDATE)
+- **Usada em:** [workoutStore](workout-store.md) (`setActivePlan`)
+
+### `renewPlan(planId: string, days: number): Promise<void>`
+- **O que faz:** Renova a ficha com nova duração e data de expiração
+- **Tabelas:** `workout_plans` (UPDATE: duration_days, expires_at, expiry_dismissed)
+- **Usada em:** [workoutStore](workout-store.md) (`renewPlan`)
+
+### `dismissExpiry(planId: string): Promise<void>`
+- **O que faz:** Marca o aviso de vencimento como dispensado
+- **Tabelas:** `workout_plans` (UPDATE: expiry_dismissed)
+- **Usada em:** [workoutStore](workout-store.md) (`dismissExpiry`)
+
 ### `saveSession(session: WorkoutSession): Promise<WorkoutSession>`
 - **O que faz:** Salva uma sessão de treino finalizada com as cargas de cada exercício
 - **Tabelas:** `workout_sessions` (INSERT), `workout_session_weights` (INSERT)
@@ -38,5 +53,7 @@
 - RLS garante isolamento por usuário em todas as tabelas
 - O draft não é descartado em caso de erro na persistência (o usuário pode tentar novamente)
 - Supabase JS não suporta transações; se falhar no meio, dados órfãos ficam no banco (inofensivos)
+- Ao salvar novo plano, desativa o plano ativo anterior automaticamente (finished_at = NOW)
+- `savePlan` agora inclui `name`, `is_active`, `duration_days`, `expires_at`
 - Conversão snake_case/camelCase via [caseMapper](case-mapper.md)
 - Erros mapeados via `mapDatabaseError`

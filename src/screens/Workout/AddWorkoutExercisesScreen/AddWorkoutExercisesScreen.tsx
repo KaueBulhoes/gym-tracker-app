@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, spacing } from '../../../constants';
@@ -15,6 +15,10 @@ import {
     DayIconContainer,
     DayInfo,
     DayName,
+    DurationInput,
+    DurationLabel,
+    DurationRow,
+    DurationUnit,
     Header,
     HeaderLeft,
     HeaderTitle,
@@ -30,9 +34,19 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
     const { days } = route.params;
     const draft = useWorkoutStore(state => state.draft);
     const saveDraft = useWorkoutStore(state => state.saveDraft);
+    const updateDraftDuration = useWorkoutStore(state => state.updateDraftDuration);
     const draftDays = draft?.days ?? [];
 
     const isLoading = useWorkoutStore(state => state.isLoading);
+    const [durationInput, setDurationInput] = useState(
+        draft?.durationDays ? String(draft.durationDays) : '',
+    );
+
+    const handleDurationChange = (text: string) => {
+        const numeric = text.replace(/[^0-9]/g, '');
+        setDurationInput(numeric);
+        updateDraftDuration(numeric ? Number(numeric) : null);
+    };
 
     const hasAnyExercise = draftDays.some(d => d.exercises.length > 0);
 
@@ -64,6 +78,20 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
 
             <ScrollContent showsVerticalScrollIndicator={false}>
                 <Content>
+                    <DurationRow>
+                        <DurationLabel>Duração da ficha:</DurationLabel>
+                        <DurationInput
+                            value={durationInput}
+                            onChangeText={handleDurationChange}
+                            placeholder="—"
+                            placeholderTextColor={colors.neutral500}
+                            keyboardType="number-pad"
+                            maxLength={3}
+                            accessibilityLabel="Duração da ficha em dias"
+                        />
+                        <DurationUnit>dias</DurationUnit>
+                    </DurationRow>
+
                     {days.map(day => {
                         const count = exerciseCountFor(day);
                         const countLabel =

@@ -16,6 +16,12 @@ export type ProfileRow = {
 export type PlanRow = {
   id: string;
   user_id: string;
+  name: string;
+  is_active: boolean;
+  finished_at: string | null;
+  duration_days: number | null;
+  expires_at: string | null;
+  expiry_dismissed: boolean;
   created_at: string;
 };
 
@@ -23,6 +29,7 @@ export type DayRow = {
   id: string;
   plan_id: string;
   day_name: string;
+  description: string | null;
   default_rest: boolean;
   default_rest_seconds: number;
   sort_order: number;

@@ -48,10 +48,27 @@ export const workoutService = {
   async savePlan(draft: WorkoutPlan): Promise<WorkoutPlan> {
     const userId = await getUserId();
 
+    // 0. Deactivate current active plan
+    await supabase
+      .from('workout_plans')
+      .update({ is_active: false, finished_at: new Date().toISOString() })
+      .eq('user_id', userId)
+      .eq('is_active', true);
+
     // 1. Insert plan
+    const expiresAt = draft.durationDays
+      ? new Date(Date.now() + draft.durationDays * 24 * 60 * 60 * 1000).toISOString()
+      : null;
+
     const { data: planRow, error: planError } = await supabase
       .from('workout_plans')
-      .insert({ user_id: userId })
+      .insert({
+        user_id: userId,
+        name: draft.name,
+        is_active: true,
+        duration_days: draft.durationDays,
+        expires_at: expiresAt,
+      })
       .select()
       .single();
 
@@ -94,12 +111,13 @@ export const workoutService = {
     }
 
     if (exerciseInserts.length === 0) {
-      // Plan with no exercises — return as-is
-      return {
-        id: planId,
-        days: draft.days.map((d) => ({ ...d, exercises: [] })),
-        createdAt: planRow.created_at,
-      };
+      return rowToPlan({
+        ...planRow,
+        workout_plan_days: dayRows.map((r: Record<string, unknown>) => ({
+          ...r,
+          workout_plan_exercises: [],
+        })),
+      });
     }
 
     const { data: exerciseRows, error: exError } = await supabase
@@ -204,6 +222,58 @@ export const workoutService = {
     }
 
     return (data ?? []).map(rowToSession);
+  },
+
+  async setActivePlan(planId: string): Promise<WorkoutPlan[]> {
+    const userId = await getUserId();
+
+    // Deactivate all
+    const { error: deactivateError } = await supabase
+      .from('workout_plans')
+      .update({ is_active: false, finished_at: new Date().toISOString() })
+      .eq('user_id', userId)
+      .eq('is_active', true);
+
+    if (deactivateError) {
+      throw mapDatabaseError(deactivateError);
+    }
+
+    // Activate target
+    const { error: activateError } = await supabase
+      .from('workout_plans')
+      .update({ is_active: true, finished_at: null })
+      .eq('id', planId);
+
+    if (activateError) {
+      throw mapDatabaseError(activateError);
+    }
+
+    // Re-fetch all plans
+    return this.getPlans();
+  },
+
+  async renewPlan(planId: string, days: number): Promise<void> {
+    const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+
+    const { error } = await supabase
+      .from('workout_plans')
+      .update({ duration_days: days, expires_at: expiresAt, expiry_dismissed: false })
+      .eq('id', planId);
+
+    if (error) {
+      throw mapDatabaseError(error);
+    }
+  },
+
+  async dismissExpiry(planId: string): Promise<void> {
+    const { error } = await supabase
+      .from('workout_plans')
+      .update({ expiry_dismissed: true })
+      .eq('id', planId);
+
+    if (error) {
+      throw mapDatabaseError(error);
+    }
   },
 
   async saveSession(session: WorkoutSession): Promise<WorkoutSession> {

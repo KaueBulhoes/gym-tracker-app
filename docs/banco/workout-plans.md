@@ -12,6 +12,12 @@ Planos de treino criados pelo usuário. Cada plano agrupa um conjunto de dias (A
 |--------|------|----------|---------|-----------|
 | `id` | `uuid` | NOT NULL | `gen_random_uuid()` | PK |
 | `user_id` | `uuid` | NOT NULL | — | FK → `auth.users.id` |
+| `name` | `text` | NOT NULL | `'Meu Treino'` | Nome do plano (ex: "Treino ABCDE") |
+| `is_active` | `boolean` | NOT NULL | `false` | Se é a ficha ativa |
+| `finished_at` | `timestamptz` | NULL | — | Quando foi desativado |
+| `duration_days` | `integer` | NULL | — | Duração da ficha em dias |
+| `expires_at` | `timestamptz` | NULL | — | Data de expiração |
+| `expiry_dismissed` | `boolean` | NOT NULL | `false` | Se o aviso de vencimento foi dispensado |
 | `created_at` | `timestamptz` | NOT NULL | `now()` | Criação do plano |
 
 ## Índices
@@ -34,6 +40,12 @@ Planos de treino criados pelo usuário. Cada plano agrupa um conjunto de dias (A
 | Coluna DB | Campo TypeScript | Arquivo |
 |-----------|-----------------|---------|
 | `id` | `WorkoutPlan.id` | `src/types/workout.ts` |
+| `name` | `WorkoutPlan.name` | `src/types/workout.ts` |
+| `is_active` | `WorkoutPlan.isActive` | `src/types/workout.ts` |
+| `finished_at` | `WorkoutPlan.finishedAt` | `src/types/workout.ts` |
+| `duration_days` | `WorkoutPlan.durationDays` | `src/types/workout.ts` |
+| `expires_at` | `WorkoutPlan.expiresAt` | `src/types/workout.ts` |
+| `expiry_dismissed` | `WorkoutPlan.expiryDismissed` | `src/types/workout.ts` |
 | `created_at` | `WorkoutPlan.createdAt` | `src/types/workout.ts` |
 
 ## Services que usam
