@@ -24,8 +24,6 @@ import {
   HeaderContent,
   MetricCard,
   MetricLabel,
-  MetricSub,
-  MetricValue,
   MetricValueLarge,
   MetricsRow,
   NextBadge,
@@ -54,6 +52,7 @@ import {
   ProfileMenuItemText,
   ProfileMenuDivider,
 } from './HomeScreen.styles';
+import { useHomeStats, type HomeStatKey } from '../../../hooks/useHomeStats';
 import { useAuthStore } from '../../../stores/authStore';
 import { useProfileStore } from '../../../stores/profileStore';
 import { useWorkoutStore } from '../../../stores/workoutStore';
@@ -98,6 +97,72 @@ const HomeScreen: React.FC = () => {
   const monthlyTotal = sessions.filter(
     s => s.finishedAt >= monthStart.toISOString(),
   ).length;
+
+  const homeStatKeys = useHomeStats(state => state.selected);
+  const loadHomeStats = useHomeStats(state => state.load);
+  const homeStatsLoaded = useHomeStats(state => state.loaded);
+
+  React.useEffect(() => {
+    if (!homeStatsLoaded) { loadHomeStats(); }
+  }, [homeStatsLoaded, loadHomeStats]);
+
+  const formatDuration = (seconds: number): string => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    if (h > 0) { return `${h}h ${m}min`; }
+    return `${m}min`;
+  };
+
+  const getStatValue = (key: HomeStatKey): { label: string; value: string } => {
+    const yearStart = new Date();
+    yearStart.setMonth(0, 1);
+    yearStart.setHours(0, 0, 0, 0);
+
+    const totalSeconds = sessions.reduce((sum, s) => sum + s.durationSeconds, 0);
+
+    switch (key) {
+      case 'lastWorkout':
+        return { label: 'Último treino', value: lastCompleted ? lastCompleted.dayName : '-' };
+      case 'monthlyTotal':
+        return { label: 'Treinos no mês', value: String(monthlyTotal) };
+      case 'yearlyTotal':
+        return { label: 'Treinos no ano', value: String(sessions.filter(s => s.finishedAt >= yearStart.toISOString()).length) };
+      case 'totalSessions':
+        return { label: 'Total de treinos', value: String(sessions.length) };
+      case 'totalTime':
+        return { label: 'Tempo total', value: formatDuration(totalSeconds) };
+      case 'streak': {
+        let streak = 0;
+        const check = new Date();
+        while (true) {
+          const ws = getWeekStart();
+          const we = new Date(ws);
+          we.setDate(we.getDate() + 7);
+          const count = sessions.filter(s => s.finishedAt >= ws && s.finishedAt < we.toISOString()).length;
+          if (count >= weeklyTarget) { streak++; check.setDate(check.getDate() - 7); } else { break; }
+        }
+        return { label: 'Sequência', value: `${streak} sem.` };
+      }
+      case 'avgPerWeek': {
+        let avg = 0;
+        if (sessions.length > 0) {
+          const first = new Date(sessions[sessions.length - 1].finishedAt);
+          const weeks = Math.max(1, Math.ceil((Date.now() - first.getTime()) / (7 * 24 * 60 * 60 * 1000)));
+          avg = Math.round((sessions.length / weeks) * 10) / 10;
+        }
+        return { label: 'Média/semana', value: String(avg) };
+      }
+      case 'avgDuration':
+        return { label: 'Duração média', value: formatDuration(sessions.length > 0 ? Math.round(totalSeconds / sessions.length) : 0) };
+      case 'longestSession':
+        return { label: 'Mais longo', value: formatDuration(sessions.length > 0 ? Math.max(...sessions.map(s => s.durationSeconds)) : 0) };
+      case 'shortestSession':
+        return { label: 'Mais curto', value: formatDuration(sessions.length > 0 ? Math.min(...sessions.map(s => s.durationSeconds)) : 0) };
+      default:
+        return { label: '', value: '-' };
+    }
+  };
+
   const [expandedWorkout, setExpandedWorkout] = useState<string | null>(null);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
@@ -184,20 +249,19 @@ const HomeScreen: React.FC = () => {
             </GoalMotivation>
           </Card>
 
-          <MetricsRow>
-            <MetricCard>
-              <MetricLabel>Último treino</MetricLabel>
-              <MetricValue>
-                {lastCompleted ? lastCompleted.dayName : '-'}
-              </MetricValue>
-              <MetricSub>-</MetricSub>
-            </MetricCard>
-
-            <MetricCard>
-              <MetricLabel>Treinos no mês</MetricLabel>
-              <MetricValueLarge>{monthlyTotal}</MetricValueLarge>
-            </MetricCard>
-          </MetricsRow>
+          {homeStatKeys.length > 0 && (
+            <MetricsRow>
+              {homeStatKeys.map(key => {
+                const stat = getStatValue(key);
+                return (
+                  <MetricCard key={key}>
+                    <MetricLabel>{stat.label}</MetricLabel>
+                    <MetricValueLarge>{stat.value}</MetricValueLarge>
+                  </MetricCard>
+                );
+              })}
+            </MetricsRow>
+          )}
 
           {hasPlan && (
             <>
@@ -324,7 +388,7 @@ const HomeScreen: React.FC = () => {
         </BottomBarStartButton>
 
         <BottomBarButton
-          onPress={() => { }}
+          onPress={() => navigation.navigate('Statistics')}
           accessibilityLabel="Estatísticas"
         >
           <MaterialCommunityIcons name="chart-line" size={24} color={colors.neutral300} />

@@ -14,13 +14,15 @@ App
     ├── Home
     │   ├── BottomBar (Planos) → WorkoutPlans
     │   ├── BottomBar (Começar) → ActiveWorkout
+    │   ├── BottomBar (Estatísticas) → Statistics
     │   └── Menu perfil → Settings
     ├── Settings
     ├── WorkoutPlans → AddWorkoutPlan (criar novo)
     ├── AddWorkoutPlan → AddWorkoutExercises
     ├── AddWorkoutExercises → WorkoutDay
     ├── WorkoutDay
-    └── ActiveWorkout → Home (ao finalizar)
+    ├── ActiveWorkout → Home (ao finalizar)
+    └── Statistics
 ```
 
 ## Telas implementadas
@@ -37,3 +39,4 @@ App
 | [Treino Ativo](active-workout.md) | `src/screens/Workout/ActiveWorkoutScreen/` | workoutStore.finishWorkout | workout_sessions, workout_session_weights |
 | [Onboarding](onboarding.md) | `src/screens/Onboarding/OnboardingScreen/` | profileStore.saveProfile | profiles |
 | [Configurações](settings.md) | `src/screens/Settings/SettingsScreen/` | profileStore, authStore | profiles, auth.users |
+| [Estatísticas](statistics.md) | `src/screens/Statistics/StatisticsScreen/` | workoutStore, profileStore, useHomeStats | — (client-side) |

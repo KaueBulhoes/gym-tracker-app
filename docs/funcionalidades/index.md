@@ -11,7 +11,8 @@ Catálogo de features do app com suas composições (telas + services + tabelas)
 - [Persistência Supabase](persistencia-supabase.md) — todos os dados persistidos no banco (perfil, planos, sessões, cargas)
 - [Gerenciamento de Fichas](gerenciamento-fichas.md) — fichas ativa/inativa, nome, duração, vencimento, descrição por dia
 
+- [Estatísticas de Treino](estatisticas.md) — métricas, recordes, progressão de carga, stats customizáveis na Home
+
 ## Planejadas
 
 - Histórico e gráficos de evolução
-- Estatísticas de treino

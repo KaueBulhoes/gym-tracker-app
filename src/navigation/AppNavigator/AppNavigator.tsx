@@ -10,6 +10,7 @@ import AddWorkoutExercisesScreen from '../../screens/Workout/AddWorkoutExercises
 import AddWorkoutPlanScreen from '../../screens/Workout/AddWorkoutPlanScreen';
 import WorkoutDayScreen from '../../screens/Workout/WorkoutDayScreen';
 import WorkoutPlansScreen from '../../screens/Workout/WorkoutPlansScreen';
+import StatisticsScreen from '../../screens/Statistics/StatisticsScreen';
 import { useProfileStore } from '../../stores/profileStore';
 import { useWorkoutStore } from '../../stores/workoutStore';
 import type { AppStackParamList } from '../types';
@@ -51,6 +52,7 @@ const AppNavigator: React.FC = () => {
             <Stack.Screen name="AddWorkoutExercises" component={AddWorkoutExercisesScreen} />
             <Stack.Screen name="WorkoutDay" component={WorkoutDayScreen} />
             <Stack.Screen name="ActiveWorkout" component={ActiveWorkoutScreen} />
+            <Stack.Screen name="Statistics" component={StatisticsScreen} />
         </Stack.Navigator>
     );
 };
