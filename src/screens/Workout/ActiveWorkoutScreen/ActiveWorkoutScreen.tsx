@@ -8,6 +8,9 @@ import { useWorkoutStore } from '../../../stores/workoutStore';
 import type { Exercise, ExerciseWeight } from '../../../types/workout';
 import {
     BackButton,
+    BottomControlButton,
+    BottomControlText,
+    BottomControlsRow,
     Checkbox,
     Container,
     Content,
@@ -20,12 +23,9 @@ import {
     ExerciseInfo,
     ExerciseMeta,
     ExerciseName,
-    FinishButton,
-    FinishButtonText,
     Header,
     HeaderCenter,
     HeaderLeft,
-    HeaderMeta,
     HeaderRight,
     HeaderRow,
     Overlay,
@@ -39,8 +39,6 @@ import {
     SetRow,
     SetText,
     SetWeight,
-    TimerActionButton,
-    TimerActionsRow,
     TimerText,
     WeightButton,
     WeightButtonLabel,
@@ -54,6 +52,7 @@ import {
     WeightToggleLabel,
     WeightToggleRow,
     WeightUnit,
+    WorkoutMetaSection,
 } from './ActiveWorkoutScreen.styles';
 
 if (
@@ -356,7 +355,7 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         <Container>
             <StatusBar barStyle="light-content" backgroundColor={colors.secondaryDark} />
 
-            <Header $topInset={insets.top}>
+            <Header>
                 <HeaderRow>
                     <HeaderLeft>
                         <BackButton
@@ -365,46 +364,22 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
                         >
                             <MaterialCommunityIcons name="arrow-left" size={22} color={colors.neutral50} />
                         </BackButton>
-                        <HeaderMeta>
-                            <DayTitle numberOfLines={1}>{currentDayName}</DayTitle>
-                            {workoutDescription ? (
-                                <DaySubtitle>{workoutDescription}</DaySubtitle>
-                            ) : null}
-                        </HeaderMeta>
                     </HeaderLeft>
 
                     <HeaderCenter>
                         <TimerText>{formatTime(activeWorkout?.elapsedSeconds ?? 0)}</TimerText>
                     </HeaderCenter>
 
-                    <HeaderRight>
-                        <TimerActionsRow>
-                            <TimerActionButton
-                                onPress={handlePauseResume}
-                                $variant={activeWorkout?.isPaused ? 'primary' : 'neutral'}
-                                accessibilityLabel={activeWorkout?.isPaused ? 'Retomar treino' : 'Pausar treino'}
-                            >
-                                <MaterialCommunityIcons
-                                    name={activeWorkout?.isPaused ? 'play' : 'pause'}
-                                    size={18}
-                                    color={activeWorkout?.isPaused ? colors.textInverse : colors.neutral50}
-                                />
-                            </TimerActionButton>
-                            <TimerActionButton
-                                onPress={handleCancelWorkout}
-                                $variant="danger"
-                                accessibilityLabel="Cancelar treino"
-                            >
-                                <MaterialCommunityIcons
-                                    name="stop"
-                                    size={18}
-                                    color={colors.neutral50}
-                                />
-                            </TimerActionButton>
-                        </TimerActionsRow>
-                    </HeaderRight>
+                    <HeaderRight />
                 </HeaderRow>
             </Header>
+
+            <WorkoutMetaSection>
+                <DayTitle numberOfLines={1}>{currentDayName}</DayTitle>
+                {workoutDescription ? (
+                    <DaySubtitle>{workoutDescription}</DaySubtitle>
+                ) : null}
+            </WorkoutMetaSection>
 
             <ScrollContent showsVerticalScrollIndicator={false}>
                 <Content>
@@ -493,15 +468,37 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
                 </Content>
             </ScrollContent>
 
-            <FinishButton
-                onPress={handleFinish}
-                disabled={isSaving}
-                $disabled={isSaving}
-                $bottomInset={insets.bottom}
-                accessibilityLabel="Finalizar treino"
-            >
-                <FinishButtonText>{isSaving ? 'Salvando...' : 'Finalizar Treino'}</FinishButtonText>
-            </FinishButton>
+            <BottomControlsRow $bottomInset={insets.bottom}>
+                <BottomControlButton
+                    onPress={handlePauseResume}
+                    $variant="neutral"
+                    accessibilityLabel={activeWorkout?.isPaused ? 'Retomar treino' : 'Pausar treino'}
+                >
+                    <BottomControlText>
+                        {activeWorkout?.isPaused ? 'Retomar' : 'Pause'}
+                    </BottomControlText>
+                </BottomControlButton>
+
+                <BottomControlButton
+                    onPress={handleFinish}
+                    $variant="primary"
+                    $disabled={isSaving}
+                    disabled={isSaving}
+                    accessibilityLabel="Finalizar treino"
+                >
+                    <BottomControlText $variant="primary">
+                        {isSaving ? 'Salvando...' : 'Finalizar'}
+                    </BottomControlText>
+                </BottomControlButton>
+
+                <BottomControlButton
+                    onPress={handleCancelWorkout}
+                    $variant="danger"
+                    accessibilityLabel="Zerar treino"
+                >
+                    <BottomControlText $variant="danger">Zerar</BottomControlText>
+                </BottomControlButton>
+            </BottomControlsRow>
 
             <Modal visible={restSeconds > 0} transparent animationType="fade" onRequestClose={closeRest}>
                 <Overlay>

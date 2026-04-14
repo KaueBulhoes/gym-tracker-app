@@ -6,10 +6,12 @@ export const Container = styled.View`
   background-color: ${colors.background};
 `;
 
-export const Header = styled.View<{ $topInset: number }>`
+export const Header = styled.View`
   padding-horizontal: ${spacing.screenHorizontal}px;
-  padding-top: ${({ $topInset }) => $topInset + spacing.sm}px;
-  padding-bottom: ${spacing.md}px;
+  padding-top: ${spacing.huge}px;
+  padding-bottom: ${spacing.xl}px;
+  min-height: 132px;
+  justify-content: flex-end;
   background-color: ${colors.secondaryDark};
 `;
 
@@ -102,6 +104,13 @@ export const DaySubtitle = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
   color: ${colors.neutral200};
+`;
+
+export const WorkoutMetaSection = styled.View`
+  align-items: center;
+  padding-top: ${spacing.md}px;
+  padding-bottom: ${spacing.xs}px;
+  padding-horizontal: ${spacing.screenHorizontal}px;
 `;
 
 export const ScrollContent = styled.ScrollView``;
@@ -237,6 +246,40 @@ export const FinishButtonText = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
   color: ${colors.neutral50};
+`;
+
+export const BottomControlsRow = styled.View<{ $bottomInset: number }>`
+  flex-direction: row;
+  gap: ${spacing.sm}px;
+  margin-horizontal: ${spacing.screenHorizontal}px;
+  margin-bottom: ${({ $bottomInset }) => spacing.lg + $bottomInset}px;
+`;
+
+export const BottomControlButton = styled.Pressable<{
+  $variant?: 'neutral' | 'primary' | 'danger';
+  $disabled?: boolean;
+}>`
+  flex: 1;
+  padding-vertical: ${spacing.md}px;
+  border-radius: ${spacing.buttonRadius}px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ $variant }) => {
+    if ($variant === 'primary') {
+      return colors.primary;
+    }
+    if ($variant === 'danger') {
+      return colors.error;
+    }
+    return colors.backgroundHighlight;
+  }};
+  opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
+`;
+
+export const BottomControlText = styled.Text<{ $variant?: 'neutral' | 'primary' | 'danger' }>`
+  font-size: ${typography.bodyBold.fontSize}px;
+  font-weight: ${typography.bodyBold.fontWeight};
+  color: ${({ $variant }) => ($variant === 'primary' ? colors.textInverse : colors.neutral50)};
 `;
 
 export const Overlay = styled.View`
