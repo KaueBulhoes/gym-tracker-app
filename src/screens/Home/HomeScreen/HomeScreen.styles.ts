@@ -109,8 +109,8 @@ export const MetricValue = styled.Text`
 `;
 
 export const MetricValueLarge = styled.Text`
-  font-size: ${typography.number.fontSize}px;
-  font-weight: ${typography.number.fontWeight};
+  font-size: ${typography.numberSmall.fontSize}px;
+  font-weight: ${typography.numberSmall.fontWeight};
   color: ${colors.text};
   flex: 1;
   text-align-vertical: center;

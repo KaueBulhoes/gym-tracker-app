@@ -276,10 +276,13 @@ export const BottomControlButton = styled.Pressable<{
   opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
 `;
 
-export const BottomControlText = styled.Text<{ $variant?: 'neutral' | 'primary' | 'danger' }>`
+export const BottomControlText = styled.Text<{
+  $variant?: 'neutral' | 'primary' | 'danger';
+}>`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${({ $variant }) => ($variant === 'primary' ? colors.textInverse : colors.neutral50)};
+  color: ${({ $variant }) =>
+    $variant === 'primary' ? colors.textInverse : colors.neutral50};
 `;
 
 export const Overlay = styled.View`
