@@ -1,7 +1,6 @@
+import { LOGIN_URL, RESET_PASSWORD_URL } from '../navigation/linking';
 import { mapAuthError } from '../utils/errorMapper';
 import { supabase } from './supabase';
-
-const RESET_PASSWORD_URL = 'gymtracker://reset-password';
 
 export const authService = {
   async signIn(email: string, password: string) {
@@ -21,6 +20,7 @@ export const authService = {
       password,
       options: {
         data: { name },
+        emailRedirectTo: LOGIN_URL,
       },
     });
     if (error) {
@@ -50,11 +50,6 @@ export const authService = {
     const searchParams = parsedUrl.searchParams;
     const hashParams = new URLSearchParams(parsedUrl.hash.replace(/^#/, ''));
 
-    const routeFromHost = parsedUrl.hostname;
-    const routeFromPath = parsedUrl.pathname.replace(/^\//, '');
-    const isResetPasswordRoute =
-      routeFromHost === 'reset-password' || routeFromPath === 'reset-password';
-
     const accessToken =
       hashParams.get('access_token') ?? searchParams.get('access_token');
     const refreshToken =
@@ -65,9 +60,11 @@ export const authService = {
       hashParams.get('token_hash') ?? searchParams.get('token_hash');
 
     const isRecoveryType = type === 'recovery';
-    const isRecoveryLink = isResetPasswordRoute || isRecoveryType;
+    const hasAuthPayload = Boolean(
+      code || tokenHash || (accessToken && refreshToken),
+    );
 
-    if (!isRecoveryLink) {
+    if (!hasAuthPayload) {
       return false;
     }
 
@@ -76,7 +73,7 @@ export const authService = {
       if (error) {
         throw mapAuthError(error);
       }
-      return true;
+      return isRecoveryType;
     }
 
     if (tokenHash && isRecoveryType) {
@@ -103,7 +100,7 @@ export const authService = {
       }
     }
 
-    return true;
+    return isRecoveryType;
   },
 
   async updatePassword(newPassword: string) {

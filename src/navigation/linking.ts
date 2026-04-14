@@ -3,6 +3,8 @@ import type { AppStackParamList, AuthStackParamList } from './types';
 
 export const APP_SCHEME = 'gymtracker';
 export const APP_PREFIX = `${APP_SCHEME}://`;
+export const LOGIN_PATH = 'login';
+export const LOGIN_URL = `${APP_PREFIX}${LOGIN_PATH}`;
 export const RESET_PASSWORD_PATH = 'reset-password';
 export const RESET_PASSWORD_URL = `${APP_PREFIX}${RESET_PASSWORD_PATH}`;
 
