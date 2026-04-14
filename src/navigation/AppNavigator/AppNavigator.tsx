@@ -25,12 +25,14 @@ const AppNavigator: React.FC = () => {
     const loadProfile = useProfileStore((s) => s.loadProfile);
     const loadPlans = useWorkoutStore((s) => s.loadPlans);
     const loadSessions = useWorkoutStore((s) => s.loadSessions);
+    const hydrateActiveWorkout = useWorkoutStore((s) => s.hydrateActiveWorkout);
 
     useEffect(() => {
         loadProfile();
         loadPlans();
         loadSessions();
-    }, [loadProfile, loadPlans, loadSessions]);
+        hydrateActiveWorkout();
+    }, [loadProfile, loadPlans, loadSessions, hydrateActiveWorkout]);
 
     if (!isProfileLoaded) {
         return (

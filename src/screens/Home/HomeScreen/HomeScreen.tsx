@@ -82,6 +82,7 @@ const HomeScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const plans = useWorkoutStore(state => state.plans);
   const lastCompleted = useWorkoutStore(state => state.lastCompleted);
+  const activeWorkout = useWorkoutStore(state => state.activeWorkout);
   const profile = useProfileStore(state => state.profile);
   const sessions = useWorkoutStore(state => state.sessions);
 
@@ -200,6 +201,23 @@ const HomeScreen: React.FC = () => {
   const toggleWorkout = (key: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpandedWorkout(prev => (prev === key ? null : key));
+  };
+
+  const startButtonLabel = activeWorkout ? 'Voltar' : 'Começar';
+
+  const openWorkout = (fallbackPlanId: string, fallbackDayName: string) => {
+    if (activeWorkout) {
+      navigation.navigate('ActiveWorkout', {
+        planId: activeWorkout.planId,
+        dayName: activeWorkout.dayName,
+      });
+      return;
+    }
+
+    navigation.navigate('ActiveWorkout', {
+      planId: fallbackPlanId,
+      dayName: fallbackDayName,
+    });
   };
 
   return (
@@ -352,7 +370,7 @@ const HomeScreen: React.FC = () => {
                           })}
                           <Button
                             title="Começar Treino"
-                            onPress={() => navigation.navigate('ActiveWorkout', { planId: day.planId, dayName: day.name })}
+                            onPress={() => openWorkout(day.planId, day.name)}
                             style={{ marginTop: spacing.md }}
                           />
                         </WorkoutAccordionBody>
@@ -380,13 +398,13 @@ const HomeScreen: React.FC = () => {
           disabled={!hasPlan}
           onPress={() => {
             if (nextDay) {
-              navigation.navigate('ActiveWorkout', { planId: nextDay.planId, dayName: nextDay.name });
+              openWorkout(nextDay.planId, nextDay.name);
             }
           }}
           accessibilityLabel="Começar treino do dia"
         >
           <MaterialCommunityIcons name="play" size={28} color={colors.textInverse} />
-          <BottomBarStartLabel>Começar</BottomBarStartLabel>
+          <BottomBarStartLabel>{startButtonLabel}</BottomBarStartLabel>
         </BottomBarStartButton>
 
         <BottomBarButton

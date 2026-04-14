@@ -51,3 +51,13 @@ export type WorkoutSession = {
   durationSeconds: number;
   exerciseWeights: ExerciseWeight[];
 };
+
+export type ActiveWorkout = {
+  planId: string;
+  dayName: string;
+  startedAt: string;
+  elapsedSeconds: number;
+  isPaused: boolean;
+  completedSets: Record<string, number[]>;
+  exerciseWeights: Record<string, ExerciseWeight>;
+};

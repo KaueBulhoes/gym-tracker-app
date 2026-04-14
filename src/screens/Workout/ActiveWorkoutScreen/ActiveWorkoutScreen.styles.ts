@@ -6,45 +6,102 @@ export const Container = styled.View`
   background-color: ${colors.background};
 `;
 
-export const Header = styled.View`
-  align-items: center;
+export const Header = styled.View<{ $topInset: number }>`
   padding-horizontal: ${spacing.screenHorizontal}px;
-  padding-top: ${spacing.huge}px;
-  padding-bottom: ${spacing.lg}px;
+  padding-top: ${({ $topInset }) => $topInset + spacing.sm}px;
+  padding-bottom: ${spacing.md}px;
   background-color: ${colors.secondaryDark};
 `;
 
-export const BackButton = styled.Pressable`
-  position: absolute;
-  left: ${spacing.screenHorizontal}px;
-  top: ${spacing.huge}px;
-  width: 40px;
-  height: 40px;
+export const HeaderRow = styled.View`
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const HeaderLeft = styled.View`
+  width: 120px;
+  flex-direction: row;
+  align-items: center;
+  gap: ${spacing.sm}px;
+`;
+
+export const HeaderMeta = styled.View`
+  flex: 1;
+`;
+
+export const HeaderCenter = styled.View`
+  flex: 1;
   align-items: center;
   justify-content: center;
-  border-radius: 20px;
+`;
+
+export const HeaderRight = styled.View`
+  width: 120px;
+  align-items: flex-end;
+  justify-content: center;
+`;
+
+export const BackButton = styled.Pressable`
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
   background-color: rgba(255, 255, 255, 0.1);
 `;
 
 export const TimerText = styled.Text`
-  font-size: 36px;
+  font-size: 32px;
   font-weight: ${typography.number.fontWeight};
   color: ${colors.primary};
   font-variant: tabular-nums;
 `;
 
+export const TimerActionsRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${spacing.sm}px;
+`;
+
+export const TimerActionButton = styled.Pressable<{
+  $variant?: 'neutral' | 'danger' | 'primary';
+}>`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ $variant }) => {
+    if ($variant === 'danger') {
+      return colors.error;
+    }
+    if ($variant === 'primary') {
+      return colors.primary;
+    }
+    return colors.backgroundHighlight;
+  }};
+`;
+
+export const TimerActionText = styled.Text<{
+  $variant?: 'neutral' | 'danger' | 'primary';
+}>`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.bodyBold.fontWeight};
+  color: ${({ $variant }) =>
+    $variant === 'primary' ? colors.textInverse : colors.neutral50};
+`;
+
 export const DayTitle = styled.Text`
-  font-size: ${typography.h3.fontSize}px;
-  font-weight: ${typography.h3.fontWeight};
+  font-size: ${typography.bodyBold.fontSize}px;
+  font-weight: ${typography.bodyBold.fontWeight};
   color: ${colors.neutral50};
-  margin-top: ${spacing.xs}px;
 `;
 
 export const DaySubtitle = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
   color: ${colors.neutral200};
-  margin-top: ${spacing.xxs}px;
 `;
 
 export const ScrollContent = styled.ScrollView``;
@@ -162,9 +219,12 @@ export const SetWeight = styled.Text<{ $checked: boolean }>`
   color: ${({ $checked }) => ($checked ? colors.neutral500 : colors.primary)};
 `;
 
-export const FinishButton = styled.Pressable<{ $disabled?: boolean }>`
+export const FinishButton = styled.Pressable<{
+  $disabled?: boolean;
+  $bottomInset: number;
+}>`
   margin-horizontal: ${spacing.screenHorizontal}px;
-  margin-bottom: ${spacing.lg}px;
+  margin-bottom: ${({ $bottomInset }) => spacing.lg + $bottomInset}px;
   padding-vertical: ${spacing.md}px;
   border-radius: ${spacing.buttonRadius}px;
   background-color: ${colors.error};

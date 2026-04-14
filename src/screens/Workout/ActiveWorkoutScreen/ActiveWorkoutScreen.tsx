@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LayoutAnimation, Modal, Platform, StatusBar, Switch, UIManager } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, spacing } from '../../../constants';
 import type { ActiveWorkoutScreenProps } from '../../../navigation/types';
@@ -22,6 +23,11 @@ import {
     FinishButton,
     FinishButtonText,
     Header,
+    HeaderCenter,
+    HeaderLeft,
+    HeaderMeta,
+    HeaderRight,
+    HeaderRow,
     Overlay,
     RestModal,
     RestModalSkip,
@@ -33,6 +39,8 @@ import {
     SetRow,
     SetText,
     SetWeight,
+    TimerActionButton,
+    TimerActionsRow,
     TimerText,
     WeightButton,
     WeightButtonLabel,
@@ -89,34 +97,36 @@ const buildSetList = (exercise: Exercise): SetInfo[] => {
 
 const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, navigation }) => {
     const { planId, dayName } = route.params;
+    const insets = useSafeAreaInsets();
 
-    const plan = useWorkoutStore(state =>
-        state.plans.find(p => p.id === planId),
-    );
-    const finishWorkout = useWorkoutStore(state => state.finishWorkout);
+    const plans = useWorkoutStore(state => state.plans);
     const sessions = useWorkoutStore(state => state.sessions);
-    const day = plan?.days.find(d => d.name === dayName);
-    const exercises = day?.exercises ?? [];
-
-    const exerciseCount = exercises.length;
-    const subtitle = `${exerciseCount} ${exerciseCount === 1 ? 'exercício' : 'exercícios'}`;
-
-    const startedAtRef = useRef(new Date().toISOString());
-    const [elapsed, setElapsed] = useState(0);
-    const elapsedRef = useRef(0);
+    const activeWorkout = useWorkoutStore(state => state.activeWorkout);
+    const finishWorkout = useWorkoutStore(state => state.finishWorkout);
+    const ensureActiveWorkout = useWorkoutStore(state => state.ensureActiveWorkout);
+    const toggleActiveSet = useWorkoutStore(state => state.toggleActiveSet);
+    const toggleActiveExercise = useWorkoutStore(state => state.toggleActiveExercise);
+    const setActiveExerciseWeight = useWorkoutStore(state => state.setActiveExerciseWeight);
+    const pauseActiveWorkout = useWorkoutStore(state => state.pauseActiveWorkout);
+    const resumeActiveWorkout = useWorkoutStore(state => state.resumeActiveWorkout);
+    const cancelActiveWorkout = useWorkoutStore(state => state.cancelActiveWorkout);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            elapsedRef.current += 1;
-            setElapsed(elapsedRef.current);
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
+        ensureActiveWorkout(planId, dayName);
+    }, [dayName, ensureActiveWorkout, planId]);
+
+    const currentPlanId = activeWorkout?.planId ?? planId;
+    const currentDayName = activeWorkout?.dayName ?? dayName;
+
+    const plan = plans.find(p => p.id === currentPlanId);
+    const realDay = plan?.days.find(d => d.name === currentDayName);
+    const exercises = realDay?.exercises ?? [];
+    const workoutDescription = realDay?.description?.trim() ?? '';
 
     // Pre-fill weights from last session of this plan+day
     const buildInitialWeights = (): Record<string, ExerciseWeight> => {
         const lastSession = sessions.find(
-            s => s.planId === planId && s.dayName === dayName,
+            s => s.planId === currentPlanId && s.dayName === currentDayName,
         );
         if (!lastSession) { return {}; }
 
@@ -137,9 +147,35 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         return initial;
     };
 
-    const [exerciseWeights, setExerciseWeights] = useState<Record<string, ExerciseWeight>>(buildInitialWeights);
+    useEffect(() => {
+        if (!activeWorkout) {
+            return;
+        }
+
+        const hasStoredWeights = Object.keys(activeWorkout.exerciseWeights).length > 0;
+        if (hasStoredWeights) {
+            return;
+        }
+
+        const initial = buildInitialWeights();
+        Object.values(initial).forEach(weight => {
+            setActiveExerciseWeight(
+                weight.exerciseId,
+                weight.exerciseName,
+                weight.uniform,
+                weight.weights,
+            );
+        });
+    }, [
+        activeWorkout,
+        currentDayName,
+        currentPlanId,
+        exercises,
+        sessions,
+        setActiveExerciseWeight,
+    ]);
+
     const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
-    const [completedSets, setCompletedSets] = useState<Record<string, Set<number>>>({});
 
     const [restSeconds, setRestSeconds] = useState(0);
     const restRef = useRef(0);
@@ -182,8 +218,8 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         if (exercise?.restSeconds) {
             return parseInt(exercise.restSeconds, 10) || 0;
         }
-        if (day?.defaultRest && day.defaultRestSeconds) {
-            return parseInt(day.defaultRestSeconds, 10) || 0;
+        if (realDay?.defaultRest && realDay.defaultRestSeconds) {
+            return parseInt(realDay.defaultRestSeconds, 10) || 0;
         }
         return 0;
     };
@@ -194,41 +230,31 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
     };
 
     const isSetCompleted = (exerciseId: string, setIndex: number) =>
-        completedSets[exerciseId]?.has(setIndex) ?? false;
+        activeWorkout?.completedSets[exerciseId]?.includes(setIndex) ?? false;
 
     const toggleSet = (exerciseId: string, setIndex: number, totalSets: number) => {
-        setCompletedSets(prev => {
-            const current = new Set(prev[exerciseId] ?? []);
-            if (current.has(setIndex)) {
-                current.delete(setIndex);
-            } else {
-                current.add(setIndex);
-                const rest = getRestForExercise(exerciseId);
-                if (rest > 0 && current.size < totalSets) {
-                    startRest(rest);
-                }
+        const doneBefore = activeWorkout?.completedSets[exerciseId]?.length ?? 0;
+        const markedAsDone = toggleActiveSet(exerciseId, setIndex, totalSets);
+
+        if (markedAsDone && doneBefore + 1 < totalSets) {
+            const rest = getRestForExercise(exerciseId);
+            if (rest > 0) {
+                startRest(rest);
             }
-            return { ...prev, [exerciseId]: current };
-        });
+        }
     };
 
     const isExerciseDone = (exerciseId: string, totalSets: number) => {
-        const done = completedSets[exerciseId];
-        return done ? done.size >= totalSets : false;
+        const done = activeWorkout?.completedSets[exerciseId] ?? [];
+        return done.length >= totalSets;
     };
 
     const toggleExercise = (exerciseId: string, setList: SetInfo[]) => {
-        const allDone = isExerciseDone(exerciseId, setList.length);
-        setCompletedSets(prev => ({
-            ...prev,
-            [exerciseId]: allDone
-                ? new Set<number>()
-                : new Set(setList.map(s => s.index)),
-        }));
+        toggleActiveExercise(exerciseId, setList.map(s => s.index));
     };
 
     const getWeightForSet = (exerciseId: string, setIndex: number): string | null => {
-        const w = exerciseWeights[exerciseId];
+        const w = activeWorkout?.exerciseWeights[exerciseId];
         if (!w) {
             return null;
         }
@@ -249,7 +275,7 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         }
         const setList = buildSetList(exercise);
         const totalSets = setList.length;
-        const existing = exerciseWeights[exerciseId];
+        const existing = activeWorkout?.exerciseWeights[exerciseId];
         if (existing) {
             setWeightDifferent(!existing.uniform);
             setWeightInputs(
@@ -275,37 +301,52 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         const exercise = exercises.find(e => e.id === weightModalExerciseId);
         const uniform = !weightDifferent;
         const weights = uniform ? [weightInputs[0] ?? ''] : [...weightInputs];
-        setExerciseWeights(prev => ({
-            ...prev,
-            [weightModalExerciseId]: {
-                exerciseId: weightModalExerciseId,
-                exerciseName: exercise?.name ?? '',
-                uniform,
-                weights,
-            },
-        }));
+        setActiveExerciseWeight(
+            weightModalExerciseId,
+            exercise?.name ?? '',
+            uniform,
+            weights,
+        );
         closeWeightModal();
     };
 
     const [isSaving, setIsSaving] = useState(false);
 
     const handleFinish = async () => {
-        if (isSaving) { return; }
+        if (isSaving || !activeWorkout) { return; }
         setIsSaving(true);
         const success = await finishWorkout({
             id: String(Date.now()),
-            planId,
-            dayName,
-            startedAt: startedAtRef.current,
+            planId: activeWorkout.planId,
+            dayName: activeWorkout.dayName,
+            startedAt: activeWorkout.startedAt,
             finishedAt: new Date().toISOString(),
-            durationSeconds: elapsedRef.current,
-            exerciseWeights: Object.values(exerciseWeights),
+            durationSeconds: activeWorkout.elapsedSeconds,
+            exerciseWeights: Object.values(activeWorkout.exerciseWeights),
         });
         if (success) {
             navigation.navigate('Home');
         } else {
             setIsSaving(false);
         }
+    };
+
+    const handlePauseResume = () => {
+        if (!activeWorkout) {
+            return;
+        }
+
+        if (activeWorkout.isPaused) {
+            resumeActiveWorkout();
+            return;
+        }
+
+        pauseActiveWorkout();
+    };
+
+    const handleCancelWorkout = () => {
+        cancelActiveWorkout();
+        navigation.navigate('Home');
     };
 
     const weightModalExercise = exercises.find(e => e.id === weightModalExerciseId);
@@ -315,13 +356,54 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         <Container>
             <StatusBar barStyle="light-content" backgroundColor={colors.secondaryDark} />
 
-            <Header>
-                <BackButton onPress={() => navigation.goBack()} accessibilityLabel="Voltar">
-                    <MaterialCommunityIcons name="arrow-left" size={24} color={colors.neutral50} />
-                </BackButton>
-                <TimerText>{formatTime(elapsed)}</TimerText>
-                <DayTitle>{dayName}</DayTitle>
-                <DaySubtitle>{subtitle}</DaySubtitle>
+            <Header $topInset={insets.top}>
+                <HeaderRow>
+                    <HeaderLeft>
+                        <BackButton
+                            onPress={() => navigation.goBack()}
+                            accessibilityLabel="Voltar"
+                        >
+                            <MaterialCommunityIcons name="arrow-left" size={22} color={colors.neutral50} />
+                        </BackButton>
+                        <HeaderMeta>
+                            <DayTitle numberOfLines={1}>{currentDayName}</DayTitle>
+                            {workoutDescription ? (
+                                <DaySubtitle>{workoutDescription}</DaySubtitle>
+                            ) : null}
+                        </HeaderMeta>
+                    </HeaderLeft>
+
+                    <HeaderCenter>
+                        <TimerText>{formatTime(activeWorkout?.elapsedSeconds ?? 0)}</TimerText>
+                    </HeaderCenter>
+
+                    <HeaderRight>
+                        <TimerActionsRow>
+                            <TimerActionButton
+                                onPress={handlePauseResume}
+                                $variant={activeWorkout?.isPaused ? 'primary' : 'neutral'}
+                                accessibilityLabel={activeWorkout?.isPaused ? 'Retomar treino' : 'Pausar treino'}
+                            >
+                                <MaterialCommunityIcons
+                                    name={activeWorkout?.isPaused ? 'play' : 'pause'}
+                                    size={18}
+                                    color={activeWorkout?.isPaused ? colors.textInverse : colors.neutral50}
+                                />
+                            </TimerActionButton>
+                            <TimerActionButton
+                                onPress={handleCancelWorkout}
+                                $variant="danger"
+                                accessibilityLabel="Cancelar treino"
+                            >
+                                <MaterialCommunityIcons
+                                    name="stop"
+                                    size={18}
+                                    color={colors.neutral50}
+                                />
+                            </TimerActionButton>
+                        </TimerActionsRow>
+                    </HeaderRight>
+                </HeaderRow>
             </Header>
 
             <ScrollContent showsVerticalScrollIndicator={false}>
@@ -415,6 +497,7 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
                 onPress={handleFinish}
                 disabled={isSaving}
                 $disabled={isSaving}
+                $bottomInset={insets.bottom}
                 accessibilityLabel="Finalizar treino"
             >
                 <FinishButtonText>{isSaving ? 'Salvando...' : 'Finalizar Treino'}</FinishButtonText>
