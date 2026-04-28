@@ -44,7 +44,12 @@ import {
   WorkoutAccordionRight,
   WorkoutAccordionSubtitle,
   WorkoutAccordionTitle,
+  ConjugatedHookBottom,
+  ConjugatedHookTop,
+  ConjugatedRail,
+  ConjugatedSpacer,
   WorkoutDetail,
+  WorkoutDetailRow,
   WorkoutDetailText,
   WorkoutIconContainer,
   WorkoutList,
@@ -364,21 +369,40 @@ const HomeScreen: React.FC = () => {
 
                       {isExpanded && (
                         <WorkoutAccordionBody>
-                          {day.exercises.map(exercise => {
+                          {day.exercises.map((exercise, exIdx) => {
                             const schemeLabel = exercise.fixedReps
                               ? `${exercise.sets}x${exercise.reps}`
                               : (exercise.repSchemes ?? []).map(s => `${s.sets}x${s.reps}`).join(' + ');
+                            const isConjugatedFirst = Boolean(exercise.conjugatedId);
+                            const isConjugatedSecond =
+                              exIdx > 0 && day.exercises[exIdx - 1]?.conjugatedId === exercise.id;
                             return (
-                              <WorkoutDetail key={exercise.id}>
-                                <MaterialCommunityIcons
-                                  name="dumbbell"
-                                  size={16}
-                                  color={colors.textSecondary}
-                                />
-                                <WorkoutDetailText>
-                                  {exercise.name} — {schemeLabel}
-                                </WorkoutDetailText>
-                              </WorkoutDetail>
+                              <WorkoutDetailRow key={exercise.id}>
+                                <ConjugatedRail>
+                                  {isConjugatedFirst ? (
+                                    <>
+                                      <ConjugatedSpacer />
+                                      <ConjugatedHookTop />
+                                    </>
+                                  ) : null}
+                                  {isConjugatedSecond ? (
+                                    <>
+                                      <ConjugatedHookBottom />
+                                      <ConjugatedSpacer />
+                                    </>
+                                  ) : null}
+                                </ConjugatedRail>
+                                <WorkoutDetail>
+                                  <MaterialCommunityIcons
+                                    name="dumbbell"
+                                    size={16}
+                                    color={colors.textSecondary}
+                                  />
+                                  <WorkoutDetailText>
+                                    {exercise.name} — {schemeLabel}
+                                  </WorkoutDetailText>
+                                </WorkoutDetail>
+                              </WorkoutDetailRow>
                             );
                           })}
                           <Button

@@ -267,11 +267,48 @@ export const WorkoutAccordionBody = styled.View`
   border-top-color: ${({ theme }) => theme.colors.neutral600};
 `;
 
+export const WorkoutDetailRow = styled.View`
+  flex-direction: row;
+  align-items: stretch;
+  margin-top: ${spacing.md}px;
+`;
+
 export const WorkoutDetail = styled.View`
+  flex: 1;
   flex-direction: row;
   align-items: center;
   gap: ${spacing.xs}px;
-  margin-top: ${spacing.md}px;
+`;
+
+export const ConjugatedRail = styled.View`
+  width: 14px;
+  margin-right: ${spacing.xs}px;
+`;
+
+export const ConjugatedSpacer = styled.View`
+  flex: 1;
+`;
+
+export const ConjugatedHookTop = styled.View`
+  flex: 1;
+  align-self: stretch;
+  border-style: dashed;
+  border-color: ${({ theme }) => theme.colors.secondary};
+  border-left-width: 2px;
+  border-top-width: 2px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+`;
+
+export const ConjugatedHookBottom = styled.View`
+  flex: 1;
+  align-self: stretch;
+  border-style: dashed;
+  border-color: ${({ theme }) => theme.colors.secondary};
+  border-left-width: 2px;
+  border-bottom-width: 2px;
+  border-right-width: 0px;
+  border-top-width: 0px;
 `;
 
 export const WorkoutDetailText = styled.Text`
