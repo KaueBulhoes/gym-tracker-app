@@ -118,6 +118,7 @@ Peito, Costas, Ombros, Bíceps, Tríceps, Pernas (Quadríceps), Pernas (Posterio
 - Nunca descartar dados silenciosamente — se o usuário inseriu, persiste
 - Stores ficam em `src/stores/` e tipos em `src/types/`
 - Ao criar uma nova feature, sempre incluir a action de salvar no store e conectar na UI
+- Se houver persistência local/remota nova ou alterada, documentar em `docs/funcionalidades/` e detalhar em `docs/api/`
 
 ### Supabase
 
@@ -181,6 +182,7 @@ docs/
 - Se criou service novo, documenta em `docs/api/`
 - Se criou ou alterou tabela Supabase, documenta em `docs/banco/`
 - Se completou feature, documenta em `docs/funcionalidades/`
+- Se criou/alterou persistência (AsyncStorage, sessão Auth, banco, cache persistente), atualizar `docs/funcionalidades/persistencia-local.md` e/ou `docs/funcionalidades/persistencia-supabase.md`
 - Links entre docs: usar caminhos relativos (ex: `[workoutStore](../api/workout-store.md)`)
 - Datas absolutas (nunca "hoje" ou "ontem" nos docs)
 

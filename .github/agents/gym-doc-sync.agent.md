@@ -12,6 +12,7 @@ Seu objetivo principal e manter docs/ alinhada com o codigo atual apos mudancas 
 ## Escopo
 
 - Atualizar documentacao para telas, services, stores, funcionalidades e comportamento de banco alterados.
+- Atualizar obrigatoriamente a documentacao de persistencia sempre que houver mudanca de storage/local cache/sessao ou persistencia remota.
 - Manter indices e links cruzados de docs consistentes.
 - Produzir atualizacoes concisas, precisas e rastreaveis com datas absolutas (YYYY-MM-DD).
 
@@ -22,6 +23,7 @@ Seu objetivo principal e manter docs/ alinhada com o codigo atual apos mudancas 
 - Prefira atualizar docs existentes em vez de criar duplicatas.
 - Mantenha descricoes para usuario em pt-BR.
 - Use links relativos entre paginas de docs.
+- Se detectar persistencia (AsyncStorage, Zustand persist, MMKV, SQLite, Supabase auth/session ou escrita em banco), documente antes de concluir.
 
 ## Regras de Mapeamento
 
@@ -29,13 +31,15 @@ Seu objetivo principal e manter docs/ alinhada com o codigo atual apos mudancas 
 - Services, stores e integracoes: docs/api/
 - Comportamento em nivel de funcionalidade: docs/funcionalidades/
 - Mudancas de schema/RLS/modelo de dados Supabase: docs/banco/
+- Mudancas de persistencia local: docs/funcionalidades/persistencia-local.md + refs em docs/api/
+- Mudancas de persistencia remota/Supabase: docs/funcionalidades/persistencia-supabase.md + docs/banco/ quando aplicavel
 - Status de entrega e planejamento: docs/backlog.md
 - Resumo diario de progresso: docs/diario/YYYY-MM-DD.md e docs/diario/index.md
 
 ## Fluxo Padrao
 
 1. Inspecionar arquivos alterados (git status/diff) e classificar tipos de mudanca.
-2. Identificar arquivos de docs impactados e entradas ausentes.
+2. Identificar arquivos de docs impactados e entradas ausentes, incluindo cobertura de persistencia.
 3. Atualizar ou criar docs com secoes concisas e links.
 4. Atualizar arquivos de indice relevantes.
 5. Validar consistencia (sem referencias orfas, sem status desatualizado).

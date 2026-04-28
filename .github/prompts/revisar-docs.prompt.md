@@ -14,6 +14,7 @@ Verifique cada camada do `src/`:
 3. **Stores** — liste todos os `.ts` em `src/stores/`
 4. **Componentes** — liste todas as pastas em `src/components/`
 5. **Hooks** — liste todos os `.ts` em `src/hooks/`
+6. **Persistência** — identifique mecanismos de persistência local/remota (AsyncStorage, Zustand persist, Supabase `persistSession`, gravações no banco)
 
 ## Passo 2: Levantar o que está documentado
 
@@ -42,6 +43,12 @@ Gere um relatório com estas seções:
 - **Sem doc:** features que parecem completas (tela + store/service conectados) mas não estão em `docs/funcionalidades/`
 - **Status incorreto:** features marcadas como "Em desenvolvimento" que já parecem implementadas, ou vice-versa
 
+### Persistência
+
+- **Sem doc:** persistência existente no código sem registro em `docs/funcionalidades/persistencia-local.md` ou `docs/funcionalidades/persistencia-supabase.md`
+- **Desalinhada:** chaves de storage, fluxo de hidratação/reset ou fontes de persistência documentadas de forma diferente do código atual
+- **Cobertura incompleta:** stores/services com persistência sem detalhamento correspondente em `docs/api/`
+
 ### Backlog
 
 - **Desatualizado:** itens marcados como `[ ]` que já foram implementados (baseado nas telas e features existentes)
@@ -60,6 +67,7 @@ Para cada problema encontrado, sugira a ação corretiva:
 - "Remover doc órfã `docs/telas/nome.md`"
 - "Atualizar status no backlog"
 - "Adicionar `index.ts` em `src/components/X/`"
+- "Atualizar docs de persistência (`docs/funcionalidades/persistencia-local.md` ou `docs/funcionalidades/persistencia-supabase.md`)"
 
 Apresente o relatório de forma concisa, agrupado por severidade:
 

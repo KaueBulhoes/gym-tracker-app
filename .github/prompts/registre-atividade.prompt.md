@@ -14,6 +14,7 @@ Verifique os arquivos criados/modificados na sessão. Classifique cada mudança:
 - **Componente** — arquivos em `src/components/`
 - **Hook** — arquivos em `src/hooks/`
 - **Store** — arquivos em `src/stores/`
+- **Persistência** — qualquer mecanismo de persistência local/remota (AsyncStorage, auth session, banco, cache persistente)
 - **Config/Setup** — configurações, dependências, estrutura do projeto
 
 ## Passo 2: Registrar cada tela criada/modificada
@@ -105,6 +106,16 @@ Se uma feature completa foi implementada (tela + service + lógica funcionando j
 
 Atualize `docs/funcionalidades/index.md`.
 
+## Passo 4.1: Registrar mudanças de persistência (obrigatório quando houver)
+
+Se houver qualquer persistência criada ou alterada, documente explicitamente:
+
+- **Persistência local** (AsyncStorage, Zustand persist, MMKV, SQLite, secure storage): atualizar/criar `docs/funcionalidades/persistencia-local.md`
+- **Persistência Supabase/remota** (Auth session, CRUD, tabelas, políticas): atualizar `docs/funcionalidades/persistencia-supabase.md` e/ou `docs/banco/`
+- **Detalhamento técnico** em `docs/api/` para stores/services envolvidos (chave de storage, momento de hidratação, reset/limpeza, fallback de erro)
+
+Não finalize o registro sem esse passo quando o código tocar em persistência.
+
 ## Passo 5: Entrada no diário
 
 Crie a entrada do dia em `docs/diario/YYYY-MM-DD.md` com um resumo de tudo que foi registrado acima, e atualize `docs/diario/index.md`.
@@ -113,5 +124,6 @@ Crie a entrada do dia em `docs/diario/YYYY-MM-DD.md` com um resumo de tudo que f
 
 - **Não duplique informação** — se um service já está documentado, apenas atualize se mudou
 - **Conecte tudo** — na doc da tela, referencie os services; no service, referencie as telas que usam
+- **Persistência é obrigatória em docs** — se houve persistência nova/alterada, registre em `docs/funcionalidades/` e refs em `docs/api/`
 - **Seja conciso** — descreva o suficiente para alguém entender sem ler o código
 - **Use links entre docs** — ex: `[workoutService](../api/workout-service.md)`
