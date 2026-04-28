@@ -166,7 +166,7 @@ export const AddExerciseButtonText = styled.Text`
 
 /* Dialog / Modal */
 
-export const Overlay = styled.View`
+export const Overlay = styled.Pressable`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.overlay};
   align-items: center;

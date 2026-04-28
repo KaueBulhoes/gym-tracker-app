@@ -14,6 +14,8 @@ Configura os exercícios de um dia específico do plano de treino. Todas as alte
 - Definir descanso individual por exercício (quando descanso padrão está desativado)
 - Editar exercício existente por botão dedicado no card (ícone de lápis)
 - Editar carga (kg) por exercício dentro do modal
+- Fechar modal ao tocar fora (mesmo comportamento do botão Cancelar, sem salvar)
+- Exibir modal respeitando Safe Area no topo e na base
 - Remover exercícios da lista
 
 ## Dados e integrações

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, StatusBar, Switch } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from 'styled-components/native';
 import { spacing } from '../../../constants';
@@ -76,6 +77,7 @@ const weightInputOnly = (text: string) => {
 
 const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }) => {
     const { colors } = useTheme();
+    const insets = useSafeAreaInsets();
     const { day } = route.params;
 
     const draftDay = useWorkoutStore(state =>
@@ -441,9 +443,21 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                 </Content>
             </ScrollContent>
 
-            <Modal visible={isDialogOpen} transparent animationType="fade" onRequestClose={closeDialog}>
+            <Modal
+                visible={isDialogOpen}
+                transparent
+                animationType="fade"
+                statusBarTranslucent
+                onRequestClose={closeDialog}
+            >
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-                    <Overlay>
+                    <Overlay
+                        onPress={closeDialog}
+                        style={{
+                            paddingTop: insets.top + spacing.md,
+                            paddingBottom: insets.bottom + spacing.md,
+                        }}
+                    >
                         <Dialog onStartShouldSetResponder={() => true}>
                             <DialogScroll keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
                                 <DialogContent>

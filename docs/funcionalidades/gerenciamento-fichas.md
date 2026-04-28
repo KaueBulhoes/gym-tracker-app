@@ -1,7 +1,7 @@
 # Gerenciamento de Fichas de Treino
 
 **Status:** Implementada
-**Data:** 2026-04-13
+**Data:** 2026-04-28
 
 ## O que faz
 
@@ -28,6 +28,7 @@ Permite ao usuário gerenciar múltiplas fichas de treino. Cada ficha pode ser a
 
 1. **Criar ficha:** AddWorkoutPlan (nome) → AddWorkoutExercises (duração) → WorkoutDay (descrição + exercícios) → salvar → nova ficha ativa, anterior desativada
 2. **Editar exercício da ficha:** WorkoutPlans → Editar → WorkoutDay → botão lápis no exercício → ajustar nome/carga/séries/reps/descanso → salvar alterações
-3. **Trocar ficha ativa:** WorkoutPlans → switch ligado → clicar na ficha desejada
-4. **Ver detalhes:** WorkoutPlans → clicar na ficha → modal com treinos e exercícios → opção de ativar
-5. **Vencimento:** Home detecta ficha vencida → alerta "Sua ficha venceu" → modal para renovar ou dispensar
+3. **Descartar edição no modal:** tocar fora do modal ou botão Cancelar fecha sem salvar
+4. **Trocar ficha ativa:** WorkoutPlans → switch ligado → clicar na ficha desejada
+5. **Ver detalhes:** WorkoutPlans → clicar na ficha → modal com treinos e exercícios → opção de ativar
+6. **Vencimento:** Home detecta ficha vencida → alerta "Sua ficha venceu" → modal para renovar ou dispensar
