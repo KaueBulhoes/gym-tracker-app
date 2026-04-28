@@ -70,13 +70,27 @@ export const profileUpdateToRow = (
   data: Partial<ProfileData>,
 ): Record<string, unknown> => {
   const row: Record<string, unknown> = {};
-  if (data.firstName !== undefined) { row.first_name = data.firstName; }
-  if (data.lastName !== undefined) { row.last_name = data.lastName; }
-  if (data.birthDate !== undefined) { row.birth_date = brDateToIso(data.birthDate); }
-  if (data.heightCm !== undefined) { row.height_cm = data.heightCm; }
-  if (data.weightKg !== undefined) { row.weight_kg = data.weightKg; }
-  if (data.weeklyGoal !== undefined) { row.weekly_goal = data.weeklyGoal; }
-  if (data.fitnessGoals !== undefined) { row.fitness_goals = data.fitnessGoals; }
+  if (data.firstName !== undefined) {
+    row.first_name = data.firstName;
+  }
+  if (data.lastName !== undefined) {
+    row.last_name = data.lastName;
+  }
+  if (data.birthDate !== undefined) {
+    row.birth_date = brDateToIso(data.birthDate);
+  }
+  if (data.heightCm !== undefined) {
+    row.height_cm = data.heightCm;
+  }
+  if (data.weightKg !== undefined) {
+    row.weight_kg = data.weightKg;
+  }
+  if (data.weeklyGoal !== undefined) {
+    row.weekly_goal = data.weeklyGoal;
+  }
+  if (data.fitnessGoals !== undefined) {
+    row.fitness_goals = data.fitnessGoals;
+  }
   return row;
 };
 
@@ -104,21 +118,68 @@ const rowToRepScheme = (row: RepSchemeRow): RepScheme => ({
   reps: row.reps,
 });
 
+const LOAD_TOKEN_REGEX = /^\[load_kg:([0-9]+(?:[.,][0-9]+)?)\]\s*/i;
+
+const decodeExerciseNotes = (
+  rawNotes: string | null,
+): {
+  notes: string | undefined;
+  loadKg: string | undefined;
+} => {
+  if (!rawNotes) {
+    return { notes: undefined, loadKg: undefined };
+  }
+
+  const match = rawNotes.match(LOAD_TOKEN_REGEX);
+  if (!match) {
+    return { notes: rawNotes, loadKg: undefined };
+  }
+
+  const withoutToken = rawNotes.replace(LOAD_TOKEN_REGEX, '').trim();
+  return {
+    notes: withoutToken || undefined,
+    loadKg: match[1].replace(',', '.'),
+  };
+};
+
+const encodeExerciseNotes = (
+  notes: string | undefined,
+  loadKg: string | undefined,
+): string | null => {
+  const normalizedNotes = notes?.trim();
+  const normalizedLoad = loadKg?.trim().replace(',', '.');
+
+  if (normalizedLoad) {
+    const withToken = `[load_kg:${normalizedLoad}]${
+      normalizedNotes ? ` ${normalizedNotes}` : ''
+    }`;
+    return withToken;
+  }
+
+  return normalizedNotes || null;
+};
+
 const rowToExercise = (
   row: ExerciseRow & { exercise_rep_schemes: RepSchemeRow[] },
-): Exercise => ({
-  id: row.id,
-  name: row.name,
-  sets: row.sets,
-  reps: row.reps,
-  fixedReps: row.fixed_reps,
-  repSchemes: row.exercise_rep_schemes
-    .sort((a, b) => a.sort_order - b.sort_order)
-    .map(rowToRepScheme),
-  restSeconds: row.rest_seconds != null ? String(row.rest_seconds) : undefined,
-  notes: row.notes ?? undefined,
-  conjugatedId: row.conjugated_id ?? undefined,
-});
+): Exercise => {
+  const parsed = decodeExerciseNotes(row.notes);
+
+  return {
+    id: row.id,
+    name: row.name,
+    loadKg: parsed.loadKg,
+    sets: row.sets,
+    reps: row.reps,
+    fixedReps: row.fixed_reps,
+    repSchemes: row.exercise_rep_schemes
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map(rowToRepScheme),
+    restSeconds:
+      row.rest_seconds != null ? String(row.rest_seconds) : undefined,
+    notes: parsed.notes,
+    conjugatedId: row.conjugated_id ?? undefined,
+  };
+};
 
 const rowToDay = (row: DayRowWithNested): WorkoutDay => ({
   name: row.day_name,
@@ -168,7 +229,9 @@ export const dayToRow = (
   day_name: day.name,
   description: day.description ?? null,
   default_rest: day.defaultRest,
-  default_rest_seconds: day.defaultRestSeconds ? Number(day.defaultRestSeconds) : 90,
+  default_rest_seconds: day.defaultRestSeconds
+    ? Number(day.defaultRestSeconds)
+    : 90,
   sort_order: sortOrder,
 });
 
@@ -183,7 +246,7 @@ export const exerciseToRow = (
   reps: exercise.reps,
   fixed_reps: exercise.fixedReps,
   rest_seconds: exercise.restSeconds ? Number(exercise.restSeconds) : null,
-  notes: exercise.notes ?? null,
+  notes: encodeExerciseNotes(exercise.notes, exercise.loadKg),
   sort_order: sortOrder,
 });
 
@@ -252,7 +315,7 @@ export const rowToSession = (
     startedAt: row.started_at,
     finishedAt: row.finished_at,
     durationSeconds: row.duration_seconds,
-    exerciseWeights: row.workout_session_weights.map((w) => ({
+    exerciseWeights: row.workout_session_weights.map(w => ({
       exerciseId: w.id,
       exerciseName: w.exercise_name,
       uniform: w.uniform,

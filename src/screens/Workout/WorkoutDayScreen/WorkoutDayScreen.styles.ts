@@ -308,7 +308,6 @@ export const SchemeActionButton = styled.Pressable<{
     $variant === 'add' ? theme.colors.primary : theme.colors.neutral500};
 `;
 
-
 /* Conjugated connector */
 
 export const ConjugatedRail = styled.View`

@@ -6,6 +6,7 @@ export type RepScheme = {
 export type Exercise = {
   id: string;
   name: string;
+  loadKg?: string;
   sets: string;
   reps: string;
   fixedReps: boolean;

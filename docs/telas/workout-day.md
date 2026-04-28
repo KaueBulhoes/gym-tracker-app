@@ -1,7 +1,7 @@
 # Tela: Dia do Treino
 
 **Arquivo:** `src/screens/Workout/WorkoutDayScreen/WorkoutDayScreen.tsx`
-**Data:** 2026-04-11
+**Data:** 2026-04-28
 
 ## O que o usuário faz
 
@@ -12,6 +12,8 @@ Configura os exercícios de um dia específico do plano de treino. Todas as alte
 - Alternar entre repetições fixas e personalizadas (drop set) com múltiplos blocos séries/reps
 - Marcar exercícios como conjugados (dois exercícios vinculados)
 - Definir descanso individual por exercício (quando descanso padrão está desativado)
+- Editar exercício existente por botão dedicado no card (ícone de lápis)
+- Editar carga (kg) por exercício dentro do modal
 - Remover exercícios da lista
 
 ## Dados e integrações
@@ -25,7 +27,8 @@ Configura os exercícios de um dia específico do plano de treino. Todas as alte
 ## Componentes usados
 
 - `ToggleSection` — seção de descanso padrão com Switch e input de segundos
-- `ExerciseCard` — card de exercício com nome, meta (séries x reps), tags e notas
+- `ExerciseCard` — card de exercício com nome, meta (séries x reps + carga), tags e notas
+- Ações do card — botões de editar (lápis) e excluir (lixeira vermelha)
 - `ConjugatedRail/HookTop/HookBottom` — conector visual bracket entre exercícios conjugados
 - `ExerciseTag` — badges "drop set" (amarelo) e "conjugado" (roxo)
 - Dialog modal — form completo para adicionar exercício ou conjugado

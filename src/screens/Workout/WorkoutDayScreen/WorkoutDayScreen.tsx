@@ -67,6 +67,12 @@ type RepSchemeInput = {
 type DialogMode = 'none' | 'main' | 'conjugated';
 
 const numericOnly = (text: string) => text.replace(/[^0-9]/g, '');
+const weightInputOnly = (text: string) => {
+    const normalized = text.replace(',', '.').replace(/[^0-9.]/g, '');
+    const [integerPart = '', ...decimals] = normalized.split('.');
+    const decimalPart = decimals.join('');
+    return decimalPart ? `${integerPart}.${decimalPart.slice(0, 2)}` : integerPart;
+};
 
 const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }) => {
     const { colors } = useTheme();
@@ -97,6 +103,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
     const [inputName, setInputName] = useState('');
     const [inputSets, setInputSets] = useState('');
     const [inputReps, setInputReps] = useState('');
+    const [inputLoad, setInputLoad] = useState('');
     const [inputRest, setInputRest] = useState('');
     const [inputNotes, setInputNotes] = useState('');
     const [inputFixedReps, setInputFixedReps] = useState(true);
@@ -104,6 +111,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
     const [inputRepSchemes, setInputRepSchemes] = useState<RepSchemeInput[]>([
         { id: String(Date.now()), sets: '', reps: '' },
     ]);
+    const [editingExerciseId, setEditingExerciseId] = useState<string | null>(null);
 
     const buildEmptyScheme = (suffix?: string): RepSchemeInput => ({
         id: `${Date.now()}-${suffix ?? '0'}`,
@@ -115,11 +123,13 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
         setInputName('');
         setInputSets('');
         setInputReps('');
+        setInputLoad('');
         setInputRest('');
         setInputNotes('');
         setInputFixedReps(true);
         setInputIsConjugated(false);
         setInputRepSchemes([buildEmptyScheme()]);
+        setEditingExerciseId(null);
     };
 
     const openMainDialog = () => {
@@ -131,6 +141,33 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
         setDialogMode('none');
         setPendingExercise(null);
         resetInputs();
+    };
+
+    const openEditDialog = (exercise: Exercise) => {
+        setEditingExerciseId(exercise.id);
+        setDialogMode('main');
+        setPendingExercise(null);
+        setInputName(exercise.name);
+        setInputLoad(exercise.loadKg ?? '');
+        setInputSets(exercise.sets);
+        setInputReps(exercise.reps);
+        setInputRest(exercise.restSeconds ?? '');
+        setInputNotes(exercise.notes ?? '');
+        setInputIsConjugated(Boolean(exercise.conjugatedId));
+        setInputFixedReps(exercise.fixedReps);
+        if (exercise.fixedReps) {
+            setInputRepSchemes([buildEmptyScheme()]);
+            return;
+        }
+
+        const repSchemes = (exercise.repSchemes ?? []).length > 0
+            ? (exercise.repSchemes ?? []).map((scheme, index) => ({
+                id: `${exercise.id}-${index}`,
+                sets: scheme.sets,
+                reps: scheme.reps,
+            }))
+            : [{ id: `${exercise.id}-0`, sets: exercise.sets, reps: exercise.reps }];
+        setInputRepSchemes(repSchemes);
     };
 
     const updateRepScheme = (id: string, key: 'sets' | 'reps', value: string) => {
@@ -156,6 +193,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
             return {
                 id,
                 name: inputName.trim(),
+                loadKg: inputLoad.trim() || undefined,
                 sets: inputSets.trim(),
                 reps: inputReps.trim(),
                 fixedReps: true,
@@ -170,6 +208,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
         return {
             id,
             name: inputName.trim(),
+            loadKg: inputLoad.trim() || undefined,
             sets: first.sets,
             reps: first.reps,
             fixedReps: false,
@@ -231,9 +270,36 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
         }));
     };
 
+    const updateExercise = (id: string, updater: (exercise: Exercise) => Exercise) => {
+        updateDraftDay(day, d => ({
+            ...d,
+            exercises: d.exercises.map(exercise =>
+                exercise.id === id ? updater(exercise) : exercise,
+            ),
+        }));
+    };
+
+    const isEditingExercise = editingExerciseId !== null;
     const isDialogOpen = dialogMode !== 'none';
     const isConjugatedDialog = dialogMode === 'conjugated';
     const handleConfirm = isConjugatedDialog ? handleConjugatedConfirm : handleMainConfirm;
+
+    const handleMainConfirmWithEdit = () => {
+        if (isEditingExercise) {
+            if (!hasRequiredFields) {
+                return;
+            }
+
+            updateExercise(isEditingExercise, current => ({
+                ...buildExercise(current.id),
+                conjugatedId: current.conjugatedId,
+            }));
+            closeDialog();
+            return;
+        }
+
+        handleMainConfirm();
+    };
 
     return (
         <Container>
@@ -320,13 +386,23 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                             />
                                             <ExerciseName>{exercise.name}</ExerciseName>
                                             <DeleteButton
+                                                onPress={() => openEditDialog(exercise)}
+                                                accessibilityLabel={`Editar ${exercise.name}`}
+                                            >
+                                                <MaterialCommunityIcons
+                                                    name="pencil-outline"
+                                                    size={spacing.iconSize.sm}
+                                                    color={colors.secondary}
+                                                />
+                                            </DeleteButton>
+                                            <DeleteButton
                                                 onPress={() => removeExercise(exercise.id)}
                                                 accessibilityLabel={`Remover ${exercise.name}`}
                                             >
                                                 <MaterialCommunityIcons
                                                     name="trash-can-outline"
                                                     size={spacing.iconSize.sm}
-                                                    color={colors.neutral400}
+                                                    color={colors.error}
                                                 />
                                             </DeleteButton>
                                         </ExerciseCardRow>
@@ -334,6 +410,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                         <ExerciseMetaRow>
                                             <ExerciseMeta>
                                                 {schemeLabel}
+                                                {exercise.loadKg ? ` · ${exercise.loadKg}kg` : ''}
                                                 {exercise.restSeconds ? ` · ${exercise.restSeconds}s descanso` : ''}
                                             </ExerciseMeta>
                                             <ExerciseTagsRow>
@@ -378,6 +455,16 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                         value={inputName}
                                         onChangeText={setInputName}
                                         accessibilityLabel="Nome do exercicio"
+                                    />
+
+                                    <DialogInput
+                                        placeholder="Carga (kg)"
+                                        placeholderTextColor={colors.neutral400}
+                                        value={inputLoad}
+                                        onChangeText={text => setInputLoad(weightInputOnly(text))}
+                                        keyboardType="decimal-pad"
+                                        maxLength={6}
+                                        accessibilityLabel="Carga em quilos"
                                     />
 
                                     {inputFixedReps ? (
@@ -508,6 +595,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                             <Switch
                                                 value={inputIsConjugated}
                                                 onValueChange={setInputIsConjugated}
+                                                disabled={isEditingExercise}
                                                 trackColor={{ false: colors.neutral500, true: colors.secondaryLight }}
                                                 thumbColor={inputIsConjugated ? colors.secondary : colors.neutral300}
                                                 accessibilityLabel="Conjugado com outro exercicio"
@@ -519,9 +607,14 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                         <CancelButton onPress={closeDialog} accessibilityLabel="Cancelar">
                                             <CancelButtonText>Cancelar</CancelButtonText>
                                         </CancelButton>
-                                        <ConfirmButton onPress={handleConfirm} accessibilityLabel="Confirmar">
+                                        <ConfirmButton
+                                            onPress={isConjugatedDialog ? handleConfirm : handleMainConfirmWithEdit}
+                                            accessibilityLabel="Confirmar"
+                                        >
                                             <ConfirmButtonText>
-                                                {inputIsConjugated && !isConjugatedDialog ? 'Proximo' : 'Adicionar'}
+                                                {isEditingExercise
+                                                    ? 'Salvar alteracoes'
+                                                    : (inputIsConjugated && !isConjugatedDialog ? 'Proximo' : 'Adicionar')}
                                             </ConfirmButtonText>
                                         </ConfirmButton>
                                     </DialogRow>

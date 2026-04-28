@@ -6,6 +6,10 @@
 
 Exercícios configurados em cada dia de treino. Guarda séries, repetições, descanso individual e notas.
 
+Observação de implementação atual:
+- A carga do exercício em kg (`Exercise.loadKg`) é persistida no campo `notes` com token interno no formato `[load_kg:VALOR]`.
+- O mapper remove/adiciona esse token automaticamente para exibir apenas a observação limpa na UI.
+
 ## Colunas
 
 | Coluna | Tipo | Nullable | Default | Descrição |
@@ -48,4 +52,5 @@ Exercícios configurados em cada dia de treino. Guarda séries, repetições, de
 | `fixed_reps` | `Exercise.fixedReps` | `src/types/workout.ts` |
 | `rest_seconds` | `Exercise.restSeconds` | `src/types/workout.ts` |
 | `notes` | `Exercise.notes` | `src/types/workout.ts` |
+| `notes` (token interno `[load_kg]`) | `Exercise.loadKg` | `src/types/workout.ts` |
 | `conjugated_id` | `Exercise.conjugatedId` | `src/types/workout.ts` |
