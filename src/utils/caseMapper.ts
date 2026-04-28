@@ -4,12 +4,14 @@ import type {
   ExerciseWeight,
   RepScheme,
   WorkoutDay,
+  WorkoutFeedback,
   WorkoutPlan,
   WorkoutSession,
 } from '../types/workout';
 import type {
   DayRow,
   ExerciseRow,
+  FeedbackRow,
   ProfileRow,
   RepSchemeRow,
   SessionRow,
@@ -220,19 +222,42 @@ export const weightToRow = (
   weights: weight.weights,
 });
 
-export const rowToSession = (
-  row: SessionRow & { workout_session_weights: WeightRow[] },
-): WorkoutSession => ({
-  id: row.id,
-  planId: row.plan_id,
-  dayName: row.day_name,
-  startedAt: row.started_at,
-  finishedAt: row.finished_at,
-  durationSeconds: row.duration_seconds,
-  exerciseWeights: row.workout_session_weights.map((w) => ({
-    exerciseId: w.id,
-    exerciseName: w.exercise_name,
-    uniform: w.uniform,
-    weights: w.weights,
-  })),
+export const feedbackToRow = (
+  feedback: WorkoutFeedback,
+  sessionId: string,
+): Omit<FeedbackRow, 'id' | 'created_at'> => ({
+  session_id: sessionId,
+  intensity: feedback.intensity,
+  difficult_exercises: feedback.difficultExercises,
+  comment: feedback.comment,
 });
+
+const rowToFeedback = (row: FeedbackRow): WorkoutFeedback => ({
+  intensity: row.intensity,
+  difficultExercises: row.difficult_exercises ?? [],
+  comment: row.comment,
+});
+
+export const rowToSession = (
+  row: SessionRow & {
+    workout_session_weights: WeightRow[];
+    workout_session_feedback: FeedbackRow[];
+  },
+): WorkoutSession => {
+  const feedbackRow = row.workout_session_feedback?.[0];
+  return {
+    id: row.id,
+    planId: row.plan_id,
+    dayName: row.day_name,
+    startedAt: row.started_at,
+    finishedAt: row.finished_at,
+    durationSeconds: row.duration_seconds,
+    exerciseWeights: row.workout_session_weights.map((w) => ({
+      exerciseId: w.id,
+      exerciseName: w.exercise_name,
+      uniform: w.uniform,
+      weights: w.weights,
+    })),
+    feedback: feedbackRow ? rowToFeedback(feedbackRow) : null,
+  };
+};

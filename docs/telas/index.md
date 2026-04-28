@@ -23,7 +23,8 @@ App
     ├── AddWorkoutPlan → AddWorkoutExercises
     ├── AddWorkoutExercises → WorkoutDay
     ├── WorkoutDay
-    ├── ActiveWorkout → Home (ao finalizar)
+    ├── ActiveWorkout → WorkoutFeedback (ao finalizar)
+    ├── WorkoutFeedback → Home (após salvar feedback)
     └── Statistics
 ```
 
@@ -40,7 +41,8 @@ App
 | [Adicionar Plano](add-workout-plan.md) | `src/screens/Workout/AddWorkoutPlanScreen/` | workoutStore.startDraft | — |
 | [Adicionar Exercícios](add-workout-exercises.md) | `src/screens/Workout/AddWorkoutExercisesScreen/` | workoutStore.saveDraft | workout_plans, workout_plan_days, workout_plan_exercises |
 | [Dia do Treino](workout-day.md) | `src/screens/Workout/WorkoutDayScreen/` | workoutStore.updateDraftDay | — |
-| [Treino Ativo](active-workout.md) | `src/screens/Workout/ActiveWorkoutScreen/` | workoutStore.finishWorkout | workout_sessions, workout_session_weights |
+| [Treino Ativo](active-workout.md) | `src/screens/Workout/ActiveWorkoutScreen/` | workoutStore.pauseActiveWorkout | workout_sessions, workout_session_weights |
+| [Feedback do Treino](workout-feedback.md) | `src/screens/Workout/WorkoutFeedbackScreen/` | workoutStore.finishWorkout | workout_sessions, workout_session_weights, workout_session_feedback |
 | [Onboarding](onboarding.md) | `src/screens/Onboarding/OnboardingScreen/` | profileStore.saveProfile | profiles |
 | [Configurações](settings.md) | `src/screens/Settings/SettingsScreen/` | profileStore, authStore | profiles, auth.users |
 | [Estatísticas](statistics.md) | `src/screens/Statistics/StatisticsScreen/` | workoutStore, profileStore, useHomeStats | — (client-side) |

@@ -42,6 +42,14 @@ export type ExerciseWeight = {
   weights: string[];
 };
 
+export type WorkoutIntensity = 'light' | 'moderate' | 'intense';
+
+export type WorkoutFeedback = {
+  intensity: WorkoutIntensity;
+  difficultExercises: string[];
+  comment: string | null;
+};
+
 export type WorkoutSession = {
   id: string;
   planId: string;
@@ -50,6 +58,7 @@ export type WorkoutSession = {
   finishedAt: string;
   durationSeconds: number;
   exerciseWeights: ExerciseWeight[];
+  feedback: WorkoutFeedback | null;
 };
 
 export type ActiveWorkout = {

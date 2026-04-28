@@ -77,3 +77,12 @@ export type WeightRow = {
   weights: string[];
   created_at: string;
 };
+
+export type FeedbackRow = {
+  id: string;
+  session_id: string;
+  intensity: 'light' | 'moderate' | 'intense';
+  difficult_exercises: string[];
+  comment: string | null;
+  created_at: string;
+};

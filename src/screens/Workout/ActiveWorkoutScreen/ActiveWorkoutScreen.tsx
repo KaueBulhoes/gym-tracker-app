@@ -162,7 +162,6 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
     const plans = useWorkoutStore(state => state.plans);
     const sessions = useWorkoutStore(state => state.sessions);
     const activeWorkout = useWorkoutStore(state => state.activeWorkout);
-    const finishWorkout = useWorkoutStore(state => state.finishWorkout);
     const ensureActiveWorkout = useWorkoutStore(state => state.ensureActiveWorkout);
     const toggleActiveSet = useWorkoutStore(state => state.toggleActiveSet);
     const toggleActiveExercise = useWorkoutStore(state => state.toggleActiveExercise);
@@ -460,25 +459,12 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         });
     };
 
-    const [isSaving, setIsSaving] = useState(false);
-
-    const handleFinish = async () => {
-        if (isSaving || !activeWorkout) { return; }
-        setIsSaving(true);
-        const success = await finishWorkout({
-            id: String(Date.now()),
-            planId: activeWorkout.planId,
-            dayName: activeWorkout.dayName,
-            startedAt: activeWorkout.startedAt,
-            finishedAt: new Date().toISOString(),
-            durationSeconds: activeWorkout.elapsedSeconds,
-            exerciseWeights: Object.values(activeWorkout.exerciseWeights),
-        });
-        if (success) {
-            navigation.navigate('Home');
-        } else {
-            setIsSaving(false);
+    const handleFinish = () => {
+        if (!activeWorkout) { return; }
+        if (!activeWorkout.isPaused) {
+            pauseActiveWorkout();
         }
+        navigation.navigate('WorkoutFeedback');
     };
 
     const handlePauseResume = () => {
@@ -644,13 +630,9 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
                 <BottomControlButton
                     onPress={handleFinish}
                     $variant="primary"
-                    $disabled={isSaving}
-                    disabled={isSaving}
                     accessibilityLabel="Finalizar treino"
                 >
-                    <BottomControlText $variant="primary">
-                        {isSaving ? 'Salvando...' : 'Finalizar'}
-                    </BottomControlText>
+                    <BottomControlText $variant="primary">Finalizar</BottomControlText>
                 </BottomControlButton>
 
                 <BottomControlButton

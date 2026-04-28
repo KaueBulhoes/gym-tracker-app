@@ -32,9 +32,9 @@
 - **Usada em:** [AddWorkoutExercisesScreen](../telas/add-workout-exercises.md)
 
 ### `finishWorkout(session): Promise<boolean>`
-- **O que faz:** Salva sessão de treino e cargas no Supabase, atualiza `lastCompleted`
+- **O que faz:** Salva sessão de treino + cargas + feedback no Supabase, atualiza `lastCompleted`. Aceita `session.feedback` opcional (intensidade, exercícios com dificuldade, comentário)
 - **Service:** [workoutService](workout-service.md).saveSession()
-- **Usada em:** [ActiveWorkoutScreen](../telas/active-workout.md)
+- **Usada em:** [WorkoutFeedbackScreen](../telas/workout-feedback.md) (a [ActiveWorkoutScreen](../telas/active-workout.md) apenas pausa o cronômetro e navega — quem chama `finishWorkout` é a tela de feedback)
 
 ## Ações Sync (local)
 

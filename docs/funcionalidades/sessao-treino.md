@@ -25,8 +25,10 @@ O progresso do treino ativo é persistido localmente para evitar perda ao sair d
 Home (botão Começar ou accordion) → ActiveWorkout (novo ou retomado)
 ActiveWorkout → Pausar/Retomar (mantém progresso)
 ActiveWorkout → Cancelar (descarta progresso, sem salvar sessão)
-ActiveWorkout → Finalizar (salva sessão) → Home
+ActiveWorkout → Finalizar (pausa cronômetro) → WorkoutFeedback → Home
 ```
+
+A finalização é um fluxo de duas telas: o botão Finalizar pausa o cronômetro e navega para [Feedback do Treino](feedback-treino.md), onde a sessão é efetivamente salva (sessão + cargas + feedback numa única operação).
 
 ## Dados salvos por sessão
 

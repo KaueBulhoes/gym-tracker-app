@@ -2,6 +2,7 @@ import type { WorkoutPlan, WorkoutSession } from '../types/workout';
 import {
   dayToRow,
   exerciseToRow,
+  feedbackToRow,
   repSchemeToRow,
   rowToPlan,
   rowToSession,
@@ -213,7 +214,7 @@ export const workoutService = {
 
     const { data, error } = await supabase
       .from('workout_sessions')
-      .select('*, workout_session_weights (*)')
+      .select('*, workout_session_weights (*), workout_session_feedback (*)')
       .eq('user_id', userId)
       .order('finished_at', { ascending: false });
 
@@ -461,10 +462,21 @@ export const workoutService = {
       }
     }
 
-    // 3. Re-fetch to return consistent data
+    // 3. Insert feedback (optional)
+    if (session.feedback) {
+      const { error: feedbackError } = await supabase
+        .from('workout_session_feedback')
+        .insert(feedbackToRow(session.feedback, sessionId));
+
+      if (feedbackError) {
+        throw mapDatabaseError(feedbackError);
+      }
+    }
+
+    // 4. Re-fetch to return consistent data
     const { data: fullSession, error: fetchError } = await supabase
       .from('workout_sessions')
-      .select('*, workout_session_weights (*)')
+      .select('*, workout_session_weights (*), workout_session_feedback (*)')
       .eq('id', sessionId)
       .single();
 

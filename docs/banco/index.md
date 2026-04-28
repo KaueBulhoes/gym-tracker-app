@@ -12,7 +12,8 @@ auth.users
 │       └── workout_plan_exercises (1:N)
 │           └── exercise_rep_schemes (1:N) — para drop sets
 └── workout_sessions (1:N)
-    └── workout_session_weights (1:N)
+    ├── workout_session_weights (1:N)
+    └── workout_session_feedback (1:1)
 ```
 
 ## Tabelas
@@ -26,6 +27,7 @@ auth.users
 | [exercise_rep_schemes](exercise-rep-schemes.md) | Blocos de séries/reps (drop sets) | A criar | workoutService (a criar) | — |
 | [workout_sessions](workout-sessions.md) | Sessões de treino finalizadas | A criar | workoutService (a criar) | [sessão de treino](../funcionalidades/sessao-treino.md) |
 | [workout_session_weights](workout-session-weights.md) | Cargas por exercício por sessão | A criar | workoutService (a criar) | — |
+| [workout_session_feedback](workout-session-feedback.md) | Feedback da sessão (intensidade, exercícios difíceis, comentário) | Integrada | workoutService | [feedback de treino](../funcionalidades/feedback-treino.md) |
 
 ## RLS (Row Level Security)
 

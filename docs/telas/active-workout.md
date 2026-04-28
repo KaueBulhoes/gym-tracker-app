@@ -13,7 +13,7 @@ Executa um treino em tempo real. Vê o cronômetro total do treino (hh:mm:ss) no
 - Registrar a carga (botão "Carga" com modal, toggle para cargas diferentes por série)
 - Pausar e retomar o treino (botão ao lado do cronômetro)
 - Cancelar o treino em andamento sem salvar sessão
-- Finalizar o treino, salvando duração e cargas no store
+- Finalizar o treino — pausa o cronômetro e navega para a [tela de Feedback](workout-feedback.md), onde a sessão é efetivamente salva
 
 ## Persistência de progresso
 
@@ -29,8 +29,7 @@ Executa um treino em tempo real. Vê o cronômetro total do treino (hh:mm:ss) no
 | `route.params.dayName`                | Param | Nome do dia (ex: "Treino A")                               |
 | `useWorkoutStore.plans`               | Store | Lê exercícios do dia a partir do plano salvo               |
 | `useWorkoutStore.activeWorkout`       | Store | Estado do treino ativo (tempo, séries concluídas e cargas) |
-| `useWorkoutStore.finishWorkout`       | Store | Salva a sessão com duração e cargas                        |
-| `useWorkoutStore.pauseActiveWorkout`  | Store | Pausa o cronômetro do treino ativo                         |
+| `useWorkoutStore.pauseActiveWorkout`  | Store | Pausa o cronômetro ao clicar Finalizar (salvamento ocorre na tela de Feedback) |
 | `useWorkoutStore.resumeActiveWorkout` | Store | Retoma o cronômetro do treino ativo                        |
 | `useWorkoutStore.cancelActiveWorkout` | Store | Descarta treino ativo sem salvar sessão                    |
 
@@ -48,4 +47,4 @@ Executa um treino em tempo real. Vê o cronômetro total do treino (hh:mm:ss) no
 ## Navegação
 
 - **Vem de:** [Home](home.md) (botão "Começar" no rodapé ou dentro do accordion; retoma treino ativo quando existir)
-- **Vai para:** [Home](home.md) (ao finalizar treino)
+- **Vai para:** [Feedback do Treino](workout-feedback.md) (ao clicar Finalizar — cronômetro fica pausado, salvamento acontece lá)

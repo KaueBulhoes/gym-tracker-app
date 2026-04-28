@@ -23,8 +23,8 @@
 - **Usada em:** [workoutStore](workout-store.md) (`saveDraft`)
 
 ### `getSessions(): Promise<WorkoutSession[]>`
-- **O que faz:** Busca todas as sessões de treino do usuário com cargas
-- **Tabelas:** `workout_sessions`, `workout_session_weights` (SELECT com nested select)
+- **O que faz:** Busca todas as sessões de treino do usuário com cargas e feedback
+- **Tabelas:** `workout_sessions`, `workout_session_weights`, `workout_session_feedback` (SELECT com nested select)
 - **Usada em:** [workoutStore](workout-store.md) (`loadSessions`)
 
 ### `setActivePlan(planId: string): Promise<WorkoutPlan[]>`
@@ -43,9 +43,14 @@
 - **Usada em:** [workoutStore](workout-store.md) (`dismissExpiry`)
 
 ### `saveSession(session: WorkoutSession): Promise<WorkoutSession>`
-- **O que faz:** Salva uma sessão de treino finalizada com as cargas de cada exercício
-- **Tabelas:** `workout_sessions` (INSERT), `workout_session_weights` (INSERT)
-- **Usada em:** [workoutStore](workout-store.md) (`finishWorkout`)
+- **O que faz:** Salva uma sessão de treino finalizada com cargas e feedback opcional
+- **Tabelas:** `workout_sessions` (INSERT), `workout_session_weights` (INSERT), `workout_session_feedback` (INSERT — quando `session.feedback` está presente)
+- **Fluxo:**
+  1. INSERT session → UUID
+  2. INSERT weights vinculados ao session_id
+  3. INSERT feedback vinculado ao session_id (apenas se `session.feedback != null`)
+  4. Re-fetch da sessão com weights + feedback aninhados
+- **Usada em:** [workoutStore](workout-store.md) (`finishWorkout`), invocada a partir de [WorkoutFeedbackScreen](../telas/workout-feedback.md)
 
 ## Regras de negócio
 

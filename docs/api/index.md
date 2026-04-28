@@ -9,7 +9,7 @@ Registro de todos os services e integração com Supabase.
 | [Supabase Client](supabase-client.md) | `src/services/supabase.ts` | RootNavigator, todos os services | Todas |
 | [Auth Service](auth-service.md) | `src/services/authService.ts` | authStore | auth.users |
 | [Profile Service](profile-service.md) | `src/services/profileService.ts` | profileStore | profiles |
-| [Workout Service](workout-service.md) | `src/services/workoutService.ts` | workoutStore | workout_plans, workout_plan_days, workout_plan_exercises, exercise_rep_schemes, workout_sessions, workout_session_weights |
+| [Workout Service](workout-service.md) | `src/services/workoutService.ts` | workoutStore | workout_plans, workout_plan_days, workout_plan_exercises, exercise_rep_schemes, workout_sessions, workout_session_weights, workout_session_feedback |
 | [Case Mapper](case-mapper.md) | `src/utils/caseMapper.ts` | profileService, workoutService | — |
 
 ## Stores
@@ -34,3 +34,4 @@ Documentação detalhada de cada tabela em [docs/banco/](../banco/index.md).
 | [exercise_rep_schemes](../banco/exercise-rep-schemes.md) | Integrada | workoutService | Blocos de reps (drop sets) |
 | [workout_sessions](../banco/workout-sessions.md) | Integrada | workoutService | Sessões de treino finalizadas |
 | [workout_session_weights](../banco/workout-session-weights.md) | Integrada | workoutService | Cargas por exercício por sessão |
+| [workout_session_feedback](../banco/workout-session-feedback.md) | Integrada | workoutService | Feedback da sessão (intensidade, exercícios difíceis, comentário) |
