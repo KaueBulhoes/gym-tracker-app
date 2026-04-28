@@ -49,7 +49,10 @@ import {
   ConjugatedRail,
   ConjugatedSpacer,
   WorkoutDetail,
+  WorkoutDetailColumns,
+  WorkoutDetailName,
   WorkoutDetailRow,
+  WorkoutDetailScheme,
   WorkoutDetailText,
   WorkoutIconContainer,
   WorkoutList,
@@ -371,8 +374,8 @@ const HomeScreen: React.FC = () => {
                         <WorkoutAccordionBody>
                           {day.exercises.map((exercise, exIdx) => {
                             const schemeLabel = exercise.fixedReps
-                              ? `${exercise.sets}x${exercise.reps}`
-                              : (exercise.repSchemes ?? []).map(s => `${s.sets}x${s.reps}`).join(' + ');
+                              ? `${exercise.sets} x ${exercise.reps}`
+                              : (exercise.repSchemes ?? []).map(s => `${s.sets} x ${s.reps}`).join(' + ');
                             const isConjugatedFirst = Boolean(exercise.conjugatedId);
                             const isConjugatedSecond =
                               exIdx > 0 && day.exercises[exIdx - 1]?.conjugatedId === exercise.id;
@@ -398,9 +401,12 @@ const HomeScreen: React.FC = () => {
                                     size={16}
                                     color={colors.textSecondary}
                                   />
-                                  <WorkoutDetailText>
-                                    {exercise.name} — {schemeLabel}
-                                  </WorkoutDetailText>
+                                  <WorkoutDetailColumns>
+                                    <WorkoutDetailName numberOfLines={1}>
+                                      {exercise.name}
+                                    </WorkoutDetailName>
+                                    <WorkoutDetailScheme>Séries: {schemeLabel}</WorkoutDetailScheme>
+                                  </WorkoutDetailColumns>
                                 </WorkoutDetail>
                               </WorkoutDetailRow>
                             );

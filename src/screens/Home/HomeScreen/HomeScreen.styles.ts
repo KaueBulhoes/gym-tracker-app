@@ -280,6 +280,27 @@ export const WorkoutDetail = styled.View`
   gap: ${spacing.xs}px;
 `;
 
+export const WorkoutDetailColumns = styled.View`
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${spacing.sm}px;
+`;
+
+export const WorkoutDetailName = styled.Text`
+  flex-shrink: 1;
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.caption.fontWeight};
+  color: ${({ theme }) => theme.colors.textSecondary};
+`;
+
+export const WorkoutDetailScheme = styled.Text`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.caption.fontWeight};
+  color: ${({ theme }) => theme.colors.textSecondary};
+`;
+
 export const ConjugatedRail = styled.View`
   width: 14px;
   margin-right: ${spacing.xs}px;
