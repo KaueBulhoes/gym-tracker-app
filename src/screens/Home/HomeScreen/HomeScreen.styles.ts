@@ -98,7 +98,9 @@ export const MetricCard = styled.View`
   border-width: 1px;
   border-color: ${({ theme }) => theme.colors.neutral600};
   padding: ${spacing.md}px;
+  min-height: 64px;
   align-items: center;
+  justify-content: center;
   gap: ${spacing.xxs}px;
 `;
 
@@ -112,8 +114,6 @@ export const MetricValueLarge = styled.Text`
   font-size: ${typography.numberSmall.fontSize}px;
   font-weight: ${typography.numberSmall.fontWeight};
   color: ${({ theme }) => theme.colors.text};
-  flex: 1;
-  text-align-vertical: center;
 `;
 
 export const MetricLabel = styled.Text`
