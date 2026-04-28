@@ -2,7 +2,9 @@ import React, { useMemo, useState } from 'react';
 import { StatusBar, Switch } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from 'styled-components/native';
+import WorkloadEvolutionCard from '../../../components/WorkloadEvolutionCard';
 import { useHomeStats, type HomeStatKey } from '../../../hooks/useHomeStats';
+import { useWorkloadChartPrefs } from '../../../hooks/useWorkloadChartPrefs';
 import type { StatisticsScreenProps } from '../../../navigation/types';
 import { useProfileStore } from '../../../stores/profileStore';
 import { useWorkoutStore } from '../../../stores/workoutStore';
@@ -198,11 +200,17 @@ const StatisticsScreen: React.FC<StatisticsScreenProps> = ({ navigation }) => {
   const toggle = useHomeStats(state => state.toggle);
   const loadHomeStats = useHomeStats(state => state.load);
   const homeStatsLoaded = useHomeStats(state => state.loaded);
+  const loadChartPrefs = useWorkloadChartPrefs(state => state.load);
+  const chartPrefsLoaded = useWorkloadChartPrefs(state => state.loaded);
   const [selectMode, setSelectMode] = useState(false);
 
   React.useEffect(() => {
     if (!homeStatsLoaded) { loadHomeStats(); }
   }, [homeStatsLoaded, loadHomeStats]);
+
+  React.useEffect(() => {
+    if (!chartPrefsLoaded) { loadChartPrefs(); }
+  }, [chartPrefsLoaded, loadChartPrefs]);
 
   const stats = useMemo(() => {
     const monthStart = getMonthStart();
@@ -370,7 +378,11 @@ const StatisticsScreen: React.FC<StatisticsScreenProps> = ({ navigation }) => {
                 </>
               )}
 
-              {/* Bloco 6 — Curiosidades */}
+              {/* Bloco 6 — Evolução de Carga (gráfico em paisagem) */}
+              <SectionTitle>Evolução de Carga</SectionTitle>
+              <WorkloadEvolutionCard sessions={sessions} />
+
+              {/* Bloco 7 — Curiosidades */}
               <SectionTitle>Curiosidades</SectionTitle>
               {stats.mostTrained && (
                 <CuriosityCard>
