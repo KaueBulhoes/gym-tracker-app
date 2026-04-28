@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from 'styled-components/native';
 import Button from '../../../components/Button';
 import ChipSelect from '../../../components/ChipSelect';
 import Input from '../../../components/Input';
-import { colors } from '../../../constants';
 import type { SettingsScreenProps } from '../../../navigation/types';
 import { useAuthStore } from '../../../stores/authStore';
 import { useProfileStore } from '../../../stores/profileStore';
@@ -58,6 +58,7 @@ const formatBirthDate = (text: string): string => {
 };
 
 const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
+  const { colors } = useTheme();
   const [activeTab, setActiveTab] = useState<Tab>('profile');
 
   return (
@@ -67,7 +68,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
           onPress={() => navigation.goBack()}
           accessibilityLabel="Voltar"
         >
-          <MaterialCommunityIcons name="arrow-left" size={24} color={colors.text} />
+          <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSecondary} />
         </BackButton>
         <TopBarTitle>Configurações</TopBarTitle>
       </TopBar>

@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { Modal, StatusBar, Switch, type View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from 'styled-components/native';
 import Button from '../../../components/Button';
-import { colors, spacing } from '../../../constants';
+import { spacing } from '../../../constants';
 import type { WorkoutPlansScreenProps } from '../../../navigation/types';
 import { useWorkoutStore } from '../../../stores/workoutStore';
 import type { WorkoutPlan } from '../../../types/workout';
@@ -39,6 +40,7 @@ import {
 } from './WorkoutPlansScreen.styles';
 
 const WorkoutPlansScreen: React.FC<WorkoutPlansScreenProps> = ({ navigation }) => {
+  const { colors } = useTheme();
   const plans = useWorkoutStore(state => state.plans);
   const setActivePlan = useWorkoutStore(state => state.setActivePlan);
   const loadDraftFromPlan = useWorkoutStore(state => state.loadDraftFromPlan);
@@ -78,7 +80,7 @@ const WorkoutPlansScreen: React.FC<WorkoutPlansScreenProps> = ({ navigation }) =
 
       <Header>
         <BackButton onPress={() => navigation.goBack()} accessibilityLabel="Voltar">
-          <MaterialCommunityIcons name="arrow-left" size={24} color={colors.neutral50} />
+          <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSecondary} />
         </BackButton>
         <HeaderTitle>Planos de Treino</HeaderTitle>
       </Header>

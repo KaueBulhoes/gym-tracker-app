@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from 'styled-components/native';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
-import { colors, spacing } from '../../../constants';
+import { spacing } from '../../../constants';
 import {
     BackButton,
     Container,
@@ -41,6 +42,7 @@ const PLAN_OPTIONS: { type: WorkoutPlanType; label: string; description: string 
 ];
 
 const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation }) => {
+    const { colors } = useTheme();
     const startDraft = useWorkoutStore(state => state.startDraft);
     const [planType, setPlanType] = useState<WorkoutPlanType | null>(null);
 
@@ -147,7 +149,7 @@ const AddWorkoutPlanScreen: React.FC<AddWorkoutPlanScreenProps> = ({ navigation 
 
             <Header>
                 <BackButton onPress={() => navigation.goBack()} accessibilityLabel="Voltar">
-                    <MaterialCommunityIcons name="arrow-left" size={24} color={colors.neutral50} />
+                    <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSecondary} />
                 </BackButton>
                 <HeaderTitle>Novo Plano de Treino</HeaderTitle>
             </Header>

@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import { LayoutAnimation, Modal, Platform, StatusBar, TextInput, UIManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from 'styled-components/native';
 import Button from '../../../components/Button';
 import Card from '../../../components/Card';
 import ProgressBar from '../../../components/ProgressBar';
-import { colors, spacing } from '../../../constants';
+import { spacing } from '../../../constants';
 import {
   BottomBar,
   BottomBarButton,
@@ -56,6 +57,7 @@ import {
 import { useHomeStats, type HomeStatKey } from '../../../hooks/useHomeStats';
 import { useAuthStore } from '../../../stores/authStore';
 import { useProfileStore } from '../../../stores/profileStore';
+import { useThemeStore } from '../../../stores/themeStore';
 import { useWorkoutStore } from '../../../stores/workoutStore';
 import type { AppStackParamList } from '../../../navigation/types';
 
@@ -78,6 +80,7 @@ const getWeekStart = (): string => {
 
 const HomeScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
   const { signOut } = useAuthStore();
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const plans = useWorkoutStore(state => state.plans);
@@ -85,6 +88,10 @@ const HomeScreen: React.FC = () => {
   const activeWorkout = useWorkoutStore(state => state.activeWorkout);
   const profile = useProfileStore(state => state.profile);
   const sessions = useWorkoutStore(state => state.sessions);
+  const themeMode = useThemeStore(state => state.mode);
+  const isThemeLoaded = useThemeStore(state => state.isLoaded);
+  const loadTheme = useThemeStore(state => state.loadTheme);
+  const toggleTheme = useThemeStore(state => state.toggleTheme);
 
   const weeklyTarget = profile?.weeklyGoal ?? 5;
   const weekStart = getWeekStart();
@@ -108,6 +115,12 @@ const HomeScreen: React.FC = () => {
   React.useEffect(() => {
     if (!homeStatsLoaded) { loadHomeStats(); }
   }, [homeStatsLoaded, loadHomeStats]);
+
+  React.useEffect(() => {
+    if (!isThemeLoaded) {
+      loadTheme();
+    }
+  }, [isThemeLoaded, loadTheme]);
 
   const formatDuration = (seconds: number): string => {
     const h = Math.floor(seconds / 3600);
@@ -236,7 +249,7 @@ const HomeScreen: React.FC = () => {
             <MaterialCommunityIcons
               name="account-outline"
               size={28}
-              color={colors.neutral50}
+              color={colors.onSecondary}
             />
           </ProfileButton>
         </Header>
@@ -248,7 +261,7 @@ const HomeScreen: React.FC = () => {
                 <MaterialCommunityIcons
                   name="target"
                   size={spacing.iconSize.md}
-                  color={colors.primary}
+                  color={colors.onSecondary}
                 />
                 <GoalTitle>Meta Semanal</GoalTitle>
               </GoalTitleRow>
@@ -490,6 +503,24 @@ const HomeScreen: React.FC = () => {
             >
               <MaterialCommunityIcons name="pencil-outline" size={20} color={colors.text} />
               <ProfileMenuItemText>Editar perfil</ProfileMenuItemText>
+            </ProfileMenuItem>
+            <ProfileMenuDivider />
+            <ProfileMenuItem
+              onPress={() => {
+                toggleTheme().finally(() => {
+                  setShowProfileMenu(false);
+                });
+              }}
+              accessibilityLabel={themeMode === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro'}
+            >
+              <MaterialCommunityIcons
+                name={themeMode === 'dark' ? 'weather-sunny' : 'weather-night'}
+                size={20}
+                color={colors.text}
+              />
+              <ProfileMenuItemText>
+                {themeMode === 'dark' ? 'Light Mode' : 'Dark Mode'}
+              </ProfileMenuItemText>
             </ProfileMenuItem>
             <ProfileMenuDivider />
             <ProfileMenuItem

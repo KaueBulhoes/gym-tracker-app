@@ -19,6 +19,7 @@ Registro de todos os services e integração com Supabase.
 | [Auth Store](auth-store.md) | `src/stores/authStore.ts` | LoginScreen, RegisterScreen, HomeScreen, SettingsScreen | Supabase Auth |
 | [Profile Store](profile-store.md) | `src/stores/profileStore.ts` | OnboardingScreen, HomeScreen, SettingsScreen, AppNavigator | Supabase (profiles) |
 | [Workout Store](workout-store.md) | `src/stores/workoutStore.ts` | HomeScreen, WorkoutPlans, AddWorkoutPlan, AddWorkoutExercises, WorkoutDay, ActiveWorkout | Supabase (7 tabelas) |
+| [Theme Store](theme-store.md) | `src/stores/themeStore.ts` | App.tsx, HomeScreen | AsyncStorage |
 
 ## Tabelas Supabase
 

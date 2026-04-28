@@ -1,30 +1,33 @@
 import styled from 'styled-components/native';
-import { colors, spacing } from '../../constants';
+import { spacing } from '../../constants';
+import type { Colors } from '../../constants/colors';
 
-export const getBackgroundColor = (variant: string) => {
+export const getBackgroundColor = (variant: string, themeColors: Colors) => {
   switch (variant) {
     case 'purple':
-      return colors.secondaryDark;
+      return themeColors.secondaryDark;
     default:
-      return colors.backgroundElevated;
+      return themeColors.backgroundElevated;
   }
 };
 
-export const getBorderColor = (variant: string) => {
+export const getBorderColor = (variant: string, themeColors: Colors) => {
   switch (variant) {
     case 'highlighted':
-      return colors.primary;
+      return themeColors.primary;
     case 'purple':
       return 'transparent';
     default:
-      return colors.neutral600;
+      return themeColors.neutral600;
   }
 };
 
 export const Container = styled.View<{ $variant: string }>`
-  background-color: ${({ $variant }) => getBackgroundColor($variant)};
+  background-color: ${({ $variant, theme }) =>
+    getBackgroundColor($variant, theme.colors)};
   border-radius: ${spacing.cardRadius}px;
   padding: ${spacing.cardPadding}px;
   border-width: 1px;
-  border-color: ${({ $variant }) => getBorderColor($variant)};
+  border-color: ${({ $variant, theme }) =>
+    getBorderColor($variant, theme.colors)};
 `;

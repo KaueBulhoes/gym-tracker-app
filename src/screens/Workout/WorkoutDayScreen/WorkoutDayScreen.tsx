@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, StatusBar, Switch } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors, spacing } from '../../../constants';
+import { useTheme } from 'styled-components/native';
+import { spacing } from '../../../constants';
 import type { WorkoutDayScreenProps } from '../../../navigation/types';
 import { useWorkoutStore } from '../../../stores/workoutStore';
 import type { Exercise } from '../../../types/workout';
@@ -68,6 +69,7 @@ type DialogMode = 'none' | 'main' | 'conjugated';
 const numericOnly = (text: string) => text.replace(/[^0-9]/g, '');
 
 const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }) => {
+    const { colors } = useTheme();
     const { day } = route.params;
 
     const draftDay = useWorkoutStore(state =>
@@ -239,7 +241,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
 
             <Header>
                 <BackButton onPress={() => navigation.goBack()} accessibilityLabel="Voltar">
-                    <MaterialCommunityIcons name="arrow-left" size={24} color={colors.neutral50} />
+                    <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSecondary} />
                 </BackButton>
                 <HeaderTitle>{day}</HeaderTitle>
             </Header>
@@ -356,7 +358,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                     })}
 
                     <AddExerciseButton onPress={openMainDialog} accessibilityLabel="Adicionar serie">
-                        <MaterialCommunityIcons name="plus" size={spacing.iconSize.md} color={colors.background} />
+                        <MaterialCommunityIcons name="plus" size={spacing.iconSize.md} color={colors.textInverse} />
                         <AddExerciseButtonText>Adicionar Serie</AddExerciseButtonText>
                     </AddExerciseButton>
                 </Content>
@@ -443,7 +445,7 @@ const WorkoutDayScreen: React.FC<WorkoutDayScreenProps> = ({ route, navigation }
                                                             <MaterialCommunityIcons
                                                                 name="plus"
                                                                 size={spacing.iconSize.sm}
-                                                                color={colors.background}
+                                                                color={colors.textInverse}
                                                             />
                                                         </SchemeActionButton>
                                                     ) : (

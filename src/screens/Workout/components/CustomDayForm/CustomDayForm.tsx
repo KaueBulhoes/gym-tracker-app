@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { TextInput as RNTextInput } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors } from '../../../../constants';
+import { useTheme } from 'styled-components/native';
 import {
     AddButton,
     DayRow,
@@ -30,6 +30,7 @@ const CustomDayForm: React.FC<CustomDayFormProps> = ({
     onDelete,
     onRename,
 }) => {
+    const { colors } = useTheme();
     const inputRef = useRef<RNTextInput>(null);
     const [removingIndex, setRemovingIndex] = useState<number | null>(null);
 

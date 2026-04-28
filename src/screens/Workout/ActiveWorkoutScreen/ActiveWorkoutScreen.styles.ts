@@ -1,9 +1,9 @@
 import styled from 'styled-components/native';
-import { colors, spacing, typography } from '../../../constants';
+import { spacing, typography } from '../../../constants';
 
 export const Container = styled.View`
   flex: 1;
-  background-color: ${colors.background};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const Header = styled.View`
@@ -12,7 +12,7 @@ export const Header = styled.View`
   padding-bottom: ${spacing.xl}px;
   min-height: 132px;
   justify-content: flex-end;
-  background-color: ${colors.secondaryDark};
+  background-color: ${({ theme }) => theme.colors.secondaryDark};
 `;
 
 export const HeaderRow = styled.View`
@@ -56,7 +56,7 @@ export const BackButton = styled.Pressable`
 export const TimerText = styled.Text`
   font-size: 32px;
   font-weight: ${typography.number.fontWeight};
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   font-variant: tabular-nums;
 `;
 
@@ -74,14 +74,14 @@ export const TimerActionButton = styled.Pressable<{
   border-radius: 20px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ $variant }) => {
+  background-color: ${({ $variant, theme }) => {
     if ($variant === 'danger') {
-      return colors.error;
+      return theme.colors.error;
     }
     if ($variant === 'primary') {
-      return colors.primary;
+      return theme.colors.primary;
     }
-    return colors.backgroundHighlight;
+    return theme.colors.backgroundHighlight;
   }};
 `;
 
@@ -90,20 +90,24 @@ export const TimerActionText = styled.Text<{
 }>`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${({ $variant }) =>
-    $variant === 'primary' ? colors.textInverse : colors.neutral50};
+  color: ${({ $variant, theme }) => {
+    if ($variant === 'primary') {
+      return theme.colors.textInverse;
+    }
+    return theme.colors.onSecondary;
+  }};
 `;
 
 export const DayTitle = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.neutral50};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const DaySubtitle = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.neutral200};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 export const WorkoutMetaSection = styled.View`
@@ -123,10 +127,11 @@ export const Content = styled.View`
 `;
 
 export const ExerciseAccordion = styled.Pressable<{ $done: boolean }>`
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   border-width: 1px;
-  border-color: ${({ $done }) => ($done ? colors.success : colors.neutral600)};
+  border-color: ${({ $done, theme }) =>
+    $done ? theme.colors.success : theme.colors.neutral600};
   overflow: hidden;
 `;
 
@@ -141,10 +146,10 @@ export const Checkbox = styled.Pressable<{ $checked: boolean }>`
   height: 24px;
   border-radius: 6px;
   border-width: 2px;
-  border-color: ${({ $checked }) =>
-    $checked ? colors.success : colors.neutral500};
-  background-color: ${({ $checked }) =>
-    $checked ? colors.success : 'transparent'};
+  border-color: ${({ $checked, theme }) =>
+    $checked ? theme.colors.success : theme.colors.neutral500};
+  background-color: ${({ $checked, theme }) =>
+    $checked ? theme.colors.success : 'transparent'};
   align-items: center;
   justify-content: center;
   margin-right: ${spacing.md}px;
@@ -157,13 +162,14 @@ export const ExerciseInfo = styled.View`
 export const ExerciseName = styled.Text<{ $done: boolean }>`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${({ $done }) => ($done ? colors.success : colors.text)};
+  color: ${({ $done, theme }) =>
+    $done ? theme.colors.success : theme.colors.text};
 `;
 
 export const ExerciseMeta = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
   margin-top: ${spacing.xxs}px;
 `;
 
@@ -183,14 +189,14 @@ export const WeightButton = styled.Pressable`
 export const WeightButtonLabel = styled.Text`
   font-size: 10px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const ExerciseBody = styled.View`
   padding-horizontal: ${spacing.cardPadding}px;
   padding-bottom: ${spacing.cardPadding}px;
   border-top-width: 1px;
-  border-top-color: ${colors.neutral600};
+  border-top-color: ${({ theme }) => theme.colors.neutral600};
   gap: ${spacing.xs}px;
   padding-top: ${spacing.sm}px;
 `;
@@ -206,10 +212,10 @@ export const SetCheckbox = styled.View<{ $checked: boolean }>`
   height: 20px;
   border-radius: 4px;
   border-width: 2px;
-  border-color: ${({ $checked }) =>
-    $checked ? colors.success : colors.neutral500};
-  background-color: ${({ $checked }) =>
-    $checked ? colors.success : 'transparent'};
+  border-color: ${({ $checked, theme }) =>
+    $checked ? theme.colors.success : theme.colors.neutral500};
+  background-color: ${({ $checked, theme }) =>
+    $checked ? theme.colors.success : 'transparent'};
   align-items: center;
   justify-content: center;
   margin-right: ${spacing.md}px;
@@ -218,14 +224,16 @@ export const SetCheckbox = styled.View<{ $checked: boolean }>`
 export const SetText = styled.Text<{ $checked: boolean }>`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${({ $checked }) => ($checked ? colors.neutral400 : colors.text)};
+  color: ${({ $checked, theme }) =>
+    $checked ? theme.colors.neutral400 : theme.colors.text};
   flex: 1;
 `;
 
 export const SetWeight = styled.Text<{ $checked: boolean }>`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${({ $checked }) => ($checked ? colors.neutral500 : colors.primary)};
+  color: ${({ $checked, theme }) =>
+    $checked ? theme.colors.neutral500 : theme.colors.primary};
 `;
 
 export const FinishButton = styled.Pressable<{
@@ -236,7 +244,7 @@ export const FinishButton = styled.Pressable<{
   margin-bottom: ${({ $bottomInset }) => spacing.lg + $bottomInset}px;
   padding-vertical: ${spacing.md}px;
   border-radius: ${spacing.buttonRadius}px;
-  background-color: ${colors.error};
+  background-color: ${({ theme }) => theme.colors.error};
   align-items: center;
   justify-content: center;
   opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
@@ -245,7 +253,7 @@ export const FinishButton = styled.Pressable<{
 export const FinishButtonText = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.neutral50};
+  color: ${({ theme }) => theme.colors.onSecondary};
 `;
 
 export const BottomControlsRow = styled.View<{ $bottomInset: number }>`
@@ -264,14 +272,14 @@ export const BottomControlButton = styled.Pressable<{
   border-radius: ${spacing.buttonRadius}px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ $variant }) => {
+  background-color: ${({ $variant, theme }) => {
     if ($variant === 'primary') {
-      return colors.primary;
+      return theme.colors.primary;
     }
     if ($variant === 'danger') {
-      return colors.error;
+      return theme.colors.error;
     }
-    return colors.backgroundHighlight;
+    return theme.colors.backgroundHighlight;
   }};
   opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
 `;
@@ -281,38 +289,45 @@ export const BottomControlText = styled.Text<{
 }>`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${({ $variant }) =>
-    $variant === 'primary' ? colors.textInverse : colors.neutral50};
+  color: ${({ $variant, theme }) => {
+    if ($variant === 'primary') {
+      return theme.colors.textInverse;
+    }
+    if ($variant === 'danger') {
+      return theme.colors.onSecondary;
+    }
+    return theme.colors.text;
+  }};
 `;
 
 export const Overlay = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: ${colors.overlay};
+  background-color: ${({ theme }) => theme.colors.overlay};
 `;
 
 export const RestModal = styled.View`
   width: 220px;
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   padding: ${spacing.xl}px;
   align-items: center;
   gap: ${spacing.md}px;
   border-width: 1px;
-  border-color: ${colors.neutral600};
+  border-color: ${({ theme }) => theme.colors.neutral600};
 `;
 
 export const RestModalTitle = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const RestModalTimer = styled.Text`
   font-size: 48px;
   font-weight: ${typography.number.fontWeight};
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   font-variant: tabular-nums;
 `;
 
@@ -320,29 +335,29 @@ export const RestModalSkip = styled.Pressable`
   padding-horizontal: ${spacing.lg}px;
   padding-vertical: ${spacing.sm}px;
   border-radius: ${spacing.buttonRadius}px;
-  background-color: ${colors.backgroundHighlight};
+  background-color: ${({ theme }) => theme.colors.backgroundHighlight};
 `;
 
 export const RestModalSkipText = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.neutral300};
+  color: ${({ theme }) => theme.colors.neutral300};
 `;
 
 export const WeightModal = styled.View`
   width: 300px;
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   padding: ${spacing.xl}px;
   gap: ${spacing.md}px;
   border-width: 1px;
-  border-color: ${colors.neutral600};
+  border-color: ${({ theme }) => theme.colors.neutral600};
 `;
 
 export const WeightModalTitle = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
   text-align: center;
 `;
 
@@ -352,10 +367,36 @@ export const WeightToggleRow = styled.View`
   justify-content: space-between;
 `;
 
+export const ExerciseTabsRow = styled.View`
+  flex-direction: row;
+  gap: ${spacing.xs}px;
+`;
+
+export const ExerciseTabButton = styled.Pressable<{ $active: boolean }>`
+  flex: 1;
+  padding-vertical: ${spacing.sm}px;
+  padding-horizontal: ${spacing.sm}px;
+  border-radius: ${spacing.buttonRadius}px;
+  border-width: 1px;
+  border-color: ${({ $active, theme }) =>
+    $active ? theme.colors.primary : theme.colors.neutral600};
+  background-color: ${({ $active, theme }) =>
+    $active ? theme.colors.primary : 'transparent'};
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ExerciseTabText = styled.Text<{ $active: boolean }>`
+  font-size: ${typography.caption.fontSize}px;
+  font-weight: ${typography.bodyBold.fontWeight};
+  color: ${({ $active, theme }) =>
+    $active ? theme.colors.textInverse : theme.colors.textSecondary};
+`;
+
 export const WeightToggleLabel = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
   flex: 1;
 `;
 
@@ -368,17 +409,17 @@ export const WeightSetRow = styled.View`
 export const WeightSetLabel = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
   width: 55px;
 `;
 
 export const WeightInput = styled.TextInput`
   flex: 1;
-  background-color: ${colors.backgroundInput};
+  background-color: ${({ theme }) => theme.colors.backgroundInput};
   border-radius: ${spacing.buttonRadius}px;
   padding-horizontal: ${spacing.md}px;
   padding-vertical: ${spacing.sm}px;
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
   font-size: ${typography.bodyBold.fontSize}px;
   text-align: center;
 `;
@@ -386,14 +427,14 @@ export const WeightInput = styled.TextInput`
 export const WeightUnit = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.neutral400};
+  color: ${({ theme }) => theme.colors.neutral400};
   width: 24px;
 `;
 
 export const WeightSaveButton = styled.Pressable`
   padding-vertical: ${spacing.sm}px;
   border-radius: ${spacing.buttonRadius}px;
-  background-color: ${colors.primary};
+  background-color: ${({ theme }) => theme.colors.primary};
   align-items: center;
   margin-top: ${spacing.xs}px;
 `;
@@ -401,5 +442,5 @@ export const WeightSaveButton = styled.Pressable`
 export const WeightSaveButtonText = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.textInverse};
+  color: ${({ theme }) => theme.colors.textInverse};
 `;

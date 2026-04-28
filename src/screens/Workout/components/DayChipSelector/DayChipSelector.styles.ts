@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { colors, spacing, typography } from '../../../../constants';
+import { spacing, typography } from '../../../../constants';
 
 export const Wrapper = styled.View`
   flex-direction: row;
@@ -14,15 +14,20 @@ export const Chip = styled.Pressable<{ $selected: boolean; $isAdd?: boolean }>`
   border-radius: ${spacing.sm}px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ $selected }) =>
-    $selected ? colors.primary : colors.backgroundElevated};
+  background-color: ${({ $selected, theme }) =>
+    $selected ? theme.colors.primary : theme.colors.backgroundElevated};
   border-width: 1.5px;
-  border-color: ${({ $selected, $isAdd }) =>
-    $isAdd ? colors.primary : $selected ? colors.primary : colors.border};
+  border-color: ${({ $selected, $isAdd, theme }) =>
+    $isAdd
+      ? theme.colors.primary
+      : $selected
+      ? theme.colors.primary
+      : theme.colors.border};
 `;
 
 export const ChipText = styled.Text<{ $selected: boolean }>`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${({ $selected }) => ($selected ? colors.textInverse : colors.text)};
+  color: ${({ $selected, theme }) =>
+    $selected ? theme.colors.textInverse : theme.colors.text};
 `;

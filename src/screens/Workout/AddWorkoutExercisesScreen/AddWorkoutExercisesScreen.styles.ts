@@ -1,9 +1,9 @@
 import styled from 'styled-components/native';
-import { colors, spacing, typography } from '../../../constants';
+import { spacing, typography } from '../../../constants';
 
 export const Container = styled.View`
   flex: 1;
-  background-color: ${colors.background};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const Header = styled.View`
@@ -13,7 +13,7 @@ export const Header = styled.View`
   padding-horizontal: ${spacing.screenHorizontal}px;
   padding-top: ${spacing.huge}px;
   padding-bottom: ${spacing.xl}px;
-  background-color: ${colors.secondaryDark};
+  background-color: ${({ theme }) => theme.colors.secondaryDark};
 `;
 
 export const HeaderLeft = styled.View`
@@ -35,13 +35,13 @@ export const BackButton = styled.Pressable`
 export const HeaderTitle = styled.Text`
   font-size: ${typography.h3.fontSize}px;
   font-weight: ${typography.h3.fontWeight};
-  color: ${colors.neutral50};
+  color: ${({ theme }) => theme.colors.onSecondary};
 `;
 
 export const SaveButton = styled.Pressable<{ $disabled?: boolean }>`
   padding-vertical: ${spacing.md}px;
   border-radius: ${spacing.buttonRadius}px;
-  background-color: ${colors.primary};
+  background-color: ${({ theme }) => theme.colors.primary};
   align-items: center;
   justify-content: center;
   margin-top: ${spacing.md}px;
@@ -51,7 +51,7 @@ export const SaveButton = styled.Pressable<{ $disabled?: boolean }>`
 export const SaveButtonText = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.background};
+  color: ${({ theme }) => theme.colors.textInverse};
 `;
 
 export const ScrollContent = styled.ScrollView``;
@@ -73,15 +73,15 @@ export const DurationRow = styled.View`
 export const DurationLabel = styled.Text`
   font-size: ${typography.body.fontSize}px;
   font-weight: ${typography.body.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const DurationInput = styled.TextInput`
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.inputRadius}px;
   border-width: 1px;
-  border-color: ${colors.neutral600};
-  color: ${colors.text};
+  border-color: ${({ theme }) => theme.colors.neutral600};
+  color: ${({ theme }) => theme.colors.text};
   font-size: ${typography.body.fontSize}px;
   padding-horizontal: ${spacing.md}px;
   padding-vertical: ${spacing.sm}px;
@@ -92,14 +92,14 @@ export const DurationInput = styled.TextInput`
 export const DurationUnit = styled.Text`
   font-size: ${typography.body.fontSize}px;
   font-weight: ${typography.body.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 export const DayCard = styled.Pressable`
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   border-width: 1px;
-  border-color: ${colors.neutral600};
+  border-color: ${({ theme }) => theme.colors.neutral600};
   overflow: hidden;
 `;
 
@@ -123,7 +123,7 @@ export const DayIconContainer = styled.View`
   border-radius: 20px;
   align-items: center;
   justify-content: center;
-  background-color: ${colors.backgroundHighlight};
+  background-color: ${({ theme }) => theme.colors.backgroundHighlight};
 `;
 
 export const DayInfo = styled.View`
@@ -133,12 +133,12 @@ export const DayInfo = styled.View`
 export const DayName = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const DayCount = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
   margin-top: ${spacing.xxs}px;
 `;

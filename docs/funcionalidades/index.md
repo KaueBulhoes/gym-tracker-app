@@ -12,6 +12,7 @@ Catálogo de features do app com suas composições (telas + services + tabelas)
 - [Gerenciamento de Fichas](gerenciamento-fichas.md) — fichas ativa/inativa, nome, duração, vencimento, descrição por dia
 
 - [Estatísticas de Treino](estatisticas.md) — métricas, recordes, progressão de carga, stats customizáveis na Home
+- [Tema Dark/Light](tema-dark-light.md) — toggle de tema persistente com paletas refinadas e theming completo via styled-components
 
 ## Planejadas
 

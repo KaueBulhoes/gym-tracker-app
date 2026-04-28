@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, type ViewStyle } from 'react-native';
-import { colors } from '../../constants';
+import { useTheme } from 'styled-components/native';
 import { Container, Title } from './Button.styles';
 
 interface ButtonProps {
@@ -20,6 +20,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   style,
 }) => {
+  const { colors } = useTheme();
   const isDisabled = disabled || isLoading;
 
   return (

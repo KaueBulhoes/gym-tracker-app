@@ -4,7 +4,7 @@ import { colors } from '../../constants';
 export const Track = styled.View`
   height: 8px;
   border-radius: 4px;
-  background-color: ${colors.neutral600};
+  background-color: ${({ theme }) => theme.colors.neutral600};
   overflow: hidden;
 `;
 

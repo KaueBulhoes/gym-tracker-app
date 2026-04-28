@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { StatusBar, Switch } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors } from '../../../constants';
+import { useTheme } from 'styled-components/native';
 import { useHomeStats, type HomeStatKey } from '../../../hooks/useHomeStats';
 import type { StatisticsScreenProps } from '../../../navigation/types';
 import { useProfileStore } from '../../../stores/profileStore';
@@ -190,6 +190,7 @@ type StatConfig = { key: HomeStatKey; label: string; value: string };
 // ─── Component ────────────────────────────────────────
 
 const StatisticsScreen: React.FC<StatisticsScreenProps> = ({ navigation }) => {
+  const { colors } = useTheme();
   const sessions = useWorkoutStore(state => state.sessions);
   const lastCompleted = useWorkoutStore(state => state.lastCompleted);
   const weeklyGoal = useProfileStore(state => state.profile?.weeklyGoal ?? 5);
@@ -285,7 +286,7 @@ const StatisticsScreen: React.FC<StatisticsScreenProps> = ({ navigation }) => {
 
       <Header>
         <BackButton onPress={() => navigation.goBack()} accessibilityLabel="Voltar">
-          <MaterialCommunityIcons name="arrow-left" size={24} color={colors.neutral50} />
+          <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSecondary} />
         </BackButton>
         <HeaderTitle>Estatísticas</HeaderTitle>
       </Header>

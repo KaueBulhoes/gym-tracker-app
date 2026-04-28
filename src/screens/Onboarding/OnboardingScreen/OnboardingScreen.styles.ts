@@ -6,7 +6,7 @@ export const Container = styled(SafeAreaView).attrs({
   edges: ['bottom'] as const,
 })`
   flex: 1;
-  background-color: ${colors.background};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const Content = styled.ScrollView`
@@ -22,14 +22,14 @@ export const Header = styled.View`
 export const Title = styled.Text`
   font-size: ${typography.h1.fontSize}px;
   font-weight: ${typography.h1.fontWeight};
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   margin-bottom: ${spacing.sm}px;
 `;
 
 export const Subtitle = styled.Text`
   font-size: ${typography.body.fontSize}px;
   font-weight: ${typography.body.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 export const Section = styled.View`
@@ -39,7 +39,7 @@ export const Section = styled.View`
 export const SectionLabel = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: ${spacing.sm}px;
 `;
 
@@ -51,7 +51,7 @@ export const Row = styled.View`
 export const ErrorText = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.error};
+  color: ${({ theme }) => theme.colors.error};
   text-align: center;
   margin-top: ${spacing.sm}px;
 `;

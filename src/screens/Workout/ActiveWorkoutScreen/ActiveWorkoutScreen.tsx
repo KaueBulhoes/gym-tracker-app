@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { LayoutAnimation, Modal, Platform, StatusBar, Switch, UIManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors, spacing } from '../../../constants';
+import { useTheme } from 'styled-components/native';
+import { spacing } from '../../../constants';
 import type { ActiveWorkoutScreenProps } from '../../../navigation/types';
 import { useWorkoutStore } from '../../../stores/workoutStore';
 import type { Exercise, ExerciseWeight } from '../../../types/workout';
@@ -23,6 +24,9 @@ import {
     ExerciseInfo,
     ExerciseMeta,
     ExerciseName,
+    ExerciseTabButton,
+    ExerciseTabText,
+    ExerciseTabsRow,
     Header,
     HeaderCenter,
     HeaderLeft,
@@ -94,7 +98,64 @@ const buildSetList = (exercise: Exercise): SetInfo[] => {
     return list;
 };
 
+const buildSchemeLabel = (exercise: Exercise): string => {
+    if (exercise.fixedReps) {
+        return `${exercise.sets}x${exercise.reps}`;
+    }
+    return (exercise.repSchemes ?? []).map(s => `${s.sets}x${s.reps}`).join(' + ');
+};
+
+type ExerciseGroup = {
+    id: string;
+    isPair: boolean;
+    exercises: Exercise[];
+};
+
+const buildGroups = (exercises: Exercise[]): ExerciseGroup[] => {
+    const groups: ExerciseGroup[] = [];
+    let i = 0;
+    while (i < exercises.length) {
+        const ex = exercises[i];
+        const next = exercises[i + 1];
+        if (ex.conjugatedId && next && next.id === ex.conjugatedId) {
+            groups.push({ id: ex.id, isPair: true, exercises: [ex, next] });
+            i += 2;
+        } else {
+            groups.push({ id: ex.id, isPair: false, exercises: [ex] });
+            i += 1;
+        }
+    }
+    return groups;
+};
+
+type GroupSetRow = { index: number; reps: (string | null)[] };
+
+const buildGroupSetList = (group: ExerciseGroup): GroupSetRow[] => {
+    const lists = group.exercises.map(buildSetList);
+    const maxLen = Math.max(...lists.map(l => l.length), 0);
+    const rows: GroupSetRow[] = [];
+    for (let i = 0; i < maxLen; i++) {
+        rows.push({
+            index: i,
+            reps: lists.map(l => l[i]?.reps ?? null),
+        });
+    }
+    return rows;
+};
+
+const buildGroupSchemeLabel = (group: ExerciseGroup): string => {
+    if (!group.isPair) {
+        return buildSchemeLabel(group.exercises[0]);
+    }
+    const [a, b] = group.exercises;
+    if (a.fixedReps && b.fixedReps && a.sets === b.sets) {
+        return `${a.sets}x ${a.reps} + ${b.reps}`;
+    }
+    return `${buildSchemeLabel(a)}  ·  ${buildSchemeLabel(b)}`;
+};
+
 const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, navigation }) => {
+    const { colors } = useTheme();
     const { planId, dayName } = route.params;
     const insets = useSafeAreaInsets();
 
@@ -121,6 +182,8 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
     const realDay = plan?.days.find(d => d.name === currentDayName);
     const exercises = realDay?.exercises ?? [];
     const workoutDescription = realDay?.description?.trim() ?? '';
+
+    const groups = useMemo(() => buildGroups(exercises), [exercises]);
 
     // Pre-fill weights from last session of this plan+day
     const buildInitialWeights = (): Record<string, ExerciseWeight> => {
@@ -174,7 +237,7 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         setActiveExerciseWeight,
     ]);
 
-    const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
+    const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
 
     const [restSeconds, setRestSeconds] = useState(0);
     const restRef = useRef(0);
@@ -223,20 +286,43 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         return 0;
     };
 
-    const toggleExpanded = (exerciseId: string) => {
+    const toggleExpanded = (groupId: string) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        setExpandedExercise(prev => (prev === exerciseId ? null : exerciseId));
+        setExpandedGroup(prev => (prev === groupId ? null : groupId));
     };
 
     const isSetCompleted = (exerciseId: string, setIndex: number) =>
         activeWorkout?.completedSets[exerciseId]?.includes(setIndex) ?? false;
 
-    const toggleSet = (exerciseId: string, setIndex: number, totalSets: number) => {
-        const doneBefore = activeWorkout?.completedSets[exerciseId]?.length ?? 0;
-        const markedAsDone = toggleActiveSet(exerciseId, setIndex, totalSets);
+    const isGroupSetCompleted = (group: ExerciseGroup, setIndex: number) => {
+        const exercisesWithSet = group.exercises.filter(
+            ex => setIndex < buildSetList(ex).length,
+        );
+        if (exercisesWithSet.length === 0) {
+            return false;
+        }
+        return exercisesWithSet.every(ex => isSetCompleted(ex.id, setIndex));
+    };
 
-        if (markedAsDone && doneBefore + 1 < totalSets) {
-            const rest = getRestForExercise(exerciseId);
+    const toggleGroupSet = (group: ExerciseGroup, setIndex: number, totalSets: number) => {
+        const exercisesWithSet = group.exercises.filter(
+            ex => setIndex < buildSetList(ex).length,
+        );
+        if (exercisesWithSet.length === 0) {
+            return;
+        }
+        const allDone = exercisesWithSet.every(ex => isSetCompleted(ex.id, setIndex));
+        const target = !allDone;
+
+        exercisesWithSet.forEach(ex => {
+            const isDone = isSetCompleted(ex.id, setIndex);
+            if (isDone !== target) {
+                toggleActiveSet(ex.id, setIndex, buildSetList(ex).length);
+            }
+        });
+
+        if (target && setIndex < totalSets - 1) {
+            const rest = getRestForExercise(group.exercises[0].id);
             if (rest > 0) {
                 startRest(rest);
             }
@@ -248,8 +334,20 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         return done.length >= totalSets;
     };
 
-    const toggleExercise = (exerciseId: string, setList: SetInfo[]) => {
-        toggleActiveExercise(exerciseId, setList.map(s => s.index));
+    const isGroupDone = (group: ExerciseGroup) =>
+        group.exercises.every(ex => isExerciseDone(ex.id, buildSetList(ex).length));
+
+    const toggleGroup = (group: ExerciseGroup) => {
+        const groupDone = isGroupDone(group);
+        const target = !groupDone;
+
+        group.exercises.forEach(ex => {
+            const setIndexes = buildSetList(ex).map(s => s.index);
+            const exDone = isExerciseDone(ex.id, setIndexes.length);
+            if (exDone !== target) {
+                toggleActiveExercise(ex.id, setIndexes);
+            }
+        });
     };
 
     const getWeightForSet = (exerciseId: string, setIndex: number): string | null => {
@@ -263,50 +361,103 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         return w.weights[setIndex] || null;
     };
 
-    const [weightModalExerciseId, setWeightModalExerciseId] = useState<string | null>(null);
-    const [weightDifferent, setWeightDifferent] = useState(false);
-    const [weightInputs, setWeightInputs] = useState<string[]>([]);
+    const buildGroupWeightLabel = (group: ExerciseGroup, setIndex: number): string => {
+        const values = group.exercises.map(ex => {
+            if (setIndex >= buildSetList(ex).length) {
+                return null;
+            }
+            return getWeightForSet(ex.id, setIndex);
+        });
+        if (values.every(v => !v)) {
+            return '-';
+        }
+        return `${values.map(v => v ?? '-').join(' + ')} kg`;
+    };
 
-    const openWeightModal = (exerciseId: string) => {
-        const exercise = exercises.find(e => e.id === exerciseId);
-        if (!exercise) {
-            return;
-        }
-        const setList = buildSetList(exercise);
-        const totalSets = setList.length;
-        const existing = activeWorkout?.exerciseWeights[exerciseId];
-        if (existing) {
-            setWeightDifferent(!existing.uniform);
-            setWeightInputs(
-                existing.uniform
+    const [weightModalGroupId, setWeightModalGroupId] = useState<string | null>(null);
+    const [weightModalActiveExerciseId, setWeightModalActiveExerciseId] = useState<string | null>(null);
+    const [weightInputsByExercise, setWeightInputsByExercise] = useState<Record<string, string[]>>({});
+    const [weightDifferentByExercise, setWeightDifferentByExercise] = useState<Record<string, boolean>>({});
+
+    const openWeightModal = (group: ExerciseGroup) => {
+        const inputs: Record<string, string[]> = {};
+        const different: Record<string, boolean> = {};
+
+        group.exercises.forEach(ex => {
+            const totalSets = buildSetList(ex).length;
+            const existing = activeWorkout?.exerciseWeights[ex.id];
+            if (existing) {
+                different[ex.id] = !existing.uniform;
+                inputs[ex.id] = existing.uniform
                     ? Array(totalSets).fill(existing.weights[0] ?? '')
-                    : existing.weights.concat(Array(Math.max(0, totalSets - existing.weights.length)).fill('')),
-            );
-        } else {
-            setWeightDifferent(false);
-            setWeightInputs(Array(totalSets).fill(''));
-        }
-        setWeightModalExerciseId(exerciseId);
+                    : existing.weights.concat(
+                          Array(Math.max(0, totalSets - existing.weights.length)).fill(''),
+                      );
+            } else {
+                different[ex.id] = false;
+                inputs[ex.id] = Array(totalSets).fill('');
+            }
+        });
+
+        setWeightInputsByExercise(inputs);
+        setWeightDifferentByExercise(different);
+        setWeightModalActiveExerciseId(group.exercises[0].id);
+        setWeightModalGroupId(group.id);
     };
 
     const closeWeightModal = () => {
-        setWeightModalExerciseId(null);
+        setWeightModalGroupId(null);
+        setWeightModalActiveExerciseId(null);
+        setWeightInputsByExercise({});
+        setWeightDifferentByExercise({});
     };
 
     const saveWeight = () => {
-        if (!weightModalExerciseId) {
+        const group = groups.find(g => g.id === weightModalGroupId);
+        if (!group) {
             return;
         }
-        const exercise = exercises.find(e => e.id === weightModalExerciseId);
-        const uniform = !weightDifferent;
-        const weights = uniform ? [weightInputs[0] ?? ''] : [...weightInputs];
-        setActiveExerciseWeight(
-            weightModalExerciseId,
-            exercise?.name ?? '',
-            uniform,
-            weights,
-        );
+
+        group.exercises.forEach(ex => {
+            const isDifferent = weightDifferentByExercise[ex.id] ?? false;
+            const inputs = weightInputsByExercise[ex.id] ?? [];
+            const uniform = !isDifferent;
+            const weights = uniform ? [inputs[0] ?? ''] : [...inputs];
+            setActiveExerciseWeight(ex.id, ex.name, uniform, weights);
+        });
+
         closeWeightModal();
+    };
+
+    const updateActiveExerciseDifferent = (value: boolean) => {
+        const exId = weightModalActiveExerciseId;
+        if (!exId) {
+            return;
+        }
+        setWeightDifferentByExercise(prev => ({ ...prev, [exId]: value }));
+        if (!value) {
+            setWeightInputsByExercise(prev => {
+                const current = prev[exId] ?? [];
+                const filled = Array(current.length).fill(current[0] ?? '');
+                return { ...prev, [exId]: filled };
+            });
+        }
+    };
+
+    const updateActiveExerciseInput = (index: number, text: string) => {
+        const exId = weightModalActiveExerciseId;
+        if (!exId) {
+            return;
+        }
+        const isDifferent = weightDifferentByExercise[exId] ?? false;
+        const cleaned = numericOnly(text);
+        setWeightInputsByExercise(prev => {
+            const current = prev[exId] ?? [];
+            const next = isDifferent
+                ? current.map((v, i) => (i === index ? cleaned : v))
+                : Array(current.length).fill(cleaned);
+            return { ...prev, [exId]: next };
+        });
     };
 
     const [isSaving, setIsSaving] = useState(false);
@@ -348,8 +499,17 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
         navigation.navigate('Home');
     };
 
-    const weightModalExercise = exercises.find(e => e.id === weightModalExerciseId);
-    const weightModalSets = weightModalExercise ? buildSetList(weightModalExercise).length : 0;
+    const weightModalGroup = groups.find(g => g.id === weightModalGroupId);
+    const activeWeightExercise = weightModalGroup?.exercises.find(
+        ex => ex.id === weightModalActiveExerciseId,
+    );
+    const activeWeightSets = activeWeightExercise ? buildSetList(activeWeightExercise).length : 0;
+    const activeWeightDifferent = activeWeightExercise
+        ? weightDifferentByExercise[activeWeightExercise.id] ?? false
+        : false;
+    const activeWeightInputs = activeWeightExercise
+        ? weightInputsByExercise[activeWeightExercise.id] ?? []
+        : [];
 
     return (
         <Container>
@@ -362,7 +522,7 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
                             onPress={() => navigation.goBack()}
                             accessibilityLabel="Voltar"
                         >
-                            <MaterialCommunityIcons name="arrow-left" size={22} color={colors.neutral50} />
+                            <MaterialCommunityIcons name="arrow-left" size={22} color={colors.onSecondary} />
                         </BackButton>
                     </HeaderLeft>
 
@@ -383,39 +543,38 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
 
             <ScrollContent showsVerticalScrollIndicator={false}>
                 <Content>
-                    {exercises.map(exercise => {
-                        const setList = buildSetList(exercise);
-                        const schemeLabel = exercise.fixedReps
-                            ? `${exercise.sets}x${exercise.reps}`
-                            : (exercise.repSchemes ?? []).map(s => `${s.sets}x${s.reps}`).join(' + ');
-                        const done = isExerciseDone(exercise.id, setList.length);
-                        const isExpanded = expandedExercise === exercise.id;
+                    {groups.map(group => {
+                        const setList = buildGroupSetList(group);
+                        const schemeLabel = buildGroupSchemeLabel(group);
+                        const done = isGroupDone(group);
+                        const isExpanded = expandedGroup === group.id;
+                        const groupName = group.exercises.map(e => e.name).join(' + ');
 
                         return (
                             <ExerciseAccordion
-                                key={exercise.id}
+                                key={group.id}
                                 $done={done}
-                                onPress={() => toggleExpanded(exercise.id)}
-                                accessibilityLabel={exercise.name}
+                                onPress={() => toggleExpanded(group.id)}
+                                accessibilityLabel={groupName}
                             >
                                 <ExerciseHeader>
                                     <Checkbox
                                         $checked={done}
-                                        onPress={() => toggleExercise(exercise.id, setList)}
-                                        accessibilityLabel={`Marcar ${exercise.name} como concluído`}
+                                        onPress={() => toggleGroup(group)}
+                                        accessibilityLabel={`Marcar ${groupName} como concluído`}
                                     >
                                         {done && (
-                                            <MaterialCommunityIcons name="check" size={16} color={colors.background} />
+                                            <MaterialCommunityIcons name="check" size={16} color={colors.textInverse} />
                                         )}
                                     </Checkbox>
                                     <ExerciseInfo>
-                                        <ExerciseName $done={done}>{exercise.name}</ExerciseName>
+                                        <ExerciseName $done={done}>{groupName}</ExerciseName>
                                         <ExerciseMeta>{schemeLabel}</ExerciseMeta>
                                     </ExerciseInfo>
                                     <ExerciseHeaderRight>
                                         <WeightButton
-                                            onPress={() => openWeightModal(exercise.id)}
-                                            accessibilityLabel={`Carga de ${exercise.name}`}
+                                            onPress={() => openWeightModal(group)}
+                                            accessibilityLabel={`Carga de ${groupName}`}
                                         >
                                             <MaterialCommunityIcons
                                                 name="weight-kilogram"
@@ -435,27 +594,30 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
                                 {isExpanded && (
                                     <ExerciseBody>
                                         {setList.map((set, setIdx) => {
-                                            const checked = isSetCompleted(exercise.id, set.index);
-                                            const weight = getWeightForSet(exercise.id, set.index);
-                                            const rest = getRestForExercise(exercise.id);
+                                            const checked = isGroupSetCompleted(group, set.index);
+                                            const weightLabel = buildGroupWeightLabel(group, set.index);
+                                            const rest = getRestForExercise(group.exercises[0].id);
                                             const isLastSet = setIdx === setList.length - 1;
+                                            const repsLabel = set.reps
+                                                .map(r => r ?? '-')
+                                                .join(' + ');
                                             return (
                                                 <SetRow
                                                     key={set.index}
-                                                    onPress={() => toggleSet(exercise.id, set.index, setList.length)}
+                                                    onPress={() => toggleGroupSet(group, set.index, setList.length)}
                                                     accessibilityLabel={`Série ${set.index + 1}`}
                                                 >
                                                     <SetCheckbox $checked={checked}>
                                                         {checked && (
-                                                            <MaterialCommunityIcons name="check" size={12} color={colors.background} />
+                                                            <MaterialCommunityIcons name="check" size={12} color={colors.textInverse} />
                                                         )}
                                                     </SetCheckbox>
                                                     <SetText $checked={checked}>
-                                                        Série {set.index + 1} x {set.reps}
+                                                        Série {set.index + 1} x {repsLabel}
                                                         {rest > 0 && !isLastSet ? `  •  Descanso: ${rest}s` : ''}
                                                     </SetText>
                                                     <SetWeight $checked={checked}>
-                                                        {weight ? `${weight} kg` : '-'}
+                                                        {weightLabel}
                                                     </SetWeight>
                                                 </SetRow>
                                             );
@@ -512,42 +674,51 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
                 </Overlay>
             </Modal>
 
-            <Modal visible={weightModalExerciseId !== null} transparent animationType="fade" onRequestClose={closeWeightModal}>
+            <Modal visible={weightModalGroupId !== null} transparent animationType="fade" onRequestClose={closeWeightModal}>
                 <Overlay>
                     <WeightModal>
-                        <WeightModalTitle>{weightModalExercise?.name}</WeightModalTitle>
+                        <WeightModalTitle>
+                            {weightModalGroup?.exercises.map(e => e.name).join(' + ')}
+                        </WeightModalTitle>
+
+                        {weightModalGroup?.isPair && (
+                            <ExerciseTabsRow>
+                                {weightModalGroup.exercises.map(ex => {
+                                    const isActive = weightModalActiveExerciseId === ex.id;
+                                    return (
+                                        <ExerciseTabButton
+                                            key={ex.id}
+                                            $active={isActive}
+                                            onPress={() => setWeightModalActiveExerciseId(ex.id)}
+                                            accessibilityLabel={`Selecionar ${ex.name}`}
+                                        >
+                                            <ExerciseTabText $active={isActive}>{ex.name}</ExerciseTabText>
+                                        </ExerciseTabButton>
+                                    );
+                                })}
+                            </ExerciseTabsRow>
+                        )}
 
                         <WeightToggleRow>
                             <WeightToggleLabel>Cargas diferentes por série</WeightToggleLabel>
                             <Switch
-                                value={weightDifferent}
-                                onValueChange={value => {
-                                    setWeightDifferent(value);
-                                    if (!value) {
-                                        setWeightInputs(prev => Array(prev.length).fill(prev[0] ?? ''));
-                                    }
-                                }}
+                                value={activeWeightDifferent}
+                                onValueChange={updateActiveExerciseDifferent}
                                 trackColor={{ false: colors.neutral500, true: colors.secondaryLight }}
-                                thumbColor={weightDifferent ? colors.secondary : colors.neutral300}
+                                thumbColor={activeWeightDifferent ? colors.secondary : colors.neutral300}
                                 accessibilityLabel="Cargas diferentes por série"
                             />
                         </WeightToggleRow>
 
-                        {weightDifferent ? (
-                            Array.from({ length: weightModalSets }).map((_, i) => (
+                        {activeWeightDifferent ? (
+                            Array.from({ length: activeWeightSets }).map((_, i) => (
                                 <WeightSetRow key={i}>
                                     <WeightSetLabel>Série {i + 1}</WeightSetLabel>
                                     <WeightInput
                                         placeholder="0"
                                         placeholderTextColor={colors.neutral400}
-                                        value={weightInputs[i] ?? ''}
-                                        onChangeText={text => {
-                                            setWeightInputs(prev => {
-                                                const next = [...prev];
-                                                next[i] = numericOnly(text);
-                                                return next;
-                                            });
-                                        }}
+                                        value={activeWeightInputs[i] ?? ''}
+                                        onChangeText={text => updateActiveExerciseInput(i, text)}
                                         keyboardType="decimal-pad"
                                         maxLength={6}
                                         accessibilityLabel={`Carga série ${i + 1}`}
@@ -561,11 +732,8 @@ const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({ route, naviga
                                 <WeightInput
                                     placeholder="0"
                                     placeholderTextColor={colors.neutral400}
-                                    value={weightInputs[0] ?? ''}
-                                    onChangeText={text => {
-                                        const val = numericOnly(text);
-                                        setWeightInputs(prev => Array(prev.length).fill(val));
-                                    }}
+                                    value={activeWeightInputs[0] ?? ''}
+                                    onChangeText={text => updateActiveExerciseInput(0, text)}
                                     keyboardType="decimal-pad"
                                     maxLength={6}
                                     accessibilityLabel="Carga"

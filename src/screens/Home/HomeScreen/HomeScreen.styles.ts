@@ -1,9 +1,9 @@
 import styled from 'styled-components/native';
-import { colors, spacing, typography } from '../../../constants';
+import { spacing, typography } from '../../../constants';
 
 export const Container = styled.View`
   flex: 1;
-  background-color: ${colors.background};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const ScrollContent = styled.ScrollView``;
@@ -15,7 +15,7 @@ export const Header = styled.View`
   padding-horizontal: ${spacing.screenHorizontal}px;
   padding-top: ${spacing.huge}px;
   padding-bottom: ${spacing.xl}px;
-  background-color: ${colors.secondaryDark};
+  background-color: ${({ theme }) => theme.colors.secondaryDark};
 `;
 
 export const HeaderContent = styled.View`
@@ -25,13 +25,13 @@ export const HeaderContent = styled.View`
 export const WelcomeText = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.neutral200};
+  color: ${({ theme }) => theme.colors.onSecondaryMuted};
 `;
 
 export const UserName = styled.Text`
   font-size: ${typography.h2.fontSize}px;
   font-weight: ${typography.h2.fontWeight};
-  color: ${colors.neutral50};
+  color: ${({ theme }) => theme.colors.onSecondary};
   margin-top: ${spacing.xxs}px;
 `;
 
@@ -66,13 +66,13 @@ export const GoalTitleRow = styled.View`
 export const GoalTitle = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.neutral50};
+  color: ${({ theme }) => theme.colors.onSecondary};
 `;
 
 export const GoalCount = styled.Text`
   font-size: ${typography.h3.fontSize}px;
   font-weight: ${typography.h3.fontWeight};
-  color: ${colors.neutral50};
+  color: ${({ theme }) => theme.colors.onSecondary};
 `;
 
 export const ProgressBarWrapper = styled.View`
@@ -83,7 +83,7 @@ export const ProgressBarWrapper = styled.View`
 export const GoalMotivation = styled.Text`
   font-size: ${typography.small.fontSize}px;
   font-weight: ${typography.small.fontWeight};
-  color: ${colors.neutral200};
+  color: ${({ theme }) => theme.colors.onSecondaryMuted};
 `;
 
 export const MetricsRow = styled.View`
@@ -93,10 +93,10 @@ export const MetricsRow = styled.View`
 
 export const MetricCard = styled.View`
   flex: 1;
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   border-width: 1px;
-  border-color: ${colors.neutral600};
+  border-color: ${({ theme }) => theme.colors.neutral600};
   padding: ${spacing.md}px;
   align-items: center;
   gap: ${spacing.xxs}px;
@@ -105,13 +105,13 @@ export const MetricCard = styled.View`
 export const MetricValue = styled.Text`
   font-size: ${typography.numberSmall.fontSize}px;
   font-weight: ${typography.numberSmall.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const MetricValueLarge = styled.Text`
   font-size: ${typography.numberSmall.fontSize}px;
   font-weight: ${typography.numberSmall.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
   flex: 1;
   text-align-vertical: center;
 `;
@@ -119,19 +119,19 @@ export const MetricValueLarge = styled.Text`
 export const MetricLabel = styled.Text`
   font-size: ${typography.small.fontSize}px;
   font-weight: ${typography.small.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 export const MetricSub = styled.Text`
   font-size: ${typography.small.fontSize}px;
   font-weight: ${typography.small.fontWeight};
-  color: ${colors.neutral400};
+  color: ${({ theme }) => theme.colors.neutral400};
 `;
 
 export const SectionTitle = styled.Text`
   font-size: ${typography.h3.fontSize}px;
   font-weight: ${typography.h3.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
   margin-top: ${spacing.sm}px;
 `;
 
@@ -145,9 +145,9 @@ export const BottomBar = styled.View<{ $bottomInset: number }>`
   justify-content: space-around;
   padding-vertical: ${spacing.sm}px;
   padding-bottom: ${spacing.md}px;
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-top-width: 1px;
-  border-top-color: ${colors.neutral600};
+  border-top-color: ${({ theme }) => theme.colors.neutral600};
 `;
 
 export const BottomBarButton = styled.Pressable`
@@ -160,7 +160,7 @@ export const BottomBarButton = styled.Pressable`
 export const BottomBarLabel = styled.Text`
   font-size: ${typography.small.fontSize}px;
   font-weight: ${typography.small.fontWeight};
-  color: ${colors.neutral300};
+  color: ${({ theme }) => theme.colors.neutral300};
 `;
 
 export const BottomBarStartButton = styled.Pressable<{ $disabled?: boolean }>`
@@ -169,10 +169,10 @@ export const BottomBarStartButton = styled.Pressable<{ $disabled?: boolean }>`
   width: 64px;
   height: 64px;
   border-radius: 32px;
-  background-color: ${colors.primary};
+  background-color: ${({ theme }) => theme.colors.primary};
   margin-top: -${spacing.xl}px;
   elevation: 6;
-  shadow-color: ${colors.primary};
+  shadow-color: ${({ theme }) => theme.colors.primary};
   shadow-offset: 0px 4px;
   shadow-opacity: 0.35;
   shadow-radius: 8px;
@@ -182,7 +182,7 @@ export const BottomBarStartButton = styled.Pressable<{ $disabled?: boolean }>`
 export const BottomBarStartLabel = styled.Text`
   font-size: 10px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.textInverse};
+  color: ${({ theme }) => theme.colors.textInverse};
   margin-top: 1px;
 `;
 
@@ -191,11 +191,11 @@ export const WorkoutList = styled.View`
 `;
 
 export const WorkoutAccordion = styled.Pressable<{ $isNext: boolean }>`
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   border-width: 1px;
-  border-color: ${({ $isNext }) =>
-    $isNext ? colors.primary : colors.neutral600};
+  border-color: ${({ $isNext, theme }) =>
+    $isNext ? theme.colors.primary : theme.colors.neutral600};
   overflow: hidden;
 `;
 
@@ -216,8 +216,8 @@ export const WorkoutIconContainer = styled.View<{ $isNext: boolean }>`
   width: 44px;
   height: 44px;
   border-radius: 22px;
-  background-color: ${({ $isNext }) =>
-    $isNext ? 'rgba(255, 214, 10, 0.15)' : colors.backgroundHighlight};
+  background-color: ${({ $isNext, theme }) =>
+    $isNext ? 'rgba(255, 214, 10, 0.15)' : theme.colors.backgroundHighlight};
   align-items: center;
   justify-content: center;
   margin-right: ${spacing.md}px;
@@ -230,13 +230,14 @@ export const WorkoutAccordionInfo = styled.View`
 export const WorkoutAccordionTitle = styled.Text<{ $isNext: boolean }>`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${({ $isNext }) => ($isNext ? colors.primary : colors.text)};
+  color: ${({ $isNext, theme }) =>
+    $isNext ? theme.colors.primary : theme.colors.text};
 `;
 
 export const WorkoutAccordionSubtitle = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
   margin-top: ${spacing.xxs}px;
 `;
 
@@ -256,14 +257,14 @@ export const NextBadge = styled.View`
 export const NextBadgeText = styled.Text`
   font-size: ${typography.small.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const WorkoutAccordionBody = styled.View`
   padding-horizontal: ${spacing.cardPadding}px;
   padding-bottom: ${spacing.cardPadding}px;
   border-top-width: 1px;
-  border-top-color: ${colors.neutral600};
+  border-top-color: ${({ theme }) => theme.colors.neutral600};
 `;
 
 export const WorkoutDetail = styled.View`
@@ -276,12 +277,12 @@ export const WorkoutDetail = styled.View`
 export const WorkoutDetailText = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 export const ProfileMenuOverlay = styled.Pressable`
   flex: 1;
-  background-color: ${colors.overlay};
+  background-color: ${({ theme }) => theme.colors.overlay};
   justify-content: flex-start;
   align-items: flex-end;
   padding-top: 90px;
@@ -289,10 +290,10 @@ export const ProfileMenuOverlay = styled.Pressable`
 `;
 
 export const ProfileMenuCard = styled.View`
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   border-width: 1px;
-  border-color: ${colors.neutral600};
+  border-color: ${({ theme }) => theme.colors.neutral600};
   min-width: 180px;
   overflow: hidden;
 `;
@@ -308,10 +309,11 @@ export const ProfileMenuItem = styled.Pressable`
 export const ProfileMenuItemText = styled.Text<{ $danger?: boolean }>`
   font-size: ${typography.body.fontSize}px;
   font-weight: ${typography.body.fontWeight};
-  color: ${({ $danger }) => ($danger ? colors.error : colors.text)};
+  color: ${({ $danger, theme }) =>
+    $danger ? theme.colors.error : theme.colors.text};
 `;
 
 export const ProfileMenuDivider = styled.View`
   height: 1px;
-  background-color: ${colors.neutral600};
+  background-color: ${({ theme }) => theme.colors.neutral600};
 `;

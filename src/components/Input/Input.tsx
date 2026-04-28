@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { type TextInputProps, type ViewStyle } from 'react-native';
-import { colors } from '../../constants';
+import { useTheme } from 'styled-components/native';
 import { Wrapper, Label, InputContainer, StyledInput, ToggleButton, ToggleText, ErrorText } from './Input.styles';
 
 interface InputProps extends Omit<TextInputProps, 'style'> {
@@ -16,6 +16,7 @@ const Input: React.FC<InputProps> = ({
   containerStyle,
   ...rest
 }) => {
+  const { colors } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 

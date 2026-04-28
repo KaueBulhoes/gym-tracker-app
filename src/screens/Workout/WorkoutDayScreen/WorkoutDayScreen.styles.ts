@@ -1,9 +1,9 @@
 import styled from 'styled-components/native';
-import { colors, spacing, typography } from '../../../constants';
+import { spacing, typography } from '../../../constants';
 
 export const Container = styled.View`
   flex: 1;
-  background-color: ${colors.background};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const Header = styled.View`
@@ -12,7 +12,7 @@ export const Header = styled.View`
   padding-horizontal: ${spacing.screenHorizontal}px;
   padding-top: ${spacing.huge}px;
   padding-bottom: ${spacing.xl}px;
-  background-color: ${colors.secondaryDark};
+  background-color: ${({ theme }) => theme.colors.secondaryDark};
 `;
 
 export const BackButton = styled.Pressable`
@@ -28,7 +28,7 @@ export const BackButton = styled.Pressable`
 export const HeaderTitle = styled.Text`
   font-size: ${typography.h3.fontSize}px;
   font-weight: ${typography.h3.fontWeight};
-  color: ${colors.neutral50};
+  color: ${({ theme }) => theme.colors.onSecondary};
   flex: 1;
 `;
 
@@ -44,12 +44,12 @@ export const Content = styled.View`
 /* Toggle Section */
 
 export const ToggleSection = styled.View`
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   padding: ${spacing.cardPadding}px;
   gap: ${spacing.sm}px;
   border-width: 1px;
-  border-color: ${colors.neutral600};
+  border-color: ${({ theme }) => theme.colors.neutral600};
 `;
 
 export const ToggleRow = styled.View`
@@ -61,7 +61,7 @@ export const ToggleRow = styled.View`
 export const ToggleLabel = styled.Text`
   font-size: ${typography.body.fontSize}px;
   font-weight: ${typography.body.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
   flex: 1;
   margin-right: ${spacing.md}px;
 `;
@@ -75,31 +75,31 @@ export const RestInputWrapper = styled.View`
 export const RestInput = styled.TextInput`
   width: 80px;
   height: 44px;
-  background-color: ${colors.backgroundInput};
+  background-color: ${({ theme }) => theme.colors.backgroundInput};
   border-radius: ${spacing.inputRadius}px;
   border-width: 1.5px;
-  border-color: ${colors.secondary};
+  border-color: ${({ theme }) => theme.colors.secondary};
   padding-horizontal: ${spacing.md}px;
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
   text-align: center;
 `;
 
 export const RestUnit = styled.Text`
   font-size: ${typography.body.fontSize}px;
   font-weight: ${typography.body.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 /* Exercise Cards */
 
 export const ExerciseCard = styled.View`
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   padding: ${spacing.cardPadding}px;
   border-width: 1px;
-  border-color: ${colors.neutral600};
+  border-color: ${({ theme }) => theme.colors.neutral600};
   gap: ${spacing.xs}px;
 `;
 
@@ -123,7 +123,7 @@ export const ExerciseName = styled.Text`
   flex: 1;
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const ExerciseMetaRow = styled.View`
@@ -135,7 +135,7 @@ export const ExerciseMetaRow = styled.View`
 export const ExerciseMeta = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 export const DeleteButton = styled.Pressable`
@@ -152,7 +152,7 @@ export const AddExerciseButton = styled.Pressable`
   align-items: center;
   justify-content: center;
   gap: ${spacing.sm}px;
-  background-color: ${colors.primary};
+  background-color: ${({ theme }) => theme.colors.primary};
   border-radius: ${spacing.cardRadius}px;
   padding-vertical: ${spacing.md}px;
   margin-top: ${spacing.sm}px;
@@ -161,14 +161,14 @@ export const AddExerciseButton = styled.Pressable`
 export const AddExerciseButtonText = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.background};
+  color: ${({ theme }) => theme.colors.textInverse};
 `;
 
 /* Dialog / Modal */
 
 export const Overlay = styled.View`
   flex: 1;
-  background-color: ${colors.overlay};
+  background-color: ${({ theme }) => theme.colors.overlay};
   align-items: center;
   justify-content: center;
   padding-horizontal: ${spacing.xl}px;
@@ -177,12 +177,12 @@ export const Overlay = styled.View`
 export const Dialog = styled.View`
   width: 100%;
   max-height: 80%;
-  background-color: ${colors.backgroundElevated};
+  background-color: ${({ theme }) => theme.colors.backgroundElevated};
   border-radius: ${spacing.cardRadius}px;
   padding: ${spacing.lg}px;
   gap: ${spacing.md}px;
   border-width: 1px;
-  border-color: ${colors.neutral600};
+  border-color: ${({ theme }) => theme.colors.neutral600};
 `;
 
 export const DialogScroll = styled.ScrollView``;
@@ -195,19 +195,19 @@ export const DialogContent = styled.View`
 export const DialogTitle = styled.Text`
   font-size: ${typography.h3.fontSize}px;
   font-weight: ${typography.h3.fontWeight};
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: ${spacing.xs}px;
 `;
 
 export const DialogInput = styled.TextInput`
   height: 44px;
-  background-color: ${colors.backgroundInput};
+  background-color: ${({ theme }) => theme.colors.backgroundInput};
   border-radius: ${spacing.inputRadius}px;
   border-width: 1.5px;
-  border-color: ${colors.border};
+  border-color: ${({ theme }) => theme.colors.border};
   padding-horizontal: ${spacing.md}px;
   font-size: ${typography.body.fontSize}px;
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const DialogRow = styled.View`
@@ -223,13 +223,13 @@ export const CancelButton = styled.Pressable`
   justify-content: center;
   border-radius: ${spacing.buttonRadius}px;
   border-width: 1.5px;
-  border-color: ${colors.neutral500};
+  border-color: ${({ theme }) => theme.colors.neutral500};
 `;
 
 export const CancelButtonText = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 export const ConfirmButton = styled.Pressable`
@@ -238,25 +238,25 @@ export const ConfirmButton = styled.Pressable`
   align-items: center;
   justify-content: center;
   border-radius: ${spacing.buttonRadius}px;
-  background-color: ${colors.primary};
+  background-color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const ConfirmButtonText = styled.Text`
   font-size: ${typography.bodyBold.fontSize}px;
   font-weight: ${typography.bodyBold.fontWeight};
-  color: ${colors.background};
+  color: ${({ theme }) => theme.colors.textInverse};
 `;
 
 export const DialogInputDynamic = styled.TextInput`
   flex: 1;
   height: 44px;
-  background-color: ${colors.backgroundInput};
+  background-color: ${({ theme }) => theme.colors.backgroundInput};
   border-radius: ${spacing.inputRadius}px;
   border-width: 1.5px;
-  border-color: ${colors.border};
+  border-color: ${({ theme }) => theme.colors.border};
   padding-horizontal: ${spacing.md}px;
   font-size: ${typography.body.fontSize}px;
-  color: ${colors.text};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 /* Dialog extras */
@@ -269,7 +269,7 @@ export const DialogInputGroup = styled.View`
 export const DialogLabel = styled.Text`
   font-size: ${typography.small.fontSize}px;
   font-weight: ${typography.small.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 export const DialogHalfRow = styled.View`
@@ -301,11 +301,11 @@ export const SchemeActionButton = styled.Pressable<{
   border-radius: ${spacing.buttonRadius}px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ $variant }) =>
-    $variant === 'add' ? colors.primary : colors.backgroundInput};
+  background-color: ${({ $variant, theme }) =>
+    $variant === 'add' ? theme.colors.primary : theme.colors.backgroundInput};
   border-width: 1.5px;
-  border-color: ${({ $variant }) =>
-    $variant === 'add' ? colors.primary : colors.neutral500};
+  border-color: ${({ $variant, theme }) =>
+    $variant === 'add' ? theme.colors.primary : theme.colors.neutral500};
 `;
 
 
@@ -323,7 +323,7 @@ export const ConjugatedHookTop = styled.View`
   flex: 1;
   align-self: stretch;
   border-style: dashed;
-  border-color: ${colors.secondary};
+  border-color: ${({ theme }) => theme.colors.secondary};
   border-left-width: 2px;
   border-top-width: 2px;
   border-right-width: 0px;
@@ -334,7 +334,7 @@ export const ConjugatedHookBottom = styled.View`
   flex: 1;
   align-self: stretch;
   border-style: dashed;
-  border-color: ${colors.secondary};
+  border-color: ${({ theme }) => theme.colors.secondary};
   border-left-width: 2px;
   border-bottom-width: 2px;
   border-right-width: 0px;
@@ -358,8 +358,8 @@ export const ExerciseTag = styled.View<{ $variant: 'dropset' | 'conjugated' }>`
       ? 'rgba(245, 158, 11, 0.15)'
       : 'rgba(139, 92, 246, 0.15)'};
   border-width: 1px;
-  border-color: ${({ $variant }) =>
-    $variant === 'dropset' ? colors.warning : colors.secondary};
+  border-color: ${({ $variant, theme }) =>
+    $variant === 'dropset' ? theme.colors.warning : theme.colors.secondary};
 `;
 
 export const ExerciseTagText = styled.Text<{
@@ -367,13 +367,13 @@ export const ExerciseTagText = styled.Text<{
 }>`
   font-size: ${typography.small.fontSize}px;
   font-weight: ${typography.small.fontWeight};
-  color: ${({ $variant }) =>
-    $variant === 'dropset' ? colors.warning : colors.secondary};
+  color: ${({ $variant, theme }) =>
+    $variant === 'dropset' ? theme.colors.warning : theme.colors.secondary};
 `;
 
 export const ExerciseNotesText = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
   font-style: italic;
 `;

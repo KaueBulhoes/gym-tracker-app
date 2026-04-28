@@ -4,7 +4,7 @@ import { colors, spacing, typography } from '../../../constants';
 
 export const Container = styled(KeyboardAvoidingView)`
   flex: 1;
-  background-color: ${colors.background};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const Content = styled.ScrollView`
@@ -20,7 +20,7 @@ export const Header = styled.View`
 export const Title = styled.Text`
   font-size: ${typography.h1.fontSize}px;
   font-weight: ${typography.h1.fontWeight};
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   margin-bottom: ${spacing.sm}px;
   text-align: center;
 `;
@@ -28,7 +28,7 @@ export const Title = styled.Text`
 export const Subtitle = styled.Text`
   font-size: ${typography.body.fontSize}px;
   font-weight: ${typography.body.fontWeight};
-  color: ${colors.textSecondary};
+  color: ${({ theme }) => theme.colors.textSecondary};
   text-align: center;
 `;
 
@@ -39,13 +39,13 @@ export const Form = styled.View`
 export const SuccessText = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.success};
+  color: ${({ theme }) => theme.colors.success};
   text-align: center;
 `;
 
 export const ErrorText = styled.Text`
   font-size: ${typography.caption.fontSize}px;
   font-weight: ${typography.caption.fontWeight};
-  color: ${colors.error};
+  color: ${({ theme }) => theme.colors.error};
   text-align: center;
 `;

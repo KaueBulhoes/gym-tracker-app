@@ -1,6 +1,7 @@
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors, spacing } from '../../constants';
+import { useTheme } from 'styled-components/native';
+import { spacing } from '../../constants';
 import { Container, IconContainer, Info, Title, Subtitle } from './WorkoutListItem.styles';
 
 interface WorkoutListItemProps {
@@ -16,6 +17,7 @@ const WorkoutListItem: React.FC<WorkoutListItemProps> = ({
   date,
   durationMinutes,
 }) => {
+  const { colors } = useTheme();
   return (
     <Container>
       <IconContainer>

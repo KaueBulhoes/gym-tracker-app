@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors, spacing } from '../../../constants';
+import { useTheme } from 'styled-components/native';
+import { spacing } from '../../../constants';
 import type { AddWorkoutExercisesScreenProps } from '../../../navigation/types';
 import { useWorkoutStore } from '../../../stores/workoutStore';
 import {
@@ -31,6 +32,7 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
     navigation,
     route,
 }) => {
+    const { colors } = useTheme();
     const { days } = route.params;
     const draft = useWorkoutStore(state => state.draft);
     const saveDraft = useWorkoutStore(state => state.saveDraft);
@@ -73,7 +75,7 @@ const AddWorkoutExercisesScreen: React.FC<AddWorkoutExercisesScreenProps> = ({
             <Header>
                 <HeaderLeft>
                     <BackButton onPress={() => navigation.goBack()} accessibilityLabel="Voltar">
-                        <MaterialCommunityIcons name="arrow-left" size={24} color={colors.neutral50} />
+                        <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSecondary} />
                     </BackButton>
                     <HeaderTitle>{isEditing ? 'Editar Exercícios' : 'Adicionar Exercícios'}</HeaderTitle>
                 </HeaderLeft>
