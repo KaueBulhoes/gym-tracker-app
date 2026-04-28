@@ -18,11 +18,11 @@ Configura os exercícios de um dia específico do plano de treino. Todas as alte
 
 ## Dados e integrações
 
-| Recurso | Tipo | Descrição |
-|---------|------|-----------|
-| `route.params.day` | Param | Nome do dia (ex: "Treino A", "Segunda") |
-| `useWorkoutStore.draft` | Store | Lê exercícios e descanso padrão do dia |
-| `useWorkoutStore.updateDraftDay` | Store | Persiste alterações no rascunho |
+| Recurso                          | Tipo  | Descrição                               |
+| -------------------------------- | ----- | --------------------------------------- |
+| `route.params.day`               | Param | Nome do dia (ex: "Treino A", "Segunda") |
+| `useWorkoutStore.draft`          | Store | Lê exercícios e descanso padrão do dia  |
+| `useWorkoutStore.updateDraftDay` | Store | Persiste alterações no rascunho         |
 
 ## Componentes usados
 

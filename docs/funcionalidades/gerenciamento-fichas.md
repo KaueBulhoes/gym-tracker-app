@@ -9,15 +9,15 @@ Permite ao usuário gerenciar múltiplas fichas de treino. Cada ficha pode ser a
 
 ## Composição
 
-| Camada | Arquivo | Descrição |
-|--------|---------|-----------|
-| Tela | `src/screens/Workout/WorkoutPlansScreen/` | Lista de fichas, seleção de ativa, modal de detalhes |
-| Tela | `src/screens/Workout/AddWorkoutPlanScreen/` | Nome do plano (auto ou custom) |
-| Tela | `src/screens/Workout/AddWorkoutExercisesScreen/` | Duração da ficha em dias |
-| Tela | `src/screens/Workout/WorkoutDayScreen/` | Descrição por dia, edição/exclusão de exercício e carga por exercício |
-| Tela | `src/screens/Home/HomeScreen/` | Filtro por plano ativo, alerta vencimento, descrição nos dias |
-| Service | `src/services/workoutService.ts` | setActivePlan, renewPlan, dismissExpiry |
-| Store | `src/stores/workoutStore.ts` | setActivePlan, renewPlan, dismissExpiry, updateDraftDuration |
+| Camada  | Arquivo                                          | Descrição                                                             |
+| ------- | ------------------------------------------------ | --------------------------------------------------------------------- |
+| Tela    | `src/screens/Workout/WorkoutPlansScreen/`        | Lista de fichas, seleção de ativa, modal de detalhes                  |
+| Tela    | `src/screens/Workout/AddWorkoutPlanScreen/`      | Nome do plano (auto ou custom)                                        |
+| Tela    | `src/screens/Workout/AddWorkoutExercisesScreen/` | Duração da ficha em dias                                              |
+| Tela    | `src/screens/Workout/WorkoutDayScreen/`          | Descrição por dia, edição/exclusão de exercício e carga por exercício |
+| Tela    | `src/screens/Home/HomeScreen/`                   | Filtro por plano ativo, alerta vencimento, descrição nos dias         |
+| Service | `src/services/workoutService.ts`                 | setActivePlan, renewPlan, dismissExpiry                               |
+| Store   | `src/stores/workoutStore.ts`                     | setActivePlan, renewPlan, dismissExpiry, updateDraftDuration          |
 
 ## Tabelas Supabase envolvidas
 
