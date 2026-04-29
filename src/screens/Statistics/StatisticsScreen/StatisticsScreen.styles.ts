@@ -11,10 +11,11 @@ export const Container = styled(SafeAreaView).attrs({
 
 export const Header = styled.View`
   flex-direction: row;
-  align-items: center;
+  align-items: flex-end;
+  min-height: 126px;
   padding-horizontal: ${spacing.screenHorizontal}px;
-  padding-top: ${spacing.xxxl}px;
-  padding-bottom: ${spacing.lg}px;
+  padding-top: ${spacing.huge}px;
+  padding-bottom: ${spacing.xl}px;
   background-color: ${({ theme }) => theme.colors.secondaryDark};
 `;
 

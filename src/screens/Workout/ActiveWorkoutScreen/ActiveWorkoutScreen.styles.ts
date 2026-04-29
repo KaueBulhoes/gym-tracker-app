@@ -10,7 +10,7 @@ export const Header = styled.View`
   padding-horizontal: ${spacing.screenHorizontal}px;
   padding-top: ${spacing.huge}px;
   padding-bottom: ${spacing.xl}px;
-  min-height: 132px;
+  min-height: 126px;
   justify-content: flex-end;
   background-color: ${({ theme }) => theme.colors.secondaryDark};
 `;

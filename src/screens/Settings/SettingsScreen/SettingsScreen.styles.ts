@@ -12,6 +12,7 @@ export const Container = styled(SafeAreaView).attrs({
 export const TopBar = styled.View`
   flex-direction: row;
   align-items: flex-end;
+  min-height: 126px;
   padding-horizontal: ${spacing.screenHorizontal}px;
   padding-top: ${spacing.huge}px;
   padding-bottom: ${spacing.xl}px;
