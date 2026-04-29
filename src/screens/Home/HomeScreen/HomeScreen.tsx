@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import { LayoutAnimation, Modal, Platform, StatusBar, TextInput, UIManager } from 'react-native';
+import { LayoutAnimation, Modal, Platform, StatusBar, Switch, TextInput, UIManager } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from 'styled-components/native';
@@ -61,9 +61,12 @@ import {
   ProfileMenuItem,
   ProfileMenuItemText,
   ProfileMenuDivider,
+  ProfileMenuToggleRow,
+  ProfileMenuToggleLabel,
 } from './HomeScreen.styles';
 import { useHomeStats, type HomeStatKey } from '../../../hooks/useHomeStats';
 import { useAuthStore } from '../../../stores/authStore';
+import { useKeepAwakeStore } from '../../../stores/keepAwakeStore';
 import { useProfileStore } from '../../../stores/profileStore';
 import { useThemeStore } from '../../../stores/themeStore';
 import { useWorkoutStore } from '../../../stores/workoutStore';
@@ -100,6 +103,8 @@ const HomeScreen: React.FC = () => {
   const isThemeLoaded = useThemeStore(state => state.isLoaded);
   const loadTheme = useThemeStore(state => state.loadTheme);
   const toggleTheme = useThemeStore(state => state.toggleTheme);
+  const keepAwakeEnabled = useKeepAwakeStore(state => state.enabled);
+  const setKeepAwake = useKeepAwakeStore(state => state.setEnabled);
 
   const weeklyTarget = profile?.weeklyGoal ?? 5;
   const weekStart = getWeekStart();
@@ -552,6 +557,27 @@ const HomeScreen: React.FC = () => {
                 {themeMode === 'dark' ? 'Light Mode' : 'Dark Mode'}
               </ProfileMenuItemText>
             </ProfileMenuItem>
+            <ProfileMenuDivider />
+            <ProfileMenuToggleRow
+              accessibilityRole="switch"
+              accessibilityLabel="Manter tela ativa"
+              accessibilityState={{ checked: keepAwakeEnabled }}
+            >
+              <MaterialCommunityIcons
+                name="lightbulb-on-outline"
+                size={20}
+                color={colors.text}
+              />
+              <ProfileMenuToggleLabel>Manter tela ativa</ProfileMenuToggleLabel>
+              <Switch
+                value={keepAwakeEnabled}
+                onValueChange={value => {
+                  setKeepAwake(value);
+                }}
+                trackColor={{ false: colors.neutral600, true: colors.primary }}
+                thumbColor={colors.onSecondary}
+              />
+            </ProfileMenuToggleRow>
             <ProfileMenuDivider />
             <ProfileMenuItem
               onPress={() => {

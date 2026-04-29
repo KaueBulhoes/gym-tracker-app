@@ -14,6 +14,7 @@ O app usa persistência local no dispositivo para manter sessão de autenticaç�
 | Service | `src/services/supabase.ts`   | Configura `auth.storage` com AsyncStorage e `persistSession: true` para manter sessão/token do Supabase Auth |
 | Store   | `src/stores/workoutStore.ts` | Persiste treino ativo (`@gymtracker:active-workout`) para recuperar sessão em andamento                      |
 | Store   | `src/stores/themeStore.ts`   | Persiste modo de tema (`@gymtracker:theme-mode`)                                                             |
+| Store   | `src/stores/keepAwakeStore.ts` | Persiste preferência "manter tela ativa" (`@gymtracker:keep-awake`)                                        |
 | Hook    | `src/hooks/useHomeStats.ts`  | Persiste seleção de cards de estatísticas da Home (`@gym_tracker/home_stats`)                                |
 | Hook    | `src/hooks/useWorkloadChartPrefs.ts` | Persiste exercício e período do gráfico de Evolução de Carga (`@gym_tracker/workload_chart`)         |
 
@@ -21,6 +22,7 @@ O app usa persistência local no dispositivo para manter sessão de autenticaç�
 
 - `@gymtracker:active-workout` — estado do treino ativo (tempo, séries concluídas e cargas)
 - `@gymtracker:theme-mode` — preferência de tema (`dark` ou `light`)
+- `@gymtracker:keep-awake` — preferência de manter a tela ativa (`'1'` ou `'0'`)
 - `@gym_tracker/home_stats` — cards de métricas escolhidos na Home
 - `@gym_tracker/workload_chart` — exercício e período (30/60/90d) do gráfico de Evolução de Carga
 

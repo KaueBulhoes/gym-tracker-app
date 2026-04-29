@@ -352,16 +352,33 @@ export const ProfileMenuCard = styled.View`
   border-radius: ${spacing.cardRadius}px;
   border-width: 1px;
   border-color: ${({ theme }) => theme.colors.neutral600};
-  min-width: 180px;
+  min-width: 260px;
   overflow: hidden;
 `;
 
 export const ProfileMenuItem = styled.Pressable`
   flex-direction: row;
   align-items: center;
-  gap: ${spacing.md}px;
-  padding-horizontal: ${spacing.base}px;
+  gap: ${spacing.sm}px;
+  padding-left: ${spacing.md}px;
+  padding-right: ${spacing.sm}px;
   padding-vertical: ${spacing.md}px;
+`;
+
+export const ProfileMenuToggleRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${spacing.sm}px;
+  padding-left: ${spacing.md}px;
+  padding-right: ${spacing.sm}px;
+  padding-vertical: ${spacing.md}px;
+`;
+
+export const ProfileMenuToggleLabel = styled.Text`
+  flex: 1;
+  font-size: ${typography.body.fontSize}px;
+  font-weight: ${typography.body.fontWeight};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const ProfileMenuItemText = styled.Text<{ $danger?: boolean }>`

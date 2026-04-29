@@ -16,6 +16,7 @@ Catálogo de features do app com suas composições (telas + services + tabelas)
 - [Estatísticas de Treino](estatisticas.md) — métricas, recordes, progressão de carga, stats customizáveis na Home
 - [Gráfico de Evolução de Carga](grafico-evolucao-carga.md) — sparkline na Estatísticas + modal em paisagem com gráfico XY (carga vs. dias) por exercício
 - [Tema Dark/Light](tema-dark-light.md) — toggle de tema persistente com paletas refinadas e theming completo via styled-components
+- [Manter Tela Ativa](manter-tela-ativa.md) — toggle no menu do perfil que impede o auto-bloqueio enquanto o app está em foreground
 
 ## Planejadas
 
